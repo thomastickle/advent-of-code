@@ -8,12 +8,14 @@ import( "bufio"
 	"unicode"
 )
 
+// Structure for holding symbols
 type SymbolLocation struct {
 	Char rune
 	Row int
 	Column int
 }
 
+// Structure for holding our possible part numbers.
 type PartNumberCandidate struct {
 	PartNumber int
 	Row int
@@ -23,7 +25,7 @@ type PartNumberCandidate struct {
 
 
 func main() {
-	var sum = 0
+	// Start by getting all the lines
 	var schematic = make([][]rune, 0) 
 	var scanner = bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
@@ -34,26 +36,17 @@ func main() {
 		}
 	}
 
+
+	// Get the Symbols and Part Number Candidates
 	var symbolLocations, partNumberCandidates = GetSymbolAndPartCandidates(schematic)
-	fmt.Println("Symbol Locations:")
+
+	// Now check which part numbers candidates are actually part numbers and add them to the total to get the answer
+	var sum = 0
 	for _, symbolLocation := range symbolLocations {
-		fmt.Printf("Symbol %c:%d:%d\n", symbolLocation.Char, symbolLocation.Row, symbolLocation.Column)
-	}
-
-	fmt.Println("Part Number Candidates: ")
-	for _, partNumberCandidate := range partNumberCandidates {
-		fmt.Printf("Part Number: %d Row: %d StartColumn %d, EndColumn %d\n", partNumberCandidate.PartNumber, partNumberCandidate.Row, partNumberCandidate.StartColumn, partNumberCandidate.EndColumn)
-	}
-
-
-	for _, symbolLocation := range symbolLocations {
-		fmt.Printf("Symbol %c:%d:%d\n", symbolLocation.Char, symbolLocation.Row, symbolLocation.Column)
 		for _, partNumberCandidate := range partNumberCandidates {
 			if (symbolLocation.Row - 1 <= partNumberCandidate.Row && partNumberCandidate.Row <= symbolLocation.Row + 1) {
-                                 fmt.Printf("Part Number %d is on the right row.\n", partNumberCandidate.PartNumber)	
 				 var x = IsInsideColumnRange(symbolLocation.Column, partNumberCandidate.StartColumn, partNumberCandidate.EndColumn)
 				 if x {
-					 fmt.Printf("%d Is a part number\n", partNumberCandidate.PartNumber)
 					 sum = sum + partNumberCandidate.PartNumber
 				 }
 			}
@@ -74,12 +67,11 @@ func IsInsideColumnRange(column int, columnRangeStart int, columnRangeEnd int) b
 }
 
 
-
+// Returns a slice with all the symbols found, and part numbers found
 func GetSymbolAndPartCandidates(schematic [][]rune) ([]SymbolLocation, []PartNumberCandidate) {
 	var symbolLocations = make([]SymbolLocation,0)
 	var partNumberCandidates = make([]PartNumberCandidate, 0)
 	for i := 0; i < len(schematic); i++ {
-		fmt.Printf("Line %d: %s\n", i, string(schematic[i]))
 		var buffer strings.Builder
 		for j := 0; j < len(schematic[i]); j++ {
 			currentRune := schematic[i][j]
