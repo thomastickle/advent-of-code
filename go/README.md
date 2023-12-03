@@ -4,5 +4,6 @@ I haven't used in more then 2 years as a refresher.  It may also involve me lear
 
 
 ## 2023
-Language: Go (New)
-Editor: Neovim (New)
+**Language:** Go (New)
+
+**Editor:** Neovim (New)
