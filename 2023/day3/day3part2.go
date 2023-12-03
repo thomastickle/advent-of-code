@@ -42,7 +42,6 @@ func main() {
 	// Now check which part numbers candidates are actually part numbers and add them to the total to get the answer
 	var sum = GenerateSumOfGearRatios(symbolLocations, partNumberCandidates)
 	fmt.Printf("Sum of parts: %d\n", sum)
-
 }
 
 func GenerateSumOfGearRatios(symbolLocations []SymbolLocation, partNumberCandidates []PartNumberCandidate) int {
