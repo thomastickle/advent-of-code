@@ -43,12 +43,18 @@ func main() {
 	// Now check which part numbers candidates are actually part numbers and add them to the total to get the answer
 	var sum = 0
 	for _, symbolLocation := range symbolLocations {
-		for _, partNumberCandidate := range partNumberCandidates {
-			if (symbolLocation.Row - 1 <= partNumberCandidate.Row && partNumberCandidate.Row <= symbolLocation.Row + 1) {
-				 var x = IsInsideColumnRange(symbolLocation.Column, partNumberCandidate.StartColumn, partNumberCandidate.EndColumn)
-				 if x {
-					 sum = sum + partNumberCandidate.PartNumber
-				 }
+		if symbolLocation.Char == '*' {
+			var partNumbers = make([]int, 0)
+			for _, partNumberCandidate := range partNumberCandidates {
+				if (symbolLocation.Row - 1 <= partNumberCandidate.Row && partNumberCandidate.Row <= symbolLocation.Row + 1) {
+					 var x = IsInsideColumnRange(symbolLocation.Column, partNumberCandidate.StartColumn, partNumberCandidate.EndColumn)
+					 if x {
+						partNumbers = append(partNumbers, partNumberCandidate.PartNumber) 
+					 }
+				}
+			}
+			if len(partNumbers) == 2 {
+				sum += partNumbers[0] * partNumbers[1]
 			}
 		}
 	}
