@@ -1,13 +1,12 @@
 package main
 
-import(
-	"bufio"
-       	"fmt"
-       	"os"
-	"strconv"
-       	"strings"
-	"unicode"
-       )
+import( "bufio"
+		"fmt"
+    	"os"
+		"strconv"
+    	"strings"
+		"unicode"
+)
 
 type SymbolLocation struct {
 	Rune rune
