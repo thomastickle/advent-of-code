@@ -30,7 +30,6 @@ func main() {
 	var scanner = bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		line := []rune(scanner.Text())
-
 		if len(line) > 0 {	
 			schematic = append(schematic, line)
 		}
@@ -41,6 +40,12 @@ func main() {
 	var symbolLocations, partNumberCandidates = GetSymbolAndPartCandidates(schematic)
 
 	// Now check which part numbers candidates are actually part numbers and add them to the total to get the answer
+	var sum = GenerateSumOfGearRatios(symbolLocations, partNumberCandidates)
+	fmt.Printf("Sum of parts: %d\n", sum)
+
+}
+
+func GenerateSumOfGearRatios(symbolLocations []SymbolLocation, partNumberCandidates []PartNumberCandidate) int {
 	var sum = 0
 	for _, symbolLocation := range symbolLocations {
 		if symbolLocation.Char == '*' {
@@ -58,9 +63,7 @@ func main() {
 			}
 		}
 	}
-
-	fmt.Printf("Sum of parts: %d\n", sum)
-
+	return sum
 }
 
 func IsInsideColumnRange(column int, columnRangeStart int, columnRangeEnd int) bool {
