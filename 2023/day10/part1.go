@@ -1,7 +1,7 @@
 package day10
 
 import (
-	"fmt"
+	//"fmt"
 	"strings"
 )
 
@@ -10,57 +10,78 @@ type Position struct {
 	Y int
 }
 
-type Direction struct {
-	North int
-	South int
-	East int
-	West int
-}
-
- 
 
 
 func Part1(lines []string) int {
 	inputTable := ConvertInputToTable(lines)
 	startLocation := FindStartLocation(lines)
-	startLocation = Position{X:1, Y: 2}
-	inputTable[startLocation.X][startLocation.Y-1] = 'F'
-	FindFurthestDistance(inputTable, startLocation)
-	return 0
+	return FindFurthestDistance(inputTable, startLocation)
 }
 
-func PrintTable(table [][]rune) {
-	for _, row := range table {
-		fmt.Print("[")
-		for _, column := range row {
-			fmt.Printf("%c,", column)
-		}
-		fmt.Println("]")
-	}
-}
-
-func FindFurthestDistance(inputTable [][]rune, previousLocation Position) {
-/*	outputTable := make([][]int, len(inputTable))
+func FindFurthestDistance(inputTable [][]rune, startPosition Position) int {
+	outputTable := make([][]int, len(inputTable))
 	for i := 0; i < len(inputTable); i++ {
 		row := make([]int, len(inputTable[i]))
 		for j := 0; j < len(inputTable); j++ {
-			row[j] = 0
+			row[j] = -1
 		}
 		outputTable[i] = row
 	}
-*/
 
-	PrintTable(inputTable)	
-	connected := GetConnected(inputTable, previousLocation)	
 
-	fmt.Println("Connected: ", connected)
+	var connectedPositions []Position
+	connectedPositions = append(connectedPositions, startPosition)
+	value := 0
+
+	for len(connectedPositions) > 0 {
+	    UpdateOutputTable(outputTable, connectedPositions, value)
+		for _, position := range connectedPositions {
+			x := GetConnected(inputTable, position)
+			connectedPositions = append(connectedPositions, x...)
+		}
+
+		connectedPositions = PruneConnectedPositions(outputTable, connectedPositions)
+		value++
+	}
+
+	// Subtract 1 because we always will overincrement
+	return value - 1
+}
+
+func PruneConnectedPositions(table [][]int, positions []Position) []Position {
+	var outputPositions []Position
+	for _, position := range positions {
+		if table[position.X][position.Y] == -1 {
+			outputPositions = append(outputPositions, position)
+		}
+	}
+	return outputPositions
+}
+
+func UpdateOutputTable(outputTable [][]int, positions []Position, value int) {
+	for _, position := range positions {
+		outputTable[position.X][position.Y] = value
+	}
+/*
+	fmt.Println("OutputTable:")
+	for _, row := range outputTable {
+		fmt.Print("[")
+		for _, value := range row {
+			if value == -1 {
+				fmt.Printf(".")
+			} else {
+				fmt.Printf("X")
+			}
+		}
+		fmt.Print("]\n")
+	}*/
 }
 
 func GetConnected(inputTable [][]rune, currentPosition Position) []Position {
 	var connectedPositions []Position
 	currentRune := inputTable[currentPosition.X][currentPosition.Y]
 	
-	if currentRune == '|' {
+	if currentRune == '|'  {
 		northRune := inputTable[currentPosition.X - 1][currentPosition.Y]
 		if northRune == '|' || northRune == 'F' || northRune == '7' {
 			connectedPositions = append(connectedPositions, Position{X: currentPosition.X - 1, Y:currentPosition.Y})
@@ -74,20 +95,106 @@ func GetConnected(inputTable [][]rune, currentPosition Position) []Position {
 
 	if currentRune == '-' {
 		westRune := inputTable[currentPosition.X][currentPosition.Y - 1]
-		fmt.Printf("Current Rune: %c West Rune: %c\n", currentRune, westRune)
 		if westRune == '-' || westRune == 'L' || westRune == 'F' { 
 			connectedPositions = append(connectedPositions, Position{X: currentPosition.X, Y:currentPosition.Y - 1})
 		}
 
 		eastRune := inputTable[currentPosition.X][currentPosition.Y + 1]
-		fmt.Printf("Current Rune: %c East Rune: %c\n", currentRune, eastRune)
+		if eastRune == '-' || eastRune == 'J' || eastRune == '7' { 
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X, Y:currentPosition.Y + 1})
+		}
+	}
+	
+	if currentRune == 'L' {
+		northRune := inputTable[currentPosition.X - 1][currentPosition.Y]
+		if northRune == '|' || northRune == 'F' || northRune == '7' {
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X - 1, Y:currentPosition.Y})
+		}
+
+		eastRune := inputTable[currentPosition.X][currentPosition.Y + 1]
 		if eastRune == '-' || eastRune == 'J' || eastRune == '7' { 
 			connectedPositions = append(connectedPositions, Position{X: currentPosition.X, Y:currentPosition.Y + 1})
 		}
 	}
 
-	if currentRune == 'F' {
+	if currentRune == 'J' {
+		northRune := inputTable[currentPosition.X - 1][currentPosition.Y]
+		if northRune == '|' || northRune == 'F' || northRune == '7' {
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X - 1, Y:currentPosition.Y})
+		}
+		
+		westRune := inputTable[currentPosition.X][currentPosition.Y - 1]
+		if westRune == '-' || westRune == 'L' || westRune == 'F' { 
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X, Y:currentPosition.Y - 1})
+		}
+	}
 
+	if currentRune == '7' {
+		westRune := inputTable[currentPosition.X][currentPosition.Y - 1]
+		if westRune == '-' || westRune == 'F' || westRune == 'L' {
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X, Y:currentPosition.Y - 1})
+		}
+
+		southRune := inputTable[currentPosition.X + 1][currentPosition.Y]
+		if southRune == '|' || southRune == 'L' || southRune == 'J' {
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X + 1, Y:currentPosition.Y})
+		}
+	}
+
+	if currentRune == 'F' {
+		eastRune := inputTable[currentPosition.X][currentPosition.Y + 1]
+		if eastRune == '-' || eastRune == 'J' || eastRune == '7' { 
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X, Y:currentPosition.Y + 1})
+		}
+
+		southRune := inputTable[currentPosition.X + 1][currentPosition.Y]
+		if southRune == '|' || southRune == 'L' || southRune == 'J' {
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X + 1, Y:currentPosition.Y})
+		}
+	}
+
+	if currentRune == 'S' {
+		north := currentPosition.X - 1
+		south := currentPosition.X + 1
+		west := currentPosition.Y - 1
+		east := currentPosition.Y + 1
+
+		northRune := '.'
+		southRune := '.'
+		westRune := '.'
+		eastRune := '.'
+
+		if north >= 0 {
+			northRune = inputTable[north][currentPosition.Y]
+		}
+
+		if south < len(inputTable) {
+			southRune = inputTable[south][currentPosition.Y]
+		}
+
+		if west >= 0 {
+			westRune = inputTable[currentPosition.X][west]
+		}
+
+		if east < len(inputTable[currentPosition.X]) {
+			eastRune = inputTable[currentPosition.X][east]
+		}
+
+		if northRune == '|' || northRune == 'F' || northRune == '7' {
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X - 1, Y:currentPosition.Y})
+		}
+		
+		if southRune == '|' || southRune == 'L' || southRune == 'J' {
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X + 1, Y:currentPosition.Y})
+		}
+		
+		if westRune == '-' || westRune == 'L' || westRune == 'F' { 
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X, Y:currentPosition.Y - 1})
+		}
+
+		if eastRune == '-' || eastRune == 'J' || eastRune == '7' { 
+			connectedPositions = append(connectedPositions, Position{X: currentPosition.X, Y:currentPosition.Y + 1})
+		}
 	}
 
 	return connectedPositions
