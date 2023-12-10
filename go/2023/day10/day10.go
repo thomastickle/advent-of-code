@@ -9,7 +9,8 @@ import (
 func Day10() {
 	var filenames = map[string]string{
 		"test-input-1": "day10/day10test1.input",
-//		"test-input-2": "day10/day10.input",
+		"test-input-2": "day10/day10test2.input",
+		"input": "day10/day10.input",
 	}	
 	
 
