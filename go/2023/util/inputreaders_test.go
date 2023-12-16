@@ -16,7 +16,7 @@ func TestGetLines(t *testing.T) {
 	defer file.Close()
 
 	reader := bufio.NewReader(file)
-	lines := GetLines(reader)
+	lines := GetLinesFromReader(reader)
 	if len(lines) == 0 {
 		t.Errorf("Did not read any lines from file.") 
 	}	
