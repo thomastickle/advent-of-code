@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"aoc-2023/day1"
 	"aoc-2023/day10"
+	"aoc-2023/day11"
 )
 
 
