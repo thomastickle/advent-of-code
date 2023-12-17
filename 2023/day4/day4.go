@@ -1,30 +1,16 @@
-package main
+package day4
 
 import (
-	"bufio"
-	"fmt"
-	"os"
 	"strings"
 )
 
-func main() {
-
-	processGames()
-
-}
-
-func processGames() {
-	scoreTotal := 0
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if len(line) > 0 {
-			scoreTotal += scoreGame(line)
-		}
+func ComputeWinningsForGames(games []string) int {
+	winnings := 0
+	for _, game := range games {
+		winnings += scoreGame(game)
 	}
-	fmt.Printf("Points total: %d\n", scoreTotal)
+	return winnings
 }
-
 
 func scoreGame(game string) int {
 	splitLine := strings.FieldsFunc(game, func(r rune) bool {
@@ -36,13 +22,12 @@ func scoreGame(game string) int {
 		winningNumbers[number] = true
 	}
 
-	matchCount := 0	
+	matchCount := 0
 	for _, num := range strings.Fields(splitLine[2]) {
 		if winningNumbers[num] {
 			matchCount++
 		}
 	}
-
 
 	result := 0
 	for i := 0; i < matchCount; i++ {
