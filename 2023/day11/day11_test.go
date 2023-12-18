@@ -9,7 +9,7 @@ import (
 
 func TestPart1Test(t *testing.T)  {
   const expectedSum = 374
-	lines := util.GetLinesFromFilename("./day11test.input")
+	lines := util.GetLinesFromFilename("day11input_test.txt")
 	galaxies := GetGalaxies(lines)
   galaxies = ExpandUniverse(galaxies, 2)
   sumOfDistances := SumDistances(galaxies)
@@ -20,7 +20,7 @@ func TestPart1Test(t *testing.T)  {
 
 func TestPart1(t *testing.T)  {
   const expectedSum = 10276166
-	lines := util.GetLinesFromFilename("./day11.input")
+	lines := util.GetLinesFromFilename("day11input.txt")
 	galaxies := GetGalaxies(lines)
   galaxies = ExpandUniverse(galaxies, 2)
   sumOfDistances := SumDistances(galaxies)
@@ -31,7 +31,7 @@ func TestPart1(t *testing.T)  {
 
 func TestPart2Test(t *testing.T)  {
   const expectedSum = 82000210 
-	lines := util.GetLinesFromFilename("./day11test.input")
+	lines := util.GetLinesFromFilename("./day11input_test.txt")
 	galaxies := GetGalaxies(lines)
   galaxies = ExpandUniverse(galaxies, 1000000)
   sumOfDistances := SumDistances(galaxies)
@@ -42,7 +42,7 @@ func TestPart2Test(t *testing.T)  {
 
 func TestPart2(t *testing.T)  {
   const expectedSum = 598693078798 
-	lines := util.GetLinesFromFilename("./day11.input")
+	lines := util.GetLinesFromFilename("./day11input.txt")
 	galaxies := GetGalaxies(lines)
   galaxies = ExpandUniverse(galaxies, 1000000)
   sumOfDistances := SumDistances(galaxies)
