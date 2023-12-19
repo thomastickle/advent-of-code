@@ -7,7 +7,7 @@ import (
 
 func TestPart1Test(t *testing.T) {
 	const expectedValue = 8
-	lines := util.GetLinesFromFilename("day2test.input")
+	lines := util.GetLinesFromFilename("day2input_test.txt")
 	sum := SumOfValidGames(lines)
 	if (expectedValue != sum) {
 		t.Fatalf("Expected value %d does not match actual value %d", expectedValue, sum)
@@ -16,7 +16,7 @@ func TestPart1Test(t *testing.T) {
 
 func TestPart1(t *testing.T) {
 	const expectedValue = 2256 
-	lines := util.GetLinesFromFilename("day2.input")
+	lines := util.GetLinesFromFilename("day2input.txt")
 	sum := SumOfValidGames(lines)
 	if (expectedValue != sum) {
 		t.Fatalf("Expected value %d does not match actual value %d", expectedValue, sum)

@@ -8,28 +8,28 @@ import (
 
 func TestPart1Test(t *testing.T) {
 	expectedWinnings := 13
-	lines := util.GetLinesFromFilename("day4test.input")
+	lines := util.GetLinesFromFilename("day4input_test.txt")
 	winnings := ComputeWinningsForGames(lines)
 	test.AssertEquals(t, expectedWinnings, winnings)
 }
 
 func TestPart1(t *testing.T) {
 	expectedWinnings := 25010 
-	lines := util.GetLinesFromFilename("day4.input")
+	lines := util.GetLinesFromFilename("day4input.txt")
 	winnings := ComputeWinningsForGames(lines)
 	test.AssertEquals(t, expectedWinnings, winnings)
 }
 
 func TestPart2Test(t *testing.T) {
 	expectedWinnings := 30 
-	lines := util.GetLinesFromFilename("day4test.input")
+	lines := util.GetLinesFromFilename("day4input_test.txt")
 	winnings := ComputeTotalCardsWon(lines)
 	test.AssertEquals(t, expectedWinnings, winnings)
 }
 
 func TestPart2(t *testing.T) {
 	expectedWinnings := 9924412
-	lines := util.GetLinesFromFilename("day4.input")
+	lines := util.GetLinesFromFilename("day4input.txt")
 	winnings := ComputeTotalCardsWon(lines)
 	test.AssertEquals(t, expectedWinnings, winnings)
 }
