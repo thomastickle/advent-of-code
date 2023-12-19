@@ -19,23 +19,20 @@ func ScorePatterns(patterns []PatternMap) int {
 	return score
 }
 
-func scorePattern(pattern PatternMap) int {
+func ScorePatterns2(patterns []PatternMap) int {
 	score := 0
-	score += scoreHorizontal(pattern)
-	score += scoreVerticle(pattern)
+
 	return score
 }
 
-
-func scoreHorizontal(pattern PatternMap) int {
- 	return (findReflection(pattern.Horizontal) + 1) * 100
+func scorePattern(pattern PatternMap) int {
+	score := 0
+	score += (findReflection(pattern.Horizontal, matchExact) + 1) * 100
+	score += findReflection(pattern.Verticle, matchExact) + 1
+	return score
 }
 
-func scoreVerticle(patternMap PatternMap) int {
-	return findReflection(patternMap.Verticle) + 1
-}
-
-func findReflection(patternMap []string) int {
+func findReflection(patternMap []string, matchFunction func([]string,[]string) bool) int {
 	for i := range patternMap {
 		var before = make([]string, i + 1)
 		var after = make([]string, len(patternMap) - i - 1)
@@ -49,19 +46,20 @@ func findReflection(patternMap []string) int {
 			after = after[:len(before)]
 		}
 
-		if stringArraysEqual(before, after) == 0 {
+		if matchFunction(before, after) {
 			return i
 		}
 	}
 	return -1
 }
 
-func stringArraysEqual(before, after []string) int {
+func matchExact(before, after []string) bool {
 	if len(before) == 0 || len(after) == 0 || len(before) != len(after) {
-		return -1 
+		return false 
 	}
-	return stringArraysCountDifferences(before, after)  
+	return stringArraysCountDifferences(before, after) == 0 
 }
+
 
 func stringArraysCountDifferences(before, after []string) int {
 	count := 0
