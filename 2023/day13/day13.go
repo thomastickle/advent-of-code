@@ -1,15 +1,16 @@
 package day13
 
 import (
+	"aoc-2023/util"
 	"slices"
 )
 
-type PatternsRecord struct {
-	Verticle   []uint
-	Horizontal []uint
+type PatternMap struct {
+	Horizontal []string
+	Verticle   []string
 }
 
-func ScorePatterns(patterns []PatternsRecord) int {
+func ScorePatterns(patterns []PatternMap) int {
 	score := 0
 	for _, pattern := range patterns {
 		patternScore := scorePattern(pattern)
@@ -18,81 +19,69 @@ func ScorePatterns(patterns []PatternsRecord) int {
 	return score
 }
 
-func scorePattern(pattern PatternsRecord) int {
+func scorePattern(pattern PatternMap) int {
 	score := 0
-	score += scoreVerticle(pattern)
 	score += scoreHorizontal(pattern)
+	score += scoreVerticle(pattern)
 	return score
 }
 
-func scorePatternRecordField(patternRecordField []uint) int {
-	match := 0
-	for i := 0; i < len(patternRecordField)-1; i++ {
-		if patternRecordField[i] == patternRecordField[i+1] {
-			j := i
-			k := i + 1
-			for 0 <= j && k < len(patternRecordField) && patternRecordField[j] == patternRecordField[k] {
-				j--
-				k++
-			}
 
-			// See if we reached a bounds while matching, that was our mirror
-			if j < 0 || k == len(patternRecordField) {
-				match = i + 1
-				break
-			}
+func scoreHorizontal(pattern PatternMap) int {
+ 	return (findReflection(pattern.Horizontal) + 1) * 100
+}
+
+func scoreVerticle(patternMap PatternMap) int {
+	return findReflection(patternMap.Verticle) + 1
+}
+
+func findReflection(patternMap []string) int {
+	for i := range patternMap {
+		var before = make([]string, i + 1)
+		var after = make([]string, len(patternMap) - i - 1)
+		copy(before, patternMap[:i+1])
+		copy(after, patternMap[i+1:])
+		slices.Reverse(before)
+
+		if len(after) < len(before) {
+			before = before[:len(after)]
+		} else {
+			after = after[:len(before)]
+		}
+
+		if stringArraysEqual(before, after) {
+			return i
 		}
 	}
-
-	return match
+	return -1
 }
 
-func scoreHorizontal(pattern PatternsRecord) int {
-	return scorePatternRecordField(pattern.Horizontal) * 100
+func stringArraysEqual(before, after []string) bool {
+	if len(before) == 0 || len(after) == 0 || len(before) != len(after) {
+		return false 
+	}
+
+	for i := range before {
+		if before[i] != after[i] {
+			return false
+		} 
+	}
+	return true
 }
 
-func scoreVerticle(pattern PatternsRecord) int {
-	return scorePatternRecordField(pattern.Verticle)
-}
 
-func ConvertLinesToPattern(patterns [][]string) []PatternsRecord {
-	var patternRecords []PatternsRecord
+func ConvertLinesToPattern(patterns [][]string) []PatternMap {
+	var patternRecords []PatternMap
 	for _, pattern := range patterns {
-		horizontal := convertHorizontal(pattern)
+		horizontal := pattern
 		verticle := convertVerticle(pattern)
-		patternRecords = append(patternRecords, PatternsRecord{verticle, horizontal})
+		patternRecords = append(patternRecords, PatternMap{horizontal, verticle})
 	}
 	return patternRecords
 }
 
-func convertHorizontal(patterns []string) []uint {
-	var horizontal []uint
-	for _, patternLine := range patterns {
-		var value uint = 0
-		for _, aRune := range patternLine {
-			value <<= 1
-			if aRune == '#' {
-				value = value | 1
-			}
-		}
-		horizontal = append(horizontal, value)
-	}
-	return horizontal
-}
-
-func convertVerticle(lines []string) []uint {
-	var verticle []uint
-	for i := 0; i < len(lines[0]); i++ {
-		var value uint = 0
-		for j := 0; j < len(lines); j++ {
-			value <<= 1
-			if lines[j][i] == '#' {
-				value = value | 1
-			}
-		}
-		verticle = append(verticle, value)
-	}
-	return verticle
+func convertVerticle(lines []string) []string {
+	return util.TransposeArrayOfStrings(lines)
 }
 
 func GetPatterns(lines []string) [][]string {

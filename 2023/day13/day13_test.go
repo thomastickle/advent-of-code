@@ -7,7 +7,7 @@ import (
 )
 
 func TestPart1Test(t *testing.T) {
-	lines := util.GetLinesFromFilename("day13input_test.txt")
+	lines := util.GetLinesFromFilename("day14input_test.txt")
 	patternSets := GetPatterns(lines)
 	patterns := ConvertLinesToPattern(patternSets)
 	score := ScorePatterns(patterns)
@@ -20,4 +20,20 @@ func TestPart1(t *testing.T) {
 	patterns := ConvertLinesToPattern(patternSets)
 	score := ScorePatterns(patterns)
 	test.AssertEquals(t, 34889, score)
+}
+
+func TestPart2Test(t *testing.T) {
+	// lines := util.GetLinesFromFilename("day13input_test.txt")
+	// patternSets := GetPatterns(lines)
+	// patterns := ConvertLinesToPattern(patternSets)
+	// score := ScorePatterns2(patterns)
+	// test.AssertEquals(t, 400, score)
+}
+
+func TestPart2(t *testing.T) {
+	// lines := util.GetLinesFromFilename("day13input.txt")
+	// patternSets := GetPatterns(lines)
+	// patterns := ConvertLinesToPattern(patternSets)
+	// score := ScorePatterns2(patterns)
+	// test.AssertEquals(t, 34889, score)
 }
