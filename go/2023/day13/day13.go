@@ -13,7 +13,7 @@ type PatternMap struct {
 func ScorePatterns(patterns []PatternMap) int {
 	score := 0
 	for _, pattern := range patterns {
-		patternScore := scorePattern(pattern)
+		patternScore := scorePattern(pattern, matchExact)
 		score += patternScore
 	}
 	return score
@@ -21,14 +21,24 @@ func ScorePatterns(patterns []PatternMap) int {
 
 func ScorePatterns2(patterns []PatternMap) int {
 	score := 0
-
+	for _, pattern := range patterns {
+		patternScore := scorePattern(pattern, matchSingle)
+		score += patternScore
+	}
 	return score
 }
 
-func scorePattern(pattern PatternMap) int {
+func scorePattern(pattern PatternMap, matchFunction func([]string,[]string) bool) int {
 	score := 0
-	score += (findReflection(pattern.Horizontal, matchExact) + 1) * 100
-	score += findReflection(pattern.Verticle, matchExact) + 1
+	h := (findReflection(pattern.Horizontal, matchFunction) + 1) * 100
+	v := findReflection(pattern.Verticle, matchFunction) + 1
+
+	if h > 0 {
+		score += h
+	} else {
+		score += v
+	}
+
 	return score
 }
 
@@ -51,6 +61,14 @@ func findReflection(patternMap []string, matchFunction func([]string,[]string) b
 		}
 	}
 	return -1
+}
+
+func matchSingle(before, after []string) bool {
+	if len(before) == 0 || len(after) == 0 || len(before) != len(after) {
+		return false 
+	}
+	x := stringArraysCountDifferences(before, after)
+	return x == 1 
 }
 
 func matchExact(before, after []string) bool {
