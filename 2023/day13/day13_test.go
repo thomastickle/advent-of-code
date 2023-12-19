@@ -7,7 +7,7 @@ import (
 )
 
 func TestPart1Test(t *testing.T) {
-	lines := util.GetLinesFromFilename("day14input_test.txt")
+	lines := util.GetLinesFromFilename("day13input_test.txt")
 	patternSets := GetPatterns(lines)
 	patterns := ConvertLinesToPattern(patternSets)
 	score := ScorePatterns(patterns)

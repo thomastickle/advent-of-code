@@ -49,24 +49,32 @@ func findReflection(patternMap []string) int {
 			after = after[:len(before)]
 		}
 
-		if stringArraysEqual(before, after) {
+		if stringArraysEqual(before, after) == 0 {
 			return i
 		}
 	}
 	return -1
 }
 
-func stringArraysEqual(before, after []string) bool {
+func stringArraysEqual(before, after []string) int {
 	if len(before) == 0 || len(after) == 0 || len(before) != len(after) {
-		return false 
+		return -1 
 	}
+	return stringArraysCountDifferences(before, after)  
+}
 
+func stringArraysCountDifferences(before, after []string) int {
+	count := 0
 	for i := range before {
-		if before[i] != after[i] {
-			return false
-		} 
+		a := []rune(before[i])
+		b := []rune(after[i])
+		for j := 0; j < len(a); j++ {
+			if a[j] != b[j] {
+				count++
+			}
+		}
 	}
-	return true
+	return count
 }
 
 
