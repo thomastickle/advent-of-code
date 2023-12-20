@@ -26,39 +26,47 @@ func calculateLoad(platform platform.Platform) int {
     return load
 }
 
-// func Rotate90Clockwise(platformMap [][]rune) [][]rune {
-//     temp = platformMap
+
+func CalculateLoadAfterBillion(platform platform.Platform) int {
+    cycles := 1000000000
+    memo := make(map[string]int)
+    cycle := 0
+    cycleStart := 0
+    for i := 1; i <= cycles; i++ {
+        runCycle(&platform)
+        key := string(platform.Map)
+        if value, ok := memo[key]; ok  {
+            cycle = i
+            cycleStart = value 
+            break 
+        } else {
+            memo[key] = i  
+        }
+    }
+
+    // Need to correctly compute the number of cycles
+    cyclesRemaining := (cycles  - cycleStart) % (cycle - cycleStart)
+    for i := 0; i < cyclesRemaining; i++ {
+        runCycle(&platform)
+    }
+    // Rotate North where calculate load will work properly
+    platform.Rotate90Clockwise()
+
+    return calculateLoad(platform)
+}
 
 
-// }
-
-// func Tilt(platformMap [][]rune) [][]rune {
-//     for i := 0; i < len(platformMap[0]); i++ {
-//         for j := 0; j < len(platformMap); j++ {
-//             z := platformMap[j][i]
-//             if z == 'O' {
-//                 k := j
-//                 for k > 0 {
-//                     v := platformMap[k-1][i]
-//                     if v != 'O' && v != '#' {
-//                         x := platformMap[k-1][i]
-//                         platformMap[k-1][i] = platformMap[k][i]
-//                         platformMap[k][i] = x
-//                         k--
-//                     } else if v == 'O' || v == '#' {
-//                         break
-//                     }
-//                 }
-//             }
-//         }
-//     }
-//     return platformMap 
-// }
-
-// func ConvertLinesToPlatform(lines []string) Platform {
-//     var platformMap [][]rune
-//     for _, line := range lines {
-//         platformMap = append(platformMap, []rune(line))
-//     }
-//     return Platform{platformMap}
-// }
+func runCycle(platform *platform.Platform) {
+    // North Movement
+    platform.Rotate90Clockwise()
+    platform.TiltRight()
+    // West Movement
+    platform.Rotate90Clockwise()
+    platform.TiltRight()
+    // South Movement
+    platform.Rotate90Clockwise()
+    platform.TiltRight()
+    // East Movement
+    platform.Rotate90Clockwise()
+    platform.TiltRight()
+}
