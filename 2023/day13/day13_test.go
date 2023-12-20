@@ -7,7 +7,7 @@ import (
 )
 
 func TestPart1Test(t *testing.T) {
-	lines := util.GetLinesFromFilename("day13input_test.txt")
+	lines := util.GetLinesFromFilename("day13test.txt")
 	patternSets := GetPatterns(lines)
 	patterns := ConvertLinesToPattern(patternSets)
 	score := ScorePatterns(patterns)
@@ -23,7 +23,7 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2Test(t *testing.T) {
-	lines := util.GetLinesFromFilename("day13input_test2.txt")
+	lines := util.GetLinesFromFilename("day13test2.txt")
 	patternSets := GetPatterns(lines)
 	patterns := ConvertLinesToPattern(patternSets)
 	score := ScorePatterns2(patterns)
