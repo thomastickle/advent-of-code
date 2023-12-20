@@ -23,7 +23,17 @@ func ConstructPlatform(lines []string) Platform {
 	return Platform{aMap, maxLineLength, len(lines)}
 }
 
-func (platform Platform) GetStringRepresentation() string {
+func findLongestLineLength(lines []string) int {
+	longest := 0
+	for _, line := range lines {
+		if len(line) > longest {
+			longest = len(line)
+		}
+	}
+	return longest
+}
+
+func (platform Platform) GetPrintableStringRepresentation() string {
 	var builder strings.Builder
 	builder.WriteString("[")
 	for i := 0; i < platform.Height; i++ {
@@ -53,8 +63,8 @@ func (platform *Platform) Rotate90Clockwise() {
 	for i := 0; i < width; i++ {
 		for j := 0; j < height; j++ {
 			destination := i*height + j
-			source := (height - j - 1) * (width) + i
-			platformMap[destination] = platform.Map[source] 
+			source := (height-j-1)*(width) + i
+			platformMap[destination] = platform.Map[source]
 		}
 	}
 	platform.Map = platformMap
@@ -62,12 +72,30 @@ func (platform *Platform) Rotate90Clockwise() {
 	platform.Width = height
 }
 
-func findLongestLineLength(lines []string) int {
-	longest := 0
-	for _, line := range lines {
-		if len(line) > longest {
-			longest = len(line)
+func (platform *Platform) TiltRight() {
+	width := platform.Width
+	height := platform.Height
+	platformMap := platform.Map
+	for i := 0; i < height; i++ {
+		for j := width - 2; j >= 0; j-- {
+			index := i*width + j
+			if platformMap[index] == 'O' {
+				moveRollableRock(platformMap, index, (i*width)+width-1)
+			}
 		}
 	}
-	return longest
+}
+
+func moveRollableRock(platform []rune, start, stopBy int) {
+	index := start
+	for index < stopBy {
+		if platform[index+1] == 'O' || platform[index+1] == '#' {
+			break
+		} else {
+			temp := platform[index+1]
+			platform[index+1] = platform[index]
+			platform[index] = temp
+			index++
+		}
+	}
 }
