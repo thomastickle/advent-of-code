@@ -7,7 +7,7 @@ import (
 
 func TestPart1Test(t *testing.T) {
 	const expectedSteps = 2
-	lines := util.GetLinesFromFilename("day8test1.input")
+	lines := util.GetLinesFromFilename("day8test1.txt")
 
 	movements, nodes := GetMovementsAndNodes(lines)
 	stepsToReach := FindStepsToReach(movements, nodes, "AAA", "ZZZ")
@@ -19,7 +19,7 @@ func TestPart1Test(t *testing.T) {
 
 func TestPart1Test2(t *testing.T) {
 	const expectedSteps = 6
-	lines := util.GetLinesFromFilename("day8test2.input")
+	lines := util.GetLinesFromFilename("day8test2.txt")
 
 	movements, nodes := GetMovementsAndNodes(lines)
 	stepsToReach := FindStepsToReach(movements, nodes, "AAA", "ZZZ")
@@ -31,7 +31,7 @@ func TestPart1Test2(t *testing.T) {
 
 func TestPart1(t *testing.T) {
 	const expectedSteps = 12169
-	lines := util.GetLinesFromFilename("day8.input")
+	lines := util.GetLinesFromFilename("day8input.txt")
 
 	movements, nodes := GetMovementsAndNodes(lines)
 	stepsToReach := FindStepsToReach(movements, nodes, "AAA", "ZZZ")
@@ -43,7 +43,7 @@ func TestPart1(t *testing.T) {
 
 func TestPart2Test(t *testing.T) {
 	const expectedSteps = 6
-	lines := util.GetLinesFromFilename("day8test3.input")
+	lines := util.GetLinesFromFilename("day8test3.txt")
 	movements, nodes := GetMovementsAndNodes(lines)
 	endsA := GetNodesByPattern(nodes, `..A`)
 	var steps []int
@@ -60,7 +60,7 @@ func TestPart2Test(t *testing.T) {
 
 func TestPart2(t *testing.T) {
 	const expectedSteps = 12030780859469
-	lines := util.GetLinesFromFilename("day8.input")
+	lines := util.GetLinesFromFilename("day8input.txt")
 	movements, nodes := GetMovementsAndNodes(lines)
 	endsA := GetNodesByPattern(nodes, `..A`)
 	var steps []int
