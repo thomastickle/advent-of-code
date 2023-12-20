@@ -30,11 +30,28 @@ func FindLowestLocationNumber(lines []string) int {
 	return lowest 
 }
 
+// Solves problem but needs optimizations
+func FindLowestLocationNumber2(lines []string) int {
+	seedNumbers := extractSeedNumbers(lines)
+	mapStack := createMappingStack(lines)
+	lowest := math.MaxInt
+	for i := 0; i < len(seedNumbers) - 1; i += 2 { 
+		start := seedNumbers[i]
+		end := seedNumbers[i] + seedNumbers[i + 1]
+		fmt.Printf("Start: %d End: %d\n", start, end)
+		for j := start; j < end; j++ {
+			output := mapSeedsToDestination(j, mapStack)
+			lowest = min(lowest, output)
+		}
+	}
+	return lowest 
+}
+
 func mapSeedsToDestination(seed int, mapStack []Map) int {
 	value := seed
 	for _, amap := range mapStack {
 		for _, mapRange := range amap.MapRange {
-			if mapRange.Source <= value && value <= mapRange.Source+mapRange.Range {
+			if mapRange.Source <= value && value < mapRange.Source+mapRange.Range {
 				value =  mapRange.Destination + (value - mapRange.Source)
 				break
 			}
