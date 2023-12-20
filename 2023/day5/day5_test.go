@@ -20,12 +20,12 @@ func TestDay5Part1(t *testing.T) {
 
 func TestDay5Part2Test(t *testing.T) {
 	lines := util.GetLinesFromFilename("day5input_test.txt")
-	lowestLocationNumber := FindLowestLocationNumber(lines)
-	test.AssertEquals(t, 35, lowestLocationNumber)
+	lowestLocationNumber := FindLowestLocationNumber2(lines)
+	test.AssertEquals(t, 46, lowestLocationNumber)
 }
 
 func TestDay5Part2(t *testing.T) {
 	lines := util.GetLinesFromFilename("day5input.txt")
-	lowestLocationNumber := FindLowestLocationNumber(lines)
-	test.AssertEquals(t, 177942185, lowestLocationNumber)
+	lowestLocationNumber := FindLowestLocationNumber2(lines)
+	test.AssertEquals(t, 69841803, lowestLocationNumber)
 }
