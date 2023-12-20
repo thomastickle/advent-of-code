@@ -21,15 +21,11 @@ type MapRange struct {
 
 func FindLowestLocationNumber(lines []string) int {
 	seedNumbers := extractSeedNumbers(lines)
-	fmt.Println("Seed numbers: ", seedNumbers)
 	mapStack := createMappingStack(lines)
-	fmt.Println("Map Stack: ", mapStack)
 	destinations := mapSeedsToDestination(seedNumbers, mapStack)
-	fmt.Println("Destinations: ", destinations)
 	sort.Slice(destinations, func(a, b int) bool {
 		return destinations[a] < destinations[b]
 	})
-	fmt.Println("Destinations: ", destinations)
 	return destinations[0]
 }
 
@@ -46,7 +42,6 @@ func mapSeedsToDestination(seeds []int, mapStack []Map) []int {
 				}
 			}
 		}
-		fmt.Println("Transition Map: ", transition)
 		destinations = append(destinations, transition[len(transition)-1])
 	}
 	return destinations
@@ -54,18 +49,19 @@ func mapSeedsToDestination(seeds []int, mapStack []Map) []int {
 
 func createMappingStack(lines []string) []Map {
 	var output []Map
-	output = append(output, extractMapValues(lines, "seed-to-soil"))
-	output = append(output, extractMapValues(lines, "soil-to-fertilizer"))
-	output = append(output, extractMapValues(lines, "fertilizer-to-water"))
-	output = append(output, extractMapValues(lines, "water-to-light"))
-	output = append(output, extractMapValues(lines, "light-to-temperature"))
-	output = append(output, extractMapValues(lines, "temperature-to-humidity"))
-	output = append(output, extractMapValues(lines, "humidity-to-location"))
+	headers := []string{"seed-to-soil", "soil-to-fertilizer", "fertilizer-to-water", "water-to-light", "light-to-temperature", "temperature-to-humidity", "humidity-to-location"}
+
+	lineIndex := 0
+	for _, header := range headers {
+		var extractedMap Map
+		extractedMap, lineIndex = extractMapValues(lines, header, lineIndex)
+		output = append(output, extractedMap)
+	}
 	return output
 }
 
-func extractMapValues(lines []string, prefix string) Map {
-	i := 0
+func extractMapValues(lines []string, prefix string, lineIndex int) (Map, int) {
+	i := lineIndex
 	for i < len(lines) && !strings.HasPrefix(lines[i], prefix) {
 		i++
 	}
@@ -79,7 +75,7 @@ func extractMapValues(lines []string, prefix string) Map {
 
 	mapRange := aMap.MapRange
 	slices.SortFunc(mapRange, mapRangeSorter)
-	return aMap
+	return aMap, i
 }
 
 func mapRangeSorter(a, b MapRange) int {
