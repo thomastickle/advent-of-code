@@ -2,8 +2,8 @@ package day5
 
 import (
 	"fmt"
+	"math"
 	"slices"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -22,29 +22,25 @@ type MapRange struct {
 func FindLowestLocationNumber(lines []string) int {
 	seedNumbers := extractSeedNumbers(lines)
 	mapStack := createMappingStack(lines)
-	destinations := mapSeedsToDestination(seedNumbers, mapStack)
-	sort.Slice(destinations, func(a, b int) bool {
-		return destinations[a] < destinations[b]
-	})
-	return destinations[0]
+	lowest := math.MaxInt 
+	for _, seedNumber := range seedNumbers {
+		output := mapSeedsToDestination(seedNumber, mapStack)
+		lowest = min(lowest, output)
+	}
+	return lowest 
 }
 
-func mapSeedsToDestination(seeds []int, mapStack []Map) []int {
-	var destinations []int
-	for _, seed := range seeds {
-		var transition []int
-		transition = append(transition, seed)
-		for _, amap := range mapStack {
-			for _, mapRange := range amap.MapRange {
-				if mapRange.Source <= transition[len(transition)-1] && transition[len(transition)-1] <= mapRange.Source+mapRange.Range {
-					transition = append(transition, mapRange.Destination+(transition[len(transition)-1]-mapRange.Source))
-					break
-				}
+func mapSeedsToDestination(seed int, mapStack []Map) int {
+	value := seed
+	for _, amap := range mapStack {
+		for _, mapRange := range amap.MapRange {
+			if mapRange.Source <= value && value <= mapRange.Source+mapRange.Range {
+				value =  mapRange.Destination + (value - mapRange.Source)
+				break
 			}
 		}
-		destinations = append(destinations, transition[len(transition)-1])
 	}
-	return destinations
+	return value 
 }
 
 func createMappingStack(lines []string) []Map {
