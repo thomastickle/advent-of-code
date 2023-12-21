@@ -8,7 +8,7 @@ import (
 
 func TestPart1Test(t *testing.T) {
 	const expectedValue = 8
-	lines := util.GetLinesFromFilename("day2input_test.txt")
+	lines := util.GetLinesFromFilename("day2test.txt")
 	sum := SumOfValidGames(lines)
 	if expectedValue != sum {
 		t.Fatalf("Expected value %d does not match actual value %d", expectedValue, sum)
@@ -25,7 +25,7 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2Test(t *testing.T) {
-	lines := util.GetLinesFromFilename("day2input_test.txt")
+	lines := util.GetLinesFromFilename("day2test.txt")
 	sum := SumOfMinimalPowerSet(lines)
 	test.AssertEquals(t, 2286, sum)
 }
