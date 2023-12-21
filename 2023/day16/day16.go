@@ -1,6 +1,10 @@
 package day16
 
-import "github.com/gammazero/deque"
+import (
+	"math"
+
+	"github.com/gammazero/deque"
+)
 
 type Cursor struct {
 	Row             int
@@ -14,11 +18,11 @@ type Coordinates struct {
 	Column int
 }
 
-func CountActivatedTiles(grid [][]rune) int {
+func CountActivatedTiles(grid [][]rune, startCursor Cursor) int {
 	var deque deque.Deque[Cursor]
 	seen := make(map[Cursor]bool)
 
-	deque.PushBack(Cursor{0, -1, 0, 1})
+	deque.PushBack(startCursor)
 
 	for deque.Len() > 0 {
 		a := deque.PopFront()
@@ -85,4 +89,20 @@ func ConstructRuneGridFromLines(lines []string) [][]rune {
 		grid[i] = []rune(row)
 	}
 	return grid
+}
+
+func GetMaxActivations(grid [][]rune) int {
+	maxValue := math.MinInt
+	for row, _ := range grid {
+		maxValue = max(maxValue, CountActivatedTiles(grid, Cursor{row,-1, 0, 1}))
+		maxValue = max(maxValue, CountActivatedTiles(grid, Cursor{row,len(grid[0]), 0, -1}))
+	}
+
+
+	for column, _ := range grid[0] {
+		maxValue = max(maxValue, CountActivatedTiles(grid, Cursor{-1, column, 1, 0}))
+		maxValue = max(maxValue, CountActivatedTiles(grid, Cursor{len(grid), column, 1, 0}))
+	}
+
+	return maxValue
 }
