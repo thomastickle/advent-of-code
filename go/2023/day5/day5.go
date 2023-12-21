@@ -38,7 +38,6 @@ func FindLowestLocationNumber2(lines []string) int {
 	for i := 0; i < len(seedNumbers) - 1; i += 2 { 
 		start := seedNumbers[i]
 		end := seedNumbers[i] + seedNumbers[i + 1]
-		fmt.Printf("Start: %d End: %d\n", start, end)
 		for j := start; j < end; j++ {
 			output := mapSeedsToDestination(j, mapStack)
 			lowest = min(lowest, output)
