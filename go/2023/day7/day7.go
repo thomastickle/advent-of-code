@@ -1,9 +1,6 @@
-package main
+package day7
 
 import (
-	"bufio"
-	"fmt"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
@@ -18,6 +15,7 @@ type Hand struct {
 
 type Card int
 const (
+	Joker = 0
 	Two Card = iota + 1
 	Three
 	Four
@@ -34,7 +32,6 @@ const (
 )
 
 type HandValue int
-
 const (
 	HIGH_CARD HandValue = iota
 	PAIR
@@ -45,14 +42,9 @@ const (
 	FIVE_OF_KIND
 )
 
-func main() {
-	var hands []Hand
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		line := scanner.Text()
-		hand := populateHand(line)
-		hands = append(hands, hand)
-	}
+
+func GetTotalWinnings(lines []string, jokers bool) int {
+	hands := getHands(lines, jokers)
 
 	slices.SortFunc(hands, func(a, b Hand) int {
 		x := a.Score - b.Score
@@ -75,32 +67,39 @@ func main() {
 	for i, hand := range hands {
 		totalWinnings += (i+1) * hand.Bet
 	}
-	fmt.Printf("Total winnings: %d\n", totalWinnings)
+	return totalWinnings
 }
 
+func getHands(lines []string, jokers bool) []Hand {
+	var hands []Hand
+	for _, line := range lines {
+		hand := populateHand(line, jokers)
+		hands = append(hands, hand)
+	}
+	return hands
+}
 
-
-func populateHand(line string) Hand {
+func populateHand(line string, jokers bool) Hand {
 	var hand Hand;			
 	handAndBet := strings.Split(line, " ")
 	hand.Bet, _ = strconv.Atoi(handAndBet[1])
-	hand.Cards = translateStringToCards(handAndBet[0])
+	hand.Cards = translateStringToCards(handAndBet[0], jokers)
 	hand.Score = scoreHand(hand.Cards)
 	return hand
 
 }
 
-func translateStringToCards(line string) []Card {
+func translateStringToCards(line string, jokers bool) []Card {
 	hand := make([]Card, len(line))
 
 	for i, aRune := range []rune(line) {
-		hand[i] = translateToCardValue(aRune)
+		hand[i] = translateToCardValue(aRune, jokers)
 	}
 
 	return hand
 }
 
-func translateToCardValue(cardRune rune) Card {
+func translateToCardValue(cardRune rune, jokers bool) Card {
 	switch cardRune {
 		case '2': return Two
 		case '3': return Three
@@ -111,41 +110,74 @@ func translateToCardValue(cardRune rune) Card {
 		case '8': return Eight
 		case '9': return Nine
 		case 'T': return Ten
-		case 'J': return Jack
+		case 'J': {
+			if jokers {
+				return Joker
+			} else {
+				return Jack
+			}
+		}
 		case 'Q': return Queen
 		case 'K': return King
 		case 'A': return Ace
 	}
-	fmt.Println("Value:", string(cardRune), "!")
 	panic("Not found")
 }
 
 
 func scoreHand(hand []Card) HandValue {
- 	counts := make([]int, 14)
+ 	counts := make([]int, int(Ace) + 1)
 	for _, card := range hand {
 		counts[int(card)] += 1
 	}
-
+	
+	jokers := counts[0]
+	counts = counts[1:]
 
 	slices.SortFunc(counts, func(a, b int) int {
 		return b - a 
 	})
 
-	if counts[0] == 5 {
+	
+	// Now figure out winning combinations
+	if counts[0] + jokers == 5 {
 		return FIVE_OF_KIND
-	} else if counts[0] == 4 {
-		return FOUR_OF_KIND
-	} else if counts[0] == 3 && counts[1] == 2 {
-		return FULL_HOUSE
-	} else if counts[0] == 3 {
-		return THREE_OF_KIND
-	} else if counts[0] == 2 && counts[1] == 2 {
-		return TWO_PAIR
-	} else if counts[0] == 2 {
-		return PAIR
-	} else {
-		return HIGH_CARD
-	}
-}
+	} 
 
+	if counts[0] + jokers == 4 {
+		return FOUR_OF_KIND
+	} 
+
+
+	// Get the two highest counts so we can try to make the best hand using jokers.
+	most := counts[0]
+	second := counts[1]
+
+	for most < 3 && jokers > 0 {
+		most++
+		jokers--
+	}
+
+	for second < 2 && jokers > 0 {
+		most++
+		jokers--
+	}
+
+	if most == 3 && second == 2 {
+		return FULL_HOUSE
+	} 
+
+	if most == 3 {
+		return THREE_OF_KIND
+	} 
+
+	if most == 2 && second == 2 {
+		return TWO_PAIR
+	} 
+
+	if most == 2 {
+		return PAIR
+	}
+
+	return HIGH_CARD
+}
