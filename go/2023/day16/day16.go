@@ -1,9 +1,8 @@
 package day16
 
 import (
+	"container/list"
 	"math"
-
-	"github.com/gammazero/deque"
 )
 
 type Cursor struct {
@@ -19,13 +18,14 @@ type Coordinates struct {
 }
 
 func CountActivatedTiles(grid [][]rune, startCursor Cursor) int {
-	var deque deque.Deque[Cursor]
+ 	deque := list.New()
 	seen := make(map[Cursor]bool)
 
 	deque.PushBack(startCursor)
 
 	for deque.Len() > 0 {
-		a := deque.PopFront()
+		 a:= deque.Front().Value.(Cursor)
+		deque.Remove(deque.Front())
 		
 		row := a.Row + a.DirectionRow
 		column := a.Column + a.DirectionColumn
