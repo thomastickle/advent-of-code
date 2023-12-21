@@ -17,3 +17,15 @@ func TestCalculateSumOfHashes(t *testing.T) {
 	sum := CalculateSumOfHashes(lines[0])
 	test.AssertEquals(t, 511498, sum)
 }
+
+func TestFocusPowerTest(t *testing.T) {
+	lines := util.GetLinesFromFilename("day15test.txt")
+	sum := FocusPower(lines[0])
+	test.AssertEquals(t, 145, sum)
+}
+
+func TestFocusPower(t *testing.T) {
+	lines := util.GetLinesFromFilename("day15input.txt")
+	sum := FocusPower(lines[0])
+	test.AssertEquals(t, 284674, sum)
+}
