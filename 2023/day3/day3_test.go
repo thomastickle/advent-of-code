@@ -7,7 +7,7 @@ import (
 
 func TestPart1Test(t *testing.T) {
 	const expectedValue = 4361
-	lines := util.GetLinesFromFilename("day3input_test.txt")
+	lines := util.GetLinesFromFilename("day3test.txt")
 	partNumberCandidates, symbols := GetAllPartNumberCandidates(lines)
 	partNumbers := GetPartNumbers(partNumberCandidates, symbols)
 	sum := GetSumOfPartNumbers(partNumbers)
@@ -30,7 +30,7 @@ func TestPart1(t *testing.T) {
 
 func TestPart2Test(t *testing.T) {
 	const expectedValue = 467835 
-	lines := util.GetLinesFromFilename("day3input_test.txt")
+	lines := util.GetLinesFromFilename("day3test.txt")
 	partNumberCandidates, symbols := GetAllPartNumberCandidates(lines)
 	partNumbers := GetPartNumbers(partNumberCandidates, symbols)
 	sum := GetSumOfGearRatios(partNumbers, symbols)
