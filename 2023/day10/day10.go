@@ -38,7 +38,7 @@ func FindFurthestDistance(inputTable [][]rune, startPosition Position) int {
 		value++
 	}
 
-	// Subtract 1 because we always will overincrement
+	// Subtract 1 because we always will over increment
 	return value - 1
 }
 
@@ -198,11 +198,11 @@ func ConvertInputToTable(lines []string) [][]rune {
 	table := make([][]rune, len(lines))
 
 	for i, line := range lines {
-		tablerow := make([]rune, len(line))
+		tableRow := make([]rune, len(line))
 		for j, char := range string(lines[i]) {
-			tablerow[j] = char
+			tableRow[j] = char
 		}
-		table[i] = tablerow
+		table[i] = tableRow
 	}
 
 	return table
