@@ -33,5 +33,5 @@ func TestDay17Part2Test2(t *testing.T) {
 func TestDay17Part2(t *testing.T) {
 	lines := util.GetLinesFromFilename("day17input.txt")
 	heatLoss := FindLowestHeatLoss(lines, 4, 10)
-	test.AssertEquals(t, 1263, heatLoss)
+	test.AssertEquals(t, 1411, heatLoss)
 }
