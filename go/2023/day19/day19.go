@@ -7,55 +7,6 @@ import (
 	"strings"
 )
 
-type WorkFlow struct {
-	Id    string
-	Rules []Rule
-}
-
-type RuleType int
-
-const (
-	GreaterThan = iota
-	LessThan
-	Default
-)
-
-type Rule struct {
-	Quality     string
-	TestType    RuleType
-	TestValue   int
-	Destination string
-}
-
-func (rule *Rule) process(part Part) string {
-	value := part.PartValues[rule.Quality]
-
-	applies := true
-	if rule.TestType == GreaterThan {
-		applies = applies && greaterThan(value, rule.TestValue)
-	} else if rule.TestType == LessThan {
-		applies = applies && lessThan(value, rule.TestValue)
-	}
-
-	if applies {
-		return rule.Destination
-	}
-
-	return ""
-}
-
-func greaterThan(x, y int) bool {
-	return x > y
-}
-
-func lessThan(x, y int) bool {
-	return x < y
-}
-
-type Part struct {
-	PartValues map[string]int
-}
-
 var WorkFlowRegex = regexp.MustCompile(`^(\w+){(.*?,?)}`)
 var WorkRuleParser = regexp.MustCompile(`(\w)(<|>)(\d+):(\w+)`)
 var PartMatcher = regexp.MustCompile(`^{(.*)}`)
@@ -80,15 +31,12 @@ func BuildWorkFlows(lines []string) map[string]WorkFlow {
 				if WorkRuleParser.MatchString(work) {
 					parsedWorkRule := WorkRuleParser.FindStringSubmatch(work)
 					quality := parsedWorkRule[1]
-					testType := LessThan
-					if parsedWorkRule[2] == ">" {
-						testType = GreaterThan
-					}
+					testType := parsedWorkRule[2] 
 					value, _ := strconv.Atoi(parsedWorkRule[3])
-					rule := Rule{quality, RuleType(testType), value, parsedWorkRule[4]}
+					rule := Rule{RuleType(quality), testType, value, parsedWorkRule[4]}
 					rules = append(rules, rule)
 				} else {
-					rules = append(rules, Rule{"", Default, -1, work})
+					rules = append(rules, Rule{"", "", -1, work})
 				}
 			}
 			workFlow := WorkFlow{workFlowName, rules}
@@ -121,9 +69,11 @@ func processPart(workFlows map[string]WorkFlow, part Part) bool {
 	for !terminated {
 		for _, rule := range currentWorkFlow.Rules {
 			destination := rule.process(part)
-			switch (destination) {
-				case "A" : return true
-				case "R" : return false
+			switch destination {
+			case "A":
+				return true
+			case "R":
+				return false
 			}
 			if destination != "" {
 				currentWorkFlow = workFlows[destination]
@@ -135,7 +85,6 @@ func processPart(workFlows map[string]WorkFlow, part Part) bool {
 	return false
 }
 
-
 func obtainPartFromLine(line string) Part {
 	var partValues map[string]int = make(map[string]int)
 	var extreme, musical, aerodynamic, shiny int
@@ -145,4 +94,38 @@ func obtainPartFromLine(line string) Part {
 	partValues["a"] = aerodynamic
 	partValues["s"] = shiny
 	return Part{PartValues: partValues}
+}
+
+func findCombinations(workflows map[string]WorkFlow, currentWorkFlow WorkFlow, partsRecord PartsRecord) int {
+	if currentWorkFlow.Id == "R" {
+		return 0
+	}
+
+	if currentWorkFlow.Id == "A" {
+		extremeAccepted := partsRecord.Extreme.Stop - partsRecord.Extreme.Start
+		musicalAccepted := partsRecord.Musical.Stop - partsRecord.Musical.Start
+		aerodynamicAccepted := partsRecord.Aerodynamic.Stop - partsRecord.Aerodynamic.Start
+		shinyAccepted := partsRecord.Shiny.Stop - partsRecord.Shiny.Start
+		return extremeAccepted * musicalAccepted * aerodynamicAccepted * shinyAccepted
+	}
+
+	combinations := 0
+
+	for _, rule := range currentWorkFlow.Rules {
+		switch(rule.WorksOn) {
+		case Extreme :
+			newPartsRecord := partsRecord
+			newPartsRecord.Extreme.Start = rule.TestValue + 1
+			newPartsRecord.Extreme.Stop = partsRecord.Extreme.Stop
+			break
+		case Musical:
+			break
+		case Aerodynamic:
+			break
+		case Shiny:
+
+		}
+	}
+
+	return combinations
 }
