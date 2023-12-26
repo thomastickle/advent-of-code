@@ -17,3 +17,16 @@ func TestDay19Part1(t *testing.T) {
 	acceptedParts := ProcessWorkFlowsAndParts(lines)
 	test.AssertEquals(t, 287054, acceptedParts)
 }
+
+
+func TestFindCombinationsAcceptReject(t *testing.T) {
+	inputLines := []string{
+		"pv{a>1716:R,A}",
+	}
+
+	partsRecord := PartsRecord{RecordExtent{"x", 1, 4000}, RecordExtent{"m", 1, 4000}, RecordExtent{"a", 1, 4000}, RecordExtent{"s", 1, 4000}}
+
+	workFlows := BuildWorkFlows(inputLines)
+	combinations := findCombinations(workFlows, workFlows["pv"], partsRecord)
+	test.AssertEquals(t, 0, combinations)
+}
