@@ -1,6 +1,9 @@
 package test
 
-import "testing"
+import (
+	"cmp"
+	"testing"
+)
 
 func ArrayEquals(expected, value []int) bool {
 	for i, expectedValue := range expected {
@@ -11,8 +14,10 @@ func ArrayEquals(expected, value []int) bool {
 	return true
 }
 
-func AssertEquals(t *testing.T, expectedValue, actualValue int) {
+func AssertEquals[OrderedType cmp.Ordered](t *testing.T, expectedValue, actualValue OrderedType) {
 	if expectedValue != actualValue {
-		t.Fatalf("Expected value %d did not match actual value %d", expectedValue, actualValue)
+		t.Fatal("Expected value : ", expectedValue, "did not match actual value: ", actualValue)
 	}
 }
+
+ 
