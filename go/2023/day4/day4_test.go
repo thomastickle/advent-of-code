@@ -14,14 +14,14 @@ func TestPart1Test(t *testing.T) {
 }
 
 func TestPart1(t *testing.T) {
-	expectedWinnings := 25010 
+	expectedWinnings := 25010
 	lines := util.GetLinesFromFilename("day4input.txt")
 	winnings := ComputeWinningsForGames(lines)
 	test.AssertEquals(t, expectedWinnings, winnings)
 }
 
 func TestPart2Test(t *testing.T) {
-	expectedWinnings := 30 
+	expectedWinnings := 30
 	lines := util.GetLinesFromFilename("day4test.txt")
 	winnings := ComputeTotalCardsWon(lines)
 	test.AssertEquals(t, expectedWinnings, winnings)
