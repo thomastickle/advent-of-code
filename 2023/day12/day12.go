@@ -75,8 +75,7 @@ func SumCombinations(lines []string) int {
 
 func SumCombinationsFolded(lines []string) int {
 	count := 0
-	for i, line := range lines {
-		fmt.Println("Doing folded Combination: ", i)
+	for _, line := range lines {
 		springCounts, brokenSprings := getMapAndValues(line)
 		springCounts = unfoldSpringMap(springCounts)
 		brokenSprings = unfoldSpringCounts(brokenSprings)
