@@ -30,10 +30,10 @@ func BuildWorkFlows(lines []string) map[string]WorkFlow {
 			for _, work := range ruleStrings {
 				if WorkRuleParser.MatchString(work) {
 					parsedWorkRule := WorkRuleParser.FindStringSubmatch(work)
-					quality := parsedWorkRule[1]
-					testType := parsedWorkRule[2] 
+					worksOn := parsedWorkRule[1]
+					testType := parsedWorkRule[2]
 					value, _ := strconv.Atoi(parsedWorkRule[3])
-					rule := Rule{RuleType(quality), testType, value, parsedWorkRule[4]}
+					rule := Rule{worksOn, testType, value, parsedWorkRule[4]}
 					rules = append(rules, rule)
 				} else {
 					rules = append(rules, Rule{"", "", -1, work})
@@ -54,8 +54,8 @@ func ProcessParts(lines []string, workFlows map[string]WorkFlow) int {
 		if PartMatcher.MatchString(line) {
 			part := obtainPartFromLine(line)
 			if processPart(workFlows, part) {
-				for _, value := range part.PartValues {
-					accept += value
+				for key := range part.Values {
+					accept += part.Values[key][0]
 				}
 			}
 		}
@@ -86,46 +86,88 @@ func processPart(workFlows map[string]WorkFlow, part Part) bool {
 }
 
 func obtainPartFromLine(line string) Part {
-	var partValues map[string]int = make(map[string]int)
+	var partValues map[string][]int = make(map[string][]int)
 	var extreme, musical, aerodynamic, shiny int
 	fmt.Sscanf(line, "{x=%d,m=%d,a=%d,s=%d}", &extreme, &musical, &aerodynamic, &shiny)
-	partValues["x"] = extreme
-	partValues["m"] = musical
-	partValues["a"] = aerodynamic
-	partValues["s"] = shiny
-	return Part{PartValues: partValues}
+	partValues["x"] = []int{extreme, extreme}
+	partValues["m"] = []int{musical, musical}
+	partValues["a"] = []int{aerodynamic, aerodynamic}
+	partValues["s"] = []int{shiny, shiny}
+	return Part{Values: partValues}
 }
 
-func findCombinations(workflows map[string]WorkFlow, currentWorkFlow WorkFlow, partsRecord PartsRecord) int {
-	if currentWorkFlow.Id == "R" {
-		return 0
+func FindCombinations(lines []string) int {
+	workflows := BuildWorkFlows(lines)
+
+	part := Part{
+		Values: map[string][]int{
+			`x`: {1, 4000},
+			`m`: {1, 4000},
+			`a`: {1, 4000},
+			`s`: {1, 4000},
+		},
 	}
 
-	if currentWorkFlow.Id == "A" {
-		extremeAccepted := partsRecord.Extreme.Stop - partsRecord.Extreme.Start
-		musicalAccepted := partsRecord.Musical.Stop - partsRecord.Musical.Start
-		aerodynamicAccepted := partsRecord.Aerodynamic.Stop - partsRecord.Aerodynamic.Start
-		shinyAccepted := partsRecord.Shiny.Stop - partsRecord.Shiny.Start
-		return extremeAccepted * musicalAccepted * aerodynamicAccepted * shinyAccepted
+	w := workflows["in"]
+
+	acceptedParts := findCombinations(workflows, w, part)
+	for i, part := range acceptedParts {
+		fmt.Printf("Part = %d\n", i)
+		for key, rating := range part.Values {
+			fmt.Printf("\t%s:%d\n", key, rating)
+		}
+
 	}
 
-	combinations := 0
+	score := 0
+	for _, acceptedPart := range acceptedParts {
+		combinations := 1
+		for _, partRating := range acceptedPart.Values {
+			combinations *= (partRating[1] - partRating[0]) + 1
+		}
+		score += combinations
+	}
+	return score
+}
+
+func findCombinations(workFlows map[string]WorkFlow, currentWorkFlow WorkFlow, part Part) []Part {
+
+	accepted := make([]Part, 0)
+
+	if currentWorkFlow.Id == `R` {
+		return nil
+	}
+
+	if currentWorkFlow.Id == `A` {
+		return append(accepted, part)
+	}
 
 	for _, rule := range currentWorkFlow.Rules {
-		switch(rule.WorksOn) {
-		case Extreme :
-			newPartsRecord := partsRecord
-			newPartsRecord.Extreme.Start = rule.TestValue + 1
-			newPartsRecord.Extreme.Stop = partsRecord.Extreme.Stop
-			break
-		case Musical:
-			break
-		case Aerodynamic:
-			break
-		case Shiny:
-
+		if rule.WorksOn == `` {
+			return append(accepted, findCombinations(workFlows, workFlows[rule.Destination], part)...)
+		}
+		if rule.Operator == `>` {
+			if part.Values[rule.WorksOn][0] > rule.Value {
+				return append(accepted, findCombinations(workFlows, workFlows[rule.Destination], part)...)
+			}
+			if part.Values[rule.WorksOn][1] > rule.Value {
+				newPart := part.copyPart()
+				newPart.Values[rule.WorksOn][0] = rule.Value + 1
+				part.Values[rule.WorksOn][1] = rule.Value
+				accepted = append(accepted, findCombinations(workFlows, workFlows[rule.Destination], newPart)...)
+			}
+		} else {
+			if part.Values[rule.WorksOn][1] < rule.Value {
+				return append(accepted, findCombinations(workFlows, workFlows[rule.Destination], part)...)
+			}
+			if part.Values[rule.WorksOn][0] < rule.Value {
+				newPart := part.copyPart()
+				newPart.Values[rule.WorksOn][1] = rule.Value - 1
+				part.Values[rule.WorksOn][0] = rule.Value
+				accepted = append(accepted, findCombinations(workFlows, workFlows[rule.Destination], newPart)...)
+			}
 		}
 	}
 
-	return combinations
+	return accepted
 }

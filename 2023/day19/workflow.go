@@ -1,58 +1,43 @@
 package day19
 
-type RuleType string 
-
-const (
-	Extreme = "x"
-	Musical = "m"
-	Aerodynamic = "a"
-	Shiny = "s"
-	Everything = ""
-)
-
+import "slices"
 
 type WorkFlow struct {
 	Id    string
 	Rules []Rule
 }
 
-
 type Rule struct {
-	WorksOn     RuleType
-	Comparison  string 
-	TestValue   int
+	WorksOn     string
+	Operator    string
+	Value       int
 	Destination string
 }
 
 type Part struct {
-	PartValues map[string]int
+	Values map[string][]int
 }
 
-type PartsRecord struct {
-	Extreme     RecordExtent
-	Musical     RecordExtent
-	Aerodynamic RecordExtent
-	Shiny       RecordExtent
-}
-
-type RecordExtent struct {
-	Id    string
-	Start int
-	Stop  int
+func (part Part) copyPart() Part {
+	newPart := Part{make(map[string][]int)}
+	for key, value := range part.Values {
+		newPart.Values[key] = slices.Clone(value)
+	}
+	return newPart
 }
 
 func (rule *Rule) process(part Part) string {
-	if rule.WorksOn == Everything {
-		return rule.Destination 
+	if rule.WorksOn == "" {
+		return rule.Destination
 	}
 
-	value := part.PartValues[string(rule.WorksOn)]
+	value := part.Values[string(rule.WorksOn)]
 
 	applies := true
-	if rule.Comparison == ">" {
-		applies = applies && greaterThan(value, rule.TestValue)
-	} else if rule.Comparison == "<"  {
-		applies = applies && lessThan(value, rule.TestValue)
+	if rule.Operator == ">" {
+		applies = applies && greaterThan(value[0], rule.Value)
+	} else if rule.Operator == "<" {
+		applies = applies && lessThan(value[1], rule.Value)
 	}
 
 	if applies {
