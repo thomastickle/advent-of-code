@@ -9,7 +9,6 @@ func SumOfValidGames(lines []string) int {
 	sum := 0
 	for _, line := range lines {
 		game, possible := processGame(line)
-		fmt.Printf("Game: %d was possible: %t\n", game, possible)
 		if possible {
 			sum += game
 		}
