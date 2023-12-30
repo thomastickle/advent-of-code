@@ -1,6 +1,7 @@
 package day8
 
 import (
+	"aoc-2023/math"
 	"aoc-2023/util"
 	"testing"
 )
@@ -51,7 +52,7 @@ func TestPart2Test(t *testing.T) {
 		steps = append(steps, FindStepsToReach(movements, nodes, startNode.Id, `..Z`))
 	}
 
-	minimumSteps := Lcm(steps[0], steps[1], steps...)
+	minimumSteps := math.Lcm(steps[0], steps[1], steps...)
 
 	if minimumSteps != expectedSteps {
 		t.Fatalf("Expected steps %d did not match actual steps %d", expectedSteps, minimumSteps)
@@ -68,7 +69,7 @@ func TestPart2(t *testing.T) {
 		steps = append(steps, FindStepsToReach(movements, nodes, startNode.Id, `..Z`))
 	}
 
-	minimumSteps := Lcm(steps[0], steps[1], steps...)
+	minimumSteps := math.Lcm(steps[0], steps[1], steps...)
 
 	if minimumSteps != expectedSteps {
 		t.Fatalf("Expected steps %d did not match actual steps %d", expectedSteps, minimumSteps)
