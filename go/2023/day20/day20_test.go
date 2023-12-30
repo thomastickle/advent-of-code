@@ -20,6 +20,6 @@ func TestDay20Part1(t *testing.T) {
 
 func TestDay20Part2(t *testing.T) {
 	lines := util.GetLinesFromFilename("day20input.txt")
-	pulsesSent := CountPulsesSent(lines, 1000, true)
-	test.AssertEquals(t, 7376797888, pulsesSent)
+	pulsesSent := CountPulsesSent(lines, 100000, true)
+	test.AssertEquals(t, 227411378431763, pulsesSent)
 }
