@@ -11,21 +11,20 @@ func CountPulsesSent(lines []string, buttonPresses int, findLowOutput bool) int 
 			outputNode, ok := stateMachine[output]
 			if ok && outputNode.Type == Conjunctor {
 				outputNode.Memory[name] = Low
-			}  
+			}
 		}
 	}
 
-	low := 0
-	high := 0
+	low, high := 0, 0
 	queue := make(chan Pulse, 300)
 	button := stateMachine["button"]
 	for i := 0; i < buttonPresses; i++ {
-		low += 1; 
-		queue <- Pulse{button.Name, button.Outputs[0], Low }
-		for  len(queue) > 0 {
-			pulse := <- queue
+		low += 1
+		queue <- Pulse{button.Name, button.Outputs[0], Low}
+		for len(queue) > 0 {
+			pulse := <-queue
 			if pulse.Pulse == Low {
-				low += 1	
+				low += 1
 			} else {
 				high += 1
 			}
@@ -35,41 +34,50 @@ func CountPulsesSent(lines []string, buttonPresses int, findLowOutput bool) int 
 				continue
 			}
 
-			if module.Type == Broadcaster {
-				for _, target := range module.Outputs {
-					queue <- Pulse{module.Name, target, pulse.Pulse}
-				}
-			}
-
-			if module.Type == FlipFlop && pulse.Pulse == Low {
-				var powerLevel PulseLevel
-				module.State = !module.State
-				if module.State {
-					powerLevel = High
-				} else {
-					powerLevel = Low
-				}
-
-				for _, target := range module.Outputs {
-					queue <- Pulse{module.Name, target, powerLevel}
-				}
-			}
-
-			if module.Type == Conjunctor {
-				module.Memory[pulse.Source] = pulse.Pulse
-				allHigh := High 
-				for _, value := range module.Memory {
-					allHigh = allHigh && bool(value)
-				}
-				for _, target := range module.Outputs {
-					queue <- Pulse{module.Name, target, PulseLevel(!allHigh)}
-				}				 
-			}
+			handleIfBroadcaster(module, pulse, queue)
+			handleFlipFlop(module, pulse, queue)
+			handleIfConjuctor(module, pulse, queue)
 		}
 	}
 
+	return (low - buttonPresses) * high
+}
 
-	return (low-buttonPresses) * high 
+func handleFlipFlop(stateMachineNode *StateMachineNode, pulse Pulse, queue chan Pulse) {
+	if stateMachineNode.Type == FlipFlop && pulse.Pulse == Low {
+		var powerLevel PulseLevel
+		stateMachineNode.State = !stateMachineNode.State
+		if stateMachineNode.State {
+			powerLevel = High
+		} else {
+			powerLevel = Low
+		}
+
+		sendToTargets(stateMachineNode, powerLevel, queue)
+	}
+}
+
+func handleIfConjuctor(stateMachineNode *StateMachineNode, pulse Pulse, queue chan Pulse) {
+	if stateMachineNode.Type == Conjunctor {
+		stateMachineNode.Memory[pulse.Source] = pulse.Pulse
+		allHigh := High
+		for _, value := range stateMachineNode.Memory {
+			allHigh = allHigh && bool(value)
+		}
+		sendToTargets(stateMachineNode, PulseLevel(!allHigh), queue)
+	}
+}
+
+func handleIfBroadcaster(stateMachineNode *StateMachineNode, pulse Pulse, queue chan Pulse) {
+	if stateMachineNode.Type == Broadcaster {
+		sendToTargets(stateMachineNode, pulse.Pulse, queue)
+	}
+}
+
+func sendToTargets(stateMachineNode *StateMachineNode, pulseLevel PulseLevel, queue chan Pulse) {
+	for _, target := range stateMachineNode.Outputs {
+		queue <- Pulse{stateMachineNode.Name, target, pulseLevel}
+	}
 }
 
 func GetStateMachine(lines []string) map[string]*StateMachineNode {
@@ -78,13 +86,13 @@ func GetStateMachine(lines []string) map[string]*StateMachineNode {
 		splitLine := strings.Split(line, "->")
 		nodeType, nodeName := getNodeTypeAndName(splitLine[0])
 		outputs := getOutputs(splitLine[1])
-		stateMachineNode := StateMachineNode{Name: nodeName, Type: nodeType, Outputs: outputs, State: Off, Memory: make(map[string]PulseLevel,0) }
+		stateMachineNode := StateMachineNode{Name: nodeName, Type: nodeType, Outputs: outputs, State: Off, Memory: make(map[string]PulseLevel, 0)}
 		stateMachineNodes[nodeName] = &stateMachineNode
 	}
 
 	stateMachineNodes["button"] = &StateMachineNode{Name: "button", Type: Button, Outputs: []string{"broadcaster"}}
 
-	return stateMachineNodes 
+	return stateMachineNodes
 }
 
 func getOutputs(outputString string) []string {
