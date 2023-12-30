@@ -1,7 +1,6 @@
 package day20
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -21,9 +20,6 @@ func CountPulsesSent(lines []string, buttonPresses int, findLowOutput bool) int 
 	queue := make(chan Pulse, 300)
 	button := stateMachine["button"]
 	for i := 0; i < buttonPresses; i++ {
-		if (i % 100000) == 0 {
-			fmt.Printf("Button presses: %d\n", i)
-		}
 		low += 1; 
 		queue <- Pulse{button.Name, button.Outputs[0], Low }
 		for  len(queue) > 0 {
