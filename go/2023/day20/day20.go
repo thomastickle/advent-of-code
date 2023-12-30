@@ -23,17 +23,11 @@ func CountPulsesSent(lines []string, buttonPresses int, findLowOutput bool) int 
 		queue <- Pulse{button.Name, button.Outputs[0], Low}
 		for len(queue) > 0 {
 			pulse := <-queue
-			if pulse.Pulse == Low {
-				low += 1
-			} else {
-				high += 1
-			}
-
+			low, high = updatePulseCounts(low, high, pulse)
 			module, ok := stateMachine[pulse.Target]
 			if !ok {
 				continue
 			}
-
 			handleIfBroadcaster(module, pulse, queue)
 			handleFlipFlop(module, pulse, queue)
 			handleIfConjuctor(module, pulse, queue)
@@ -41,6 +35,14 @@ func CountPulsesSent(lines []string, buttonPresses int, findLowOutput bool) int 
 	}
 
 	return (low - buttonPresses) * high
+}
+
+func updatePulseCounts(low, high int, pulse Pulse) (int, int) {
+	if pulse.Pulse == Low {
+		return low + 1, high
+	} else {
+		return low, high + 1
+	}
 }
 
 func handleFlipFlop(stateMachineNode *StateMachineNode, pulse Pulse, queue chan Pulse) {
