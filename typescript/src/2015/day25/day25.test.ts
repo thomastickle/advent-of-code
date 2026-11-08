@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
+import {pending} from "../../testing.ts"
 import {inputPath, readInput} from "../../input.ts"
 import {part1, codeAt, sequenceNumber} from "./day25.ts"
 
@@ -10,18 +11,24 @@ describe("2015 day 25: examples", () => {
         [4, 2, 12],
         [1, 5, 15],
     ] as const) {
-        it(`part 1: row ${row}, column ${column} is code number ${expected}`, () => {
-            assert.equal(sequenceNumber(row, column), expected)
-        })
+        it(
+            `part 1: row ${row}, column ${column} is code number ${expected}`,
+            pending(() => {
+                assert.equal(sequenceNumber(row, column), expected)
+            }),
+        )
     }
 
     for (const [row, column, expected] of [
         [1, 1, 20151125],
         [2, 1, 31916031],
     ] as const) {
-        it(`part 1: the code at row ${row}, column ${column} is ${expected}`, () => {
-            assert.equal(codeAt(row, column), expected)
-        })
+        it(
+            `part 1: the code at row ${row}, column ${column} is ${expected}`,
+            pending(() => {
+                assert.equal(codeAt(row, column), expected)
+            }),
+        )
     }
 })
 
@@ -37,7 +44,11 @@ const skip = (answer: number | undefined) =>
           : false
 
 describe("2015 day 25: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, () => {
-        assert.equal(part1(input!), expected.part1)
-    })
+    it(
+        "part 1",
+        {skip: skip(expected.part1)},
+        pending(() => {
+            assert.equal(part1(input!), expected.part1)
+        }),
+    )
 })

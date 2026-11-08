@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
+import {pending} from "../../testing.ts"
 import {inputPath, readInput} from "../../input.ts"
 import {part1, part2} from "./day04.ts"
 
@@ -10,17 +11,23 @@ describe("2015 day 04: examples", () => {
         ["pqrstuv", 1048970],
     ]
     for (const [input, expected] of part1Cases) {
-        it(`part 1: ${JSON.stringify(input)} -> ${expected}`, () => {
-            assert.equal(part1(input), expected)
-        })
+        it(
+            `part 1: ${JSON.stringify(input)} -> ${expected}`,
+            pending(() => {
+                assert.equal(part1(input), expected)
+            }),
+        )
     }
 
     // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them here.
     const part2Cases: [string, number][] = []
     for (const [input, expected] of part2Cases) {
-        it(`part 2: ${JSON.stringify(input)} -> ${expected}`, () => {
-            assert.equal(part2(input), expected)
-        })
+        it(
+            `part 2: ${JSON.stringify(input)} -> ${expected}`,
+            pending(() => {
+                assert.equal(part2(input), expected)
+            }),
+        )
     }
 })
 
@@ -36,10 +43,18 @@ const skip = (answer: number | undefined) =>
           : false
 
 describe("2015 day 04: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, () => {
-        assert.equal(part1(input!), expected.part1)
-    })
-    it("part 2", {skip: skip(expected.part2)}, () => {
-        assert.equal(part2(input!), expected.part2)
-    })
+    it(
+        "part 1",
+        {skip: skip(expected.part1)},
+        pending(() => {
+            assert.equal(part1(input!), expected.part1)
+        }),
+    )
+    it(
+        "part 2",
+        {skip: skip(expected.part2)},
+        pending(() => {
+            assert.equal(part2(input!), expected.part2)
+        }),
+    )
 })
