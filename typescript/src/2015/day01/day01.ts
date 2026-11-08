@@ -1,4 +1,4 @@
-import { readInput } from "../../src/input.ts";
+import { readInput } from "../../input.ts";
 
 /** Day 1: Not Quite Lisp. '(' goes up a floor, ')' goes down. */
 export function part1(input: string): number {

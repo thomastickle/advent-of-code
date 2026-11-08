@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { readInput } from "../../src/input.ts";
+import { readInput } from "../../input.ts";
 import { part1, part2 } from "./day01.ts";
 
 describe("2015 day 01: examples", () => {
