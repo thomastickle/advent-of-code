@@ -8,10 +8,10 @@ Each language lives in its own top-level directory (`go/`, `rust/`, `kotlin/`, .
 
 `master` holds only the shared top-level files. Each language's history was brought over from its earlier single-language repo, with authors, dates and messages preserved, and lives on its own branch until it is deliberately merged:
 
-- `import/<lang>` — the imported history, rewritten into the `<lang>/` subdirectory.
+- `<lang>` — the language's history, rebuilt on top of `master` with the code under `<lang>/`.
 - `original/<lang>` — the untouched original history, with the original commit hashes.
 
 | Language | Year(s) | Branch |
 |---|---|---|
-| Go | 2023 | `import/go` |
-| Rust | 2025 | `import/rust` |
+| Go | 2023 | `go` |
+| Rust | 2025 | `rust` |
