@@ -1,0 +1,4 @@
+node_modules/
+# Puzzle inputs are personal to each account and AoC asks that they not be shared.
+# Remove this line if you'd rather commit them.
+**/input.txt
