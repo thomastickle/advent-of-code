@@ -1,31 +1,31 @@
 import {inputPath, readInput} from "../../input.ts"
 
-export function part1(_input: string): number {
+export function part1(input: string): number {
     let floor = 0
-    for (const char of _input) {
-        if (char === '(') {
+    for (const char of input) {
+        if (char === "(") {
             floor++
-        } else {
+        } else if (char === ")") {
             floor--
         }
     }
     return floor
 }
 
-export function part2(_input: string): number {
+export function part2(input: string): number {
     let floor = 0
-
-    for (const [index, char] of [..._input].entries()) {
-        if (char === '(') {
+    for (let index = 0; index < input.length; index++) {
+        const char = input[index]
+        if (char === "(") {
             floor++
-        } else {
+        } else if (char === ")") {
             floor--
             if (floor === -1) {
                 return index + 1
             }
         }
     }
-    return -1
+    throw new Error("Santa never enters the basement")
 }
 
 if (import.meta.main) {
