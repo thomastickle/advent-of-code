@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
+import {pending} from "../../testing.ts"
 import {inputPath, readInput} from "../../input.ts"
 import {part1, part2} from "./day02.ts"
 
@@ -11,9 +12,12 @@ describe("2015 day 02: examples", () => {
         ["2x3x4\n1x1x10", 101],
     ]
     for (const [input, expected] of part1Cases) {
-        it(`part 1: ${JSON.stringify(input)} -> ${expected}`, () => {
-            assert.equal(part1(input), expected)
-        })
+        it(
+            `part 1: ${JSON.stringify(input)} -> ${expected}`,
+            pending(() => {
+                assert.equal(part1(input), expected)
+            }),
+        )
     }
 
     // Feet of ribbon: the shortest perimeter around one face plus the volume for the bow.
@@ -23,9 +27,12 @@ describe("2015 day 02: examples", () => {
         ["2x3x4\n1x1x10", 48],
     ]
     for (const [input, expected] of part2Cases) {
-        it(`part 2: ${JSON.stringify(input)} -> ${expected}`, () => {
-            assert.equal(part2(input), expected)
-        })
+        it(
+            `part 2: ${JSON.stringify(input)} -> ${expected}`,
+            pending(() => {
+                assert.equal(part2(input), expected)
+            }),
+        )
     }
 })
 
@@ -41,10 +48,18 @@ const skip = (answer: number | undefined) =>
           : false
 
 describe("2015 day 02: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, () => {
-        assert.equal(part1(input!), expected.part1)
-    })
-    it("part 2", {skip: skip(expected.part2)}, () => {
-        assert.equal(part2(input!), expected.part2)
-    })
+    it(
+        "part 1",
+        {skip: skip(expected.part1)},
+        pending(() => {
+            assert.equal(part1(input!), expected.part1)
+        }),
+    )
+    it(
+        "part 2",
+        {skip: skip(expected.part2)},
+        pending(() => {
+            assert.equal(part2(input!), expected.part2)
+        }),
+    )
 })
