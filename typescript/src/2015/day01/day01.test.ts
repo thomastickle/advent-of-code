@@ -33,7 +33,7 @@ describe("2015 day 01: examples", () => {
 })
 
 // Fill these in once you've solved it, so the full input stays a regression test.
-const expected: { part1?: number; part2?: number } = {}
+const expected: {part1?: number; part2?: number} = {part1: 74, part2: 1795}
 
 const input = readInput(2015, 1)
 const skip = (answer: number | undefined) =>
