@@ -1,1 +1,4 @@
 node_modules/
+
+# Local symlink to ../inputs for IDE convenience; inputs are never committed.
+/inputs

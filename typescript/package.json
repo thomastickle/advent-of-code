@@ -6,6 +6,8 @@
     "node": ">=24"
   },
   "scripts": {
+    "aoc": "node src/cli/main.ts",
+    "start": "node src/cli/main.ts",
     "test": "node --test",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm test"
