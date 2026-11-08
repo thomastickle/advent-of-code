@@ -1,0 +1,15 @@
+# Build output
+target/
+build/
+out/
+dist/
+.gradle/
+node_modules/
+*.class
+*.o
+
+# Editors / OS
+.idea/
+.vscode/
+*.log
+.DS_Store
