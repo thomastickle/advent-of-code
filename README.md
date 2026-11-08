@@ -4,11 +4,15 @@ My [Advent of Code](https://adventofcode.com) solutions, grouped by language. I 
 
 Each language lives in its own top-level directory (`go/`, `rust/`, `kotlin/`, ...), with its own README for building and running it.
 
-## Where things live
+## History
 
-`master` holds only the shared top-level files. Each language's history was brought over from its earlier single-language repo, with authors, dates and messages preserved, and lives on its own branch until it is deliberately merged. Each `<lang>` branch is that language's history rebuilt on top of `master`, with the code under `<lang>/`.
+Each language was brought over from its earlier single-language repo with authors, dates and messages preserved, and merged into `master`. The `go` and `rust` branches are kept as the per-language histories.
 
 | Language | Year(s) | Branch |
 |---|---|---|
 | Go | 2023 | `go` |
 | Rust | 2025 | `rust` |
+
+## License
+
+[MIT](LICENSE)
