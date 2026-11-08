@@ -14,3 +14,4 @@ Each language lives in its own top-level directory (`go/`, `rust/`, `kotlin/`, .
 | Language | Year(s) | Branch |
 |---|---|---|
 | Go | 2023 | `import/go` |
+| Rust | 2025 | `import/rust` |
