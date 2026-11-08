@@ -5,7 +5,8 @@ Plain TypeScript, no framework. Node runs the `.ts` files directly (type strippi
 ```sh
 npm install
 npm run check        # typecheck + tests
-npm test             # tests only
+npm test             # tests only: a year > day > part tree, details only for failures
+npm run test:verbose # every test by name
 npm run typecheck    # tsc --noEmit
 npm run aoc          # 🎄 the menu: pick a year, a day, a part (or "all")
 node src/2015/day01/day01.ts   # run a single day file directly
