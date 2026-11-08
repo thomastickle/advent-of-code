@@ -1,0 +1,5 @@
+# Puzzle inputs are personal to each account and AoC asks that they not be shared.
+# Ignore everything here except this file and the README.
+*
+!.gitignore
+!README.md

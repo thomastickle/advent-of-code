@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { readInput } from "../../input.ts";
+import { inputPath, readInput } from "../../input.ts";
 import { part1, part2 } from "./day01.ts";
 
 describe("2015 day 01: examples", () => {
@@ -35,9 +35,9 @@ describe("2015 day 01: examples", () => {
 // Fill these in once you've solved it, so the full input stays a regression test.
 const expected: { part1?: number; part2?: number } = {};
 
-const input = readInput(import.meta.dirname);
+const input = readInput(2015, 1);
 const skip = (answer: number | undefined) =>
-  input === undefined ? "no input.txt" : answer === undefined ? "expected answer not recorded yet" : false;
+  input === undefined ? `no input at ${inputPath(2015, 1)}` : answer === undefined ? "expected answer not recorded yet" : false;
 
 describe("2015 day 01: full input", () => {
   it("part 1", { skip: skip(expected.part1) }, () => {

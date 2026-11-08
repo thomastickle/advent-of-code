@@ -1,32 +1,17 @@
-import { readInput } from "../../input.ts";
+import { inputPath, readInput } from "../../input.ts";
 
-/** Day 1: Not Quite Lisp. '(' goes up a floor, ')' goes down. */
-export function part1(input: string): number {
-  let floor = 0;
-  for (const c of input) {
-    if (c === "(") floor++;
-    else if (c === ")") floor--;
-  }
-  return floor;
+export function part1(_input: string): number {
+  throw new Error("not implemented");
 }
 
-/** 1-based position of the first character that sends Santa to the basement. */
-export function part2(input: string): number {
-  let floor = 0;
-  let position = 0;
-  for (const c of input) {
-    position++;
-    if (c === "(") floor++;
-    else if (c === ")") floor--;
-    if (floor === -1) return position;
-  }
-  throw new Error("Santa never enters the basement");
+export function part2(_input: string): number {
+  throw new Error("not implemented");
 }
 
 if (import.meta.main) {
-  const input = readInput(import.meta.dirname);
+  const input = readInput(2015, 1);
   if (input === undefined) {
-    console.error("No input.txt found next to this file.");
+    console.error(`No input found at ${inputPath(2015, 1)}`);
     process.exit(1);
   }
   console.log("part 1:", part1(input));
