@@ -6,7 +6,7 @@ Each language lives in its own top-level directory (`go/`, `rust/`, `kotlin/`, .
 
 ## Where things live
 
-`main` holds only the shared top-level files. Each language's history was brought over from its earlier single-language repo, with authors, dates and messages preserved, and lives on its own branch until it is deliberately merged:
+`master` holds only the shared top-level files. Each language's history was brought over from its earlier single-language repo, with authors, dates and messages preserved, and lives on its own branch until it is deliberately merged:
 
 - `import/<lang>` — the imported history, rewritten into the `<lang>/` subdirectory.
 - `original/<lang>` — the untouched original history, with the original commit hashes.
