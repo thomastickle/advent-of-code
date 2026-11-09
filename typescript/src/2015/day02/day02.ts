@@ -1,5 +1,6 @@
 import {inputPath, readInput} from "../../input.ts"
 
+/** A present, as the three dimensions of a rectangular box, all in feet. */
 interface Box {
     length: number
     width: number
@@ -8,58 +9,74 @@ interface Box {
 
 /**
  * Extract the measurements of a box from its input string
- * @param boxInput String in the format "lengthxwidthxheight"
+ * @param boxInput String in the format "<length>x<width>x<height>", e.g. "2x3x4"
  * @returns Box object with the measurements
+ * @throws Error if the string is not three whole numbers separated by "x"
  */
 function getBoxMeasurements(boxInput: string): Box {
-    const measurements = boxInput.split("x")
-    const lengthValue = parseInt(measurements[0] ?? "0")
-    const widthValue = parseInt(measurements[1] ?? "0")
-    const heightValue = parseInt(measurements[2] ?? "0")
-    return {
-        length: lengthValue,
-        width: widthValue,
-        height: heightValue
+    const match = /^(\d+)x(\d+)x(\d+)$/.exec(boxInput.trim())
+    if (match === null) {
+        throw new Error(`Invalid box measurements: ${JSON.stringify(boxInput)}`)
     }
+    return {length: Number(match[1]), width: Number(match[2]), height: Number(match[3])}
 }
 
 /**
- * Process all the lines of the input returning a single value
- * @param input
- * @param processBox
+ * Parse every non-blank line of the input as a box and add up the material each box needs
+ * @param input One box per line, each in the format "<length>x<width>x<height>", e.g. "2x3x4"
+ * @param amountFor Function giving the amount of material a single box needs (square feet of paper, feet of ribbon)
+ * @returns The total amount of material needed for every box
+ * @throws Error if any non-blank line is not a valid box
  */
-function processInput(input: string, processBox: (boxInput: string) => number): number {
+function processInput(input: string, amountFor: (box: Box) => number): number {
     let total = 0
-    for (const boxInput of input.split("\n")) {
-        if (boxInput.trim().length === 0) {
-            continue
+    for (const line of input.split("\n")) {
+        if (line.trim().length > 0) {
+            total += amountFor(getBoxMeasurements(line))
         }
-        total += processBox(boxInput)
     }
     return total
 }
 
-export function part1(input: string): number {
-    function processBox(boxInput: string) {
-        const {length, width, height} = getBoxMeasurements(boxInput)
-        const total = 2 * length * width + 2 * width * height + 2 * height * length
-        const smallestSize = Math.min(length * width, width * height, height * length)
-        return total + smallestSize
-    }
-
-    return processInput(input, processBox)
+/**
+ * Wrapping paper needed for one box: its surface area plus the area of its smallest side as slack
+ * @param box The box to wrap
+ * @returns Square feet of wrapping paper
+ */
+function wrappingPaper({length, width, height}: Box): number {
+    const lw = length * width
+    const wh = width * height
+    const hl = height * length
+    return 2 * (lw + wh + hl) + Math.min(lw, wh, hl)
 }
 
-export function part2(input: string): number {
-    function processBox(boxInput: string) {
-        const box = getBoxMeasurements(boxInput)
-        const smallest = Object.values(box).sort((a, b) => a - b).slice(0, 2)
-        const base = 2 * (smallest[0] + smallest[1])
-        const bow = box.length * box.width * box.height
-        return base + bow
-    }
+/**
+ * Ribbon needed for one box: the shortest distance around one face, plus a bow equal to the box's volume.
+ * The shortest perimeter is twice the sum of the two smallest dimensions, i.e. the sum of all three less the largest.
+ * @param box The box to wrap
+ * @returns Feet of ribbon
+ */
+function ribbon({length, width, height}: Box): number {
+    const perimeter = 2 * (length + width + height - Math.max(length, width, height))
+    return perimeter + length * width * height
+}
 
-    return processInput(input, processBox)
+/**
+ * Part 1: total wrapping paper for all the presents
+ * @param input One box per line, each in the format "<length>x<width>x<height>", e.g. "2x3x4"
+ * @returns Total square feet of wrapping paper
+ */
+export function part1(input: string): number {
+    return processInput(input, wrappingPaper)
+}
+
+/**
+ * Part 2: total ribbon for all the presents
+ * @param input One box per line, each in the format "<length>x<width>x<height>", e.g. "2x3x4"
+ * @returns Total feet of ribbon
+ */
+export function part2(input: string): number {
+    return processInput(input, ribbon)
 }
 
 if (import.meta.main) {
