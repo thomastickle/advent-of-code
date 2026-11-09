@@ -39,8 +39,8 @@ const skip = (answer: number | undefined) =>
     input === undefined
         ? `no input at ${inputPath(2015, 4)}`
         : answer === undefined
-          ? "expected answer not recorded yet"
-          : false
+            ? "expected answer not recorded yet"
+            : false
 
 describe("2015 day 04: full input", () => {
     it(
