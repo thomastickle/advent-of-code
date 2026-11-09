@@ -2,3 +2,6 @@ node_modules/
 
 # Local symlink to ../inputs for IDE convenience; inputs are never committed.
 /inputs
+
+# Local agent/IDE tool configuration (machine-specific ports and paths).
+/.codex

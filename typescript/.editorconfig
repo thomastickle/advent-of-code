@@ -1,0 +1,30 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+[*.{ts,js,mjs,cjs}]
+# WebStorm / JetBrains code style: no semicolons, double quotes, {tight braces}, trailing commas when multiline.
+ij_typescript_use_semicolon_after_statement = false
+ij_typescript_use_double_quotes = true
+ij_typescript_spaces_within_imports = false
+ij_typescript_spaces_within_object_literal_braces = false
+ij_typescript_spaces_within_object_type_braces = false
+ij_typescript_enforce_trailing_comma = whenmultiline
+ij_javascript_use_semicolon_after_statement = false
+ij_javascript_use_double_quotes = true
+ij_javascript_spaces_within_imports = false
+ij_javascript_spaces_within_object_literal_braces = false
+ij_javascript_enforce_trailing_comma = whenmultiline
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
