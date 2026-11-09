@@ -41,7 +41,7 @@ function processInput(input: string, processBox: (boxInput: string) => number): 
 
 export function part1(input: string): number {
     function processBox(boxInput: string) {
-        const {length, width, height}  = getBoxMeasurements(boxInput)
+        const {length, width, height} = getBoxMeasurements(boxInput)
         const total = 2 * length * width + 2 * width * height + 2 * height * length
         const smallestSize = Math.min(length * width, width * height, height * length)
         return total + smallestSize
@@ -51,14 +51,15 @@ export function part1(input: string): number {
 }
 
 export function part2(input: string): number {
-/*
-    function processbox(boxinput: string): number {
-        r
+    function processBox(boxInput: string) {
+        const box = getBoxMeasurements(boxInput)
+        const smallest = Object.values(box).sort((a, b) => a - b).slice(0, 2)
+        const base = 2 * (smallest[0] + smallest[1])
+        const bow = box.length * box.width * box.height
+        return base + bow
     }
 
     return processInput(input, processBox)
-*/
-    throw new Error("Not implemented")
 }
 
 if (import.meta.main) {

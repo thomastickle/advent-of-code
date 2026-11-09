@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
 import {pending} from "../../testing.ts"
-import {inputPath, readInput} from "../../input.ts"
+import {inputPath, readExpected, readInput} from "../../input.ts"
 import {part1, part2} from "./day11.ts"
 
 describe("2015 day 11: examples", () => {
@@ -30,8 +30,8 @@ describe("2015 day 11: examples", () => {
     }
 })
 
-// Fill these in once you've solved it, so the full input stays a regression test.
-const expected: {part1?: string; part2?: string} = {}
+// Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
+const expected: {part1?: string; part2?: string} = readExpected(2015, 11)
 
 const input = readInput(2015, 11)
 const skip = (answer: string | undefined) =>
