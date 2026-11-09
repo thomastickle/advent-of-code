@@ -19,8 +19,12 @@ describe("2015 day 03: examples", () => {
         )
     }
 
-    // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them here.
-    const part2Cases: [string, number][] = []
+    // Santa and Robo-Santa take turns, starting from the same house.
+    const part2Cases: [string, number][] = [
+        ["^v", 3],
+        ["^>v<", 3],
+        ["^v^v^v^v^v", 11],
+    ]
     for (const [input, expected] of part2Cases) {
         it(
             `part 2: ${JSON.stringify(input)} -> ${expected}`,
@@ -32,15 +36,15 @@ describe("2015 day 03: examples", () => {
 })
 
 // Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
-const expected: {part1?: number; part2?: number} = readExpected(2015, 3)
+const expected: { part1?: number; part2?: number } = readExpected(2015, 3)
 
 const input = readInput(2015, 3)
 const skip = (answer: number | undefined) =>
     input === undefined
         ? `no input at ${inputPath(2015, 3)}`
         : answer === undefined
-          ? "expected answer not recorded yet"
-          : false
+            ? "expected answer not recorded yet"
+            : false
 
 describe("2015 day 03: full input", () => {
     it(
