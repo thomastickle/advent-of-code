@@ -23,8 +23,14 @@ describe("2015 day 05: examples", () => {
         )
     }
 
-    // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them here.
-    const part2Cases: [string, number][] = []
+    // Each example is one string; the last case (derived, not on the page) runs all four as separate lines.
+    const part2Cases: [string, number][] = [
+        ["qjhvhtzxzqqjkmpb", 1],
+        ["xxyxx", 1],
+        ["uurcxstgmygtbstg", 0],
+        ["ieodomkazucvgmuy", 0],
+        ["qjhvhtzxzqqjkmpb\nxxyxx\nuurcxstgmygtbstg\nieodomkazucvgmuy", 2],
+    ]
     for (const [input, expected] of part2Cases) {
         it(
             `part 2: ${JSON.stringify(input)} -> ${expected}`,
