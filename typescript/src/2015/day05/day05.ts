@@ -33,7 +33,7 @@ function hasThreeVowels(input: string): boolean {
 /**
  * Old rule 2: the line contains at least one letter that appears twice in a row, such as "dd" in "abcdde"
  * @param input One line of the puzzle input, e.g. "ugknbfddgicrmopn"
- * @returns true if any two neighbouring characters are the same
+ * @returns true if any two neighboring characters are the same
  */
 function hasDoubleLetter(input: string): boolean {
     for (let index = 0; index < input.length - 1; index++) {

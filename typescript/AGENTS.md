@@ -40,5 +40,5 @@ and `@throws` where it applies. Say why a non-obvious choice was made, such as a
 
 ## Performance
 
-Measure before optimising, and throw the benchmark script away afterwards (use the scratchpad, not the repo). Choose a
+Measure before optimizing, and throw the benchmark script away afterwards (use the scratchpad, not the repo). Choose a
 better algorithm or data structure first; constant factors second.
