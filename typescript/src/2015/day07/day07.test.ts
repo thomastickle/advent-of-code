@@ -17,35 +17,32 @@ describe("2015 day 07: examples", () => {
     ].join("\n")
 
     // The example has no wire a, so each case reads a different wire.
-    const part1Cases: [string, number][] = [
-        ["d", 72],
-        ["e", 507],
-        ["f", 492],
-        ["g", 114],
-        ["h", 65412],
-        ["i", 65079],
-        ["x", 123],
-        ["y", 456],
-    ]
-    for (const [wire, expected] of part1Cases) {
-        it(
-            `part 1: wire ${wire} -> ${expected}`,
-            pending(() => {
-                assert.equal(part1(example, wire), expected)
-            }),
-        )
-    }
+    it("part 1: wire d -> 72", pending(() => {
+        assert.equal(part1(example, "d"), 72)
+    }))
+    it("part 1: wire e -> 507", pending(() => {
+        assert.equal(part1(example, "e"), 507)
+    }))
+    it("part 1: wire f -> 492", pending(() => {
+        assert.equal(part1(example, "f"), 492)
+    }))
+    it("part 1: wire g -> 114", pending(() => {
+        assert.equal(part1(example, "g"), 114)
+    }))
+    it("part 1: wire h -> 65412", pending(() => {
+        assert.equal(part1(example, "h"), 65412)
+    }))
+    it("part 1: wire i -> 65079", pending(() => {
+        assert.equal(part1(example, "i"), 65079)
+    }))
+    it("part 1: wire x -> 123", pending(() => {
+        assert.equal(part1(example, "x"), 123)
+    }))
+    it("part 1: wire y -> 456", pending(() => {
+        assert.equal(part1(example, "y"), 456)
+    }))
 
-    // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them here.
-    const part2Cases: [string, number][] = []
-    for (const [input, expected] of part2Cases) {
-        it(
-            `part 2: ${JSON.stringify(input)} -> ${expected}`,
-            pending(() => {
-                assert.equal(part2(input), expected)
-            }),
-        )
-    }
+    // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them below as it("part 2: ...") calls.
 })
 
 // Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
@@ -60,18 +57,10 @@ const skip = (answer: number | undefined) =>
           : false
 
 describe("2015 day 07: full input", () => {
-    it(
-        "part 1",
-        {skip: skip(expected.part1)},
-        pending(() => {
-            assert.equal(part1(input!), expected.part1)
-        }),
-    )
-    it(
-        "part 2",
-        {skip: skip(expected.part2)},
-        pending(() => {
-            assert.equal(part2(input!), expected.part2)
-        }),
-    )
+    it("part 1", {skip: skip(expected.part1)}, pending(() => {
+        assert.equal(part1(input!), expected.part1)
+    }))
+    it("part 2", {skip: skip(expected.part2)}, pending(() => {
+        assert.equal(part2(input!), expected.part2)
+    }))
 })
