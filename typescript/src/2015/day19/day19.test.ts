@@ -6,29 +6,28 @@ import {part1, part2} from "./day19.ts"
 
 describe("2015 day 19: examples", () => {
     // Input is the replacement rules, a blank line, then the molecule.
-    const part1Cases: [string, number][] = [
-        ["H => HO\nH => OH\nO => HH\n\nHOH", 4],
-        ["H => HO\nH => OH\nO => HH\n\nHOHOHO", 7],
-    ]
-    for (const [input, expected] of part1Cases) {
-        it(
-            `part 1: ${JSON.stringify(input)} -> ${expected}`,
-            pending(() => {
-                assert.equal(part1(input), expected)
-            }),
-        )
-    }
+    it("part 1: the example (5 lines) -> 4", pending(() => {
+        const input = [
+            "H => HO",
+            "H => OH",
+            "O => HH",
+            "",
+            "HOH",
+        ].join("\n")
+        assert.equal(part1(input), 4)
+    }))
+    it("part 1: the example (5 lines) -> 7", pending(() => {
+        const input = [
+            "H => HO",
+            "H => OH",
+            "O => HH",
+            "",
+            "HOHOHO",
+        ].join("\n")
+        assert.equal(part1(input), 7)
+    }))
 
-    // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them here.
-    const part2Cases: [string, number][] = []
-    for (const [input, expected] of part2Cases) {
-        it(
-            `part 2: ${JSON.stringify(input)} -> ${expected}`,
-            pending(() => {
-                assert.equal(part2(input), expected)
-            }),
-        )
-    }
+    // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them below as it("part 2: ...") calls.
 })
 
 // Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
@@ -43,18 +42,10 @@ const skip = (answer: number | undefined) =>
           : false
 
 describe("2015 day 19: full input", () => {
-    it(
-        "part 1",
-        {skip: skip(expected.part1)},
-        pending(() => {
-            assert.equal(part1(input!), expected.part1)
-        }),
-    )
-    it(
-        "part 2",
-        {skip: skip(expected.part2)},
-        pending(() => {
-            assert.equal(part2(input!), expected.part2)
-        }),
-    )
+    it("part 1", {skip: skip(expected.part1)}, pending(() => {
+        assert.equal(part1(input!), expected.part1)
+    }))
+    it("part 2", {skip: skip(expected.part2)}, pending(() => {
+        assert.equal(part2(input!), expected.part2)
+    }))
 })

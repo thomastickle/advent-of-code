@@ -5,34 +5,26 @@ import {inputPath, readExpected, readInput} from "../../input.ts"
 import {part1, part2} from "./day03.ts"
 
 describe("2015 day 03: examples", () => {
-    const part1Cases: [string, number][] = [
-        [">", 2],
-        ["^>v<", 4],
-        ["^v^v^v^v^v", 2],
-    ]
-    for (const [input, expected] of part1Cases) {
-        it(
-            `part 1: ${JSON.stringify(input)} -> ${expected}`,
-            pending(() => {
-                assert.equal(part1(input), expected)
-            }),
-        )
-    }
+    it("part 1: \">\" -> 2", pending(() => {
+        assert.equal(part1(">"), 2)
+    }))
+    it("part 1: \"^>v<\" -> 4", pending(() => {
+        assert.equal(part1("^>v<"), 4)
+    }))
+    it("part 1: \"^v^v^v^v^v\" -> 2", pending(() => {
+        assert.equal(part1("^v^v^v^v^v"), 2)
+    }))
 
     // Santa and Robo-Santa take turns, starting from the same house.
-    const part2Cases: [string, number][] = [
-        ["^v", 3],
-        ["^>v<", 3],
-        ["^v^v^v^v^v", 11],
-    ]
-    for (const [input, expected] of part2Cases) {
-        it(
-            `part 2: ${JSON.stringify(input)} -> ${expected}`,
-            pending(() => {
-                assert.equal(part2(input), expected)
-            }),
-        )
-    }
+    it("part 2: \"^v\" -> 3", pending(() => {
+        assert.equal(part2("^v"), 3)
+    }))
+    it("part 2: \"^>v<\" -> 3", pending(() => {
+        assert.equal(part2("^>v<"), 3)
+    }))
+    it("part 2: \"^v^v^v^v^v\" -> 11", pending(() => {
+        assert.equal(part2("^v^v^v^v^v"), 11)
+    }))
 })
 
 // Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
@@ -47,18 +39,10 @@ const skip = (answer: number | undefined) =>
             : false
 
 describe("2015 day 03: full input", () => {
-    it(
-        "part 1",
-        {skip: skip(expected.part1)},
-        pending(() => {
-            assert.equal(part1(input!), expected.part1)
-        }),
-    )
-    it(
-        "part 2",
-        {skip: skip(expected.part2)},
-        pending(() => {
-            assert.equal(part2(input!), expected.part2)
-        }),
-    )
+    it("part 1", {skip: skip(expected.part1)}, pending(() => {
+        assert.equal(part1(input!), expected.part1)
+    }))
+    it("part 2", {skip: skip(expected.part2)}, pending(() => {
+        assert.equal(part2(input!), expected.part2)
+    }))
 })

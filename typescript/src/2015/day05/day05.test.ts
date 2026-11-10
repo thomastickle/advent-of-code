@@ -6,39 +6,54 @@ import {part1, part2} from "./day05.ts"
 
 describe("2015 day 05: examples", () => {
     // Each example is one string; the last case runs all five as separate lines.
-    const part1Cases: [string, number][] = [
-        ["ugknbfddgicrmopn", 1],
-        ["aaa", 1],
-        ["jchzalrnumimnmhp", 0],
-        ["haegwjzuvuyypxyu", 0],
-        ["dvszwmarrgswjxmb", 0],
-        ["ugknbfddgicrmopn\naaa\njchzalrnumimnmhp\nhaegwjzuvuyypxyu\ndvszwmarrgswjxmb", 2],
-    ]
-    for (const [input, expected] of part1Cases) {
-        it(
-            `part 1: ${JSON.stringify(input)} -> ${expected}`,
-            pending(() => {
-                assert.equal(part1(input), expected)
-            }),
-        )
-    }
+    it("part 1: \"ugknbfddgicrmopn\" -> 1", pending(() => {
+        assert.equal(part1("ugknbfddgicrmopn"), 1)
+    }))
+    it("part 1: \"aaa\" -> 1", pending(() => {
+        assert.equal(part1("aaa"), 1)
+    }))
+    it("part 1: \"jchzalrnumimnmhp\" -> 0", pending(() => {
+        assert.equal(part1("jchzalrnumimnmhp"), 0)
+    }))
+    it("part 1: \"haegwjzuvuyypxyu\" -> 0", pending(() => {
+        assert.equal(part1("haegwjzuvuyypxyu"), 0)
+    }))
+    it("part 1: \"dvszwmarrgswjxmb\" -> 0", pending(() => {
+        assert.equal(part1("dvszwmarrgswjxmb"), 0)
+    }))
+    it("part 1: the example (5 lines) -> 2", pending(() => {
+        const input = [
+            "ugknbfddgicrmopn",
+            "aaa",
+            "jchzalrnumimnmhp",
+            "haegwjzuvuyypxyu",
+            "dvszwmarrgswjxmb",
+        ].join("\n")
+        assert.equal(part1(input), 2)
+    }))
 
     // Each example is one string; the last case (derived, not on the page) runs all four as separate lines.
-    const part2Cases: [string, number][] = [
-        ["qjhvhtzxzqqjkmpb", 1],
-        ["xxyxx", 1],
-        ["uurcxstgmygtbstg", 0],
-        ["ieodomkazucvgmuy", 0],
-        ["qjhvhtzxzqqjkmpb\nxxyxx\nuurcxstgmygtbstg\nieodomkazucvgmuy", 2],
-    ]
-    for (const [input, expected] of part2Cases) {
-        it(
-            `part 2: ${JSON.stringify(input)} -> ${expected}`,
-            pending(() => {
-                assert.equal(part2(input), expected)
-            }),
-        )
-    }
+    it("part 2: \"qjhvhtzxzqqjkmpb\" -> 1", pending(() => {
+        assert.equal(part2("qjhvhtzxzqqjkmpb"), 1)
+    }))
+    it("part 2: \"xxyxx\" -> 1", pending(() => {
+        assert.equal(part2("xxyxx"), 1)
+    }))
+    it("part 2: \"uurcxstgmygtbstg\" -> 0", pending(() => {
+        assert.equal(part2("uurcxstgmygtbstg"), 0)
+    }))
+    it("part 2: \"ieodomkazucvgmuy\" -> 0", pending(() => {
+        assert.equal(part2("ieodomkazucvgmuy"), 0)
+    }))
+    it("part 2: the example (4 lines) -> 2", pending(() => {
+        const input = [
+            "qjhvhtzxzqqjkmpb",
+            "xxyxx",
+            "uurcxstgmygtbstg",
+            "ieodomkazucvgmuy",
+        ].join("\n")
+        assert.equal(part2(input), 2)
+    }))
 })
 
 // Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
@@ -53,18 +68,10 @@ const skip = (answer: number | undefined) =>
           : false
 
 describe("2015 day 05: full input", () => {
-    it(
-        "part 1",
-        {skip: skip(expected.part1)},
-        pending(() => {
-            assert.equal(part1(input!), expected.part1)
-        }),
-    )
-    it(
-        "part 2",
-        {skip: skip(expected.part2)},
-        pending(() => {
-            assert.equal(part2(input!), expected.part2)
-        }),
-    )
+    it("part 1", {skip: skip(expected.part1)}, pending(() => {
+        assert.equal(part1(input!), expected.part1)
+    }))
+    it("part 2", {skip: skip(expected.part2)}, pending(() => {
+        assert.equal(part2(input!), expected.part2)
+    }))
 })
