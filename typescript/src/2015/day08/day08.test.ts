@@ -30,7 +30,29 @@ describe("2015 day 08: examples", () => {
         assert.equal(part1(input), 12)
     }))
 
-    // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them below as it("part 2: ...") calls.
+    // Part 2 gives each line's encoded length and its code length. The answer for one line is the first minus the
+    // second, so these per-line results are derived by subtraction. The last case is the page's own total, 42 - 23.
+    it("part 2: the empty string literal (encodes to 6, from 2) -> 4", pending(() => {
+        assert.equal(part2("\"\""), 4)
+    }))
+    it("part 2: abc (encodes to 9, from 5) -> 4", pending(() => {
+        assert.equal(part2("\"abc\""), 4)
+    }))
+    it("part 2: aaa with an escaped quote (encodes to 16, from 10) -> 6", pending(() => {
+        assert.equal(part2("\"aaa\\\"aaa\""), 6)
+    }))
+    it("part 2: a hex escape, x27 (encodes to 11, from 6) -> 5", pending(() => {
+        assert.equal(part2("\"\\x27\""), 5)
+    }))
+    it("part 2: the example (4 lines) -> 19", pending(() => {
+        const input = [
+            "\"\"",
+            "\"abc\"",
+            "\"aaa\\\"aaa\"",
+            "\"\\x27\"",
+        ].join("\n")
+        assert.equal(part2(input), 19)
+    }))
 })
 
 // Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
