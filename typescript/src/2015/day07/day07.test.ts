@@ -52,7 +52,35 @@ describe("2015 day 07: examples", () => {
         assert.equal(part1(example, "j"), 0)
     }))
 
-    // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them below as it("part 2: ...") calls.
+    // The page gives no example for part 2, so these are derived by hand from its rule: take the signal on wire a,
+    // override wire b with it, reset every other wire (a included), and read a again. Each circuit has wires a and b.
+    it("part 2: NOT undoes itself once b holds a's inverted signal (derived)", pending(() => {
+        // a is first 65528, so b becomes 65528 and NOT of that is 7.
+        assert.equal(part2("7 -> b\nNOT b -> a"), 7)
+    }))
+    it("part 2: a is read once more, not fed back again (derived)", pending(() => {
+        // a is first 6, so b becomes 6 and a becomes 12. A second pass would give 24.
+        assert.equal(part2("3 -> b\nb LSHIFT 1 -> a"), 12)
+    }))
+    it("part 2: wires between b and a are recomputed, not reused (derived)", pending(() => {
+        // First x is 4 and a is 5. Then b becomes 5, so x becomes 10 and a becomes 11. A stale x would give 5.
+        assert.equal(part2("2 -> b\nb LSHIFT 1 -> x\nx OR 1 -> a"), 11)
+    }))
+    it("part 2: the override replaces b's own gate (derived)", pending(() => {
+        // a is first 12, so b becomes 12 whatever x says, and a becomes 24. Keeping b's gate would give 12.
+        assert.equal(part2("3 -> x\nx LSHIFT 1 -> b\nb LSHIFT 1 -> a"), 24)
+    }))
+    it("part 2: a keeps its value when it doesn't depend on b (derived)", pending(() => {
+        assert.equal(part2("10 -> a\n1 -> b"), 10)
+    }))
+    it("part 2: an override of 0 still counts as an override (derived)", pending(() => {
+        // a is first 0, so b becomes 0 and NOT of that is 65535. Ignoring a zero would leave b at 65535 and give 0.
+        assert.equal(part2("65535 -> b\nNOT b -> a"), 65535)
+    }))
+    it("part 2: the override keeps its full 16 bits (derived)", pending(() => {
+        // a is first 32768, so b becomes 32768 and shifting it left by 15 leaves no bits within 16, giving 0.
+        assert.equal(part2("1 -> b\nb LSHIFT 15 -> a"), 0)
+    }))
 })
 
 describe("2015 day 07: numeric operands", () => {
