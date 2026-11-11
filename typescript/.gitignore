@@ -5,3 +5,4 @@ node_modules/
 
 # Local agent/IDE tool configuration (machine-specific ports and paths).
 /.codex
+.junie
