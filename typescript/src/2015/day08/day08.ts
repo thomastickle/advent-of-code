@@ -1,61 +1,85 @@
 import {inputPath, readInput} from "../../input.ts"
 
-/** 2015 day 8: Matchsticks. https://adventofcode.com/2015/day/8 */
+/** Two hex digits, as in the `27` of `\x27`. */
+const HEX_PAIR = /^[0-9a-fA-F]{2}$/
 
-
-
-function computeInMemory(line: string): number {
+/**
+ * Count the characters a string literal holds in memory, after its escapes are resolved.
+ * @param line One string literal with its surrounding quotes, e.g. `"aaa\"aaa"`. The only escapes are `\\`, `\"` and
+ * `\x` followed by two hex digits, and each counts as one character.
+ * @returns The number of characters in memory, not counting the surrounding quotes (the example above gives 7)
+ * @throws If the line is not quoted, has an unescaped quote inside, or has an unknown or truncated escape
+ */
+function memoryLength(line: string): number {
+    if (line.length < 2 || !line.startsWith("\"") || !line.endsWith("\"")) {
+        throw new Error(`Invalid line: ${line}`)
+    }
+    const body = line.slice(1, -1)
     let length = 0
-    let lastChar = ""
-
-    for (let i = 0; i < line.length; i++) {
-        if (line[i] == "\"" && (i === 0 || i === line.length - 1)) {
-           continue
+    for (let i = 0; i < body.length; i++) {
+        const char = body[i]
+        if (char === "\"") {
+            throw new Error(`Invalid line: ${line}`)
         }
-        if (line[i] == "\\") {
-            let nextValue = line[i + 1]
-            if (nextValue == "x") {
-                i += 3
-            } else if (nextValue == "\\" || nextValue == "\"") {
+        if (char === "\\") {
+            const next = body[i + 1]
+            if (next === "\\" || next === "\"") {
                 i += 1
+            } else if (next === "x" && HEX_PAIR.test(body.slice(i + 2, i + 4))) {
+                i += 3
+            } else {
+                throw new Error(`Invalid line: ${line}`)
             }
         }
         length++
     }
-
     return length
 }
 
-function lengthEncodedString(line: string): number {
-    let output = "\""
-    for (let char of line) {
-        if (char == "\"") {
-            output += "\\\""
-        } else if (char == "\\") {
-            output += "\\\\"
-        } else {
-            output += char
+/**
+ * Count the characters needed to write a string literal out as a new string literal.
+ * Each quote and backslash gains an escaping backslash, and a new pair of quotes goes around the whole thing.
+ * @param line One string literal as it appears in the input, e.g. `"aaa\"aaa"` (10 characters)
+ * @returns The length of the re-encoded literal, including its surrounding quotes (16 for the example above)
+ */
+function encodedLength(line: string): number {
+    const escaped = line.length - line.replace(/["\\]/g, "").length
+    return 2 + line.length + escaped
+}
+
+/**
+ * Add up a per-line result over a whole input, skipping blank lines such as one left by a trailing newline.
+ * @param input The puzzle input, one string literal per line
+ * @param perLine The result for one line
+ * @returns The sum of the per-line results
+ */
+function sumOverLines(input: string, perLine: (line: string) => number): number {
+    let total = 0
+    for (const line of input.split("\n")) {
+        if (line !== "") {
+            total += perLine(line)
         }
     }
-    output += "\""
-    return output.length
+    return total
 }
 
-
+/**
+ * Part 1: characters of code minus characters in memory, over every literal.
+ * @param input The puzzle input, one string literal per line, e.g. `"abc"`
+ * @returns The total difference
+ * @throws If a line is not a valid string literal
+ */
 export function part1(input: string): number {
-    let length = 0;
-    for (const line of input.split("\n")) {
-       length += line.length - computeInMemory(line)
-    }
-    return length
+    return sumOverLines(input, line => line.length - memoryLength(line))
 }
 
+/**
+ * Part 2: characters of the re-encoded literals minus characters of the original code, over every literal.
+ * @param input The puzzle input, one string literal per line, e.g. `"abc"`
+ * @returns The total difference
+ */
 export function part2(input: string): number {
-    let length = 0
-    for (const line of input.split("\n")) {
-        length += lengthEncodedString(line) - line.length
-    }
-    return length
+    return sumOverLines(input, line => encodedLength(line) - line.length)
 }
 
 if (import.meta.main) {

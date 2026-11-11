@@ -55,6 +55,47 @@ describe("2015 day 08: examples", () => {
     }))
 })
 
+describe("2015 day 08: input handling", () => {
+    it("part 1 ignores a trailing newline", () => {
+        assert.equal(part1("\"abc\"\n"), 2)
+    })
+    it("part 2 ignores a trailing newline", () => {
+        assert.equal(part2("\"abc\"\n"), 4)
+    })
+    it("part 2 ignores a blank line between literals", () => {
+        assert.equal(part2("\"abc\"\n\n\"abc\""), 8)
+    })
+    it("counts an escaped backslash followed by x27 as four characters", () => {
+        // "\\x27" is 7 characters of code and 4 in memory (backslash, x, 2, 7).
+        assert.equal(part1("\"\\\\x27\""), 3)
+    })
+    it("counts adjacent escapes", () => {
+        // "\"\\" is 6 characters of code and 2 in memory (a quote, a backslash).
+        assert.equal(part1("\"\\\"\\\\\""), 4)
+    })
+    it("part 1 rejects a line without quotes", () => {
+        assert.throws(() => part1("abc"), /Invalid line/)
+    })
+    it("part 1 rejects a lone quote", () => {
+        assert.throws(() => part1("\""), /Invalid line/)
+    })
+    it("part 1 rejects an unescaped quote inside", () => {
+        assert.throws(() => part1("\"a\"b\""), /Invalid line/)
+    })
+    it("part 1 rejects an unknown escape", () => {
+        assert.throws(() => part1("\"\\q\""), /Invalid line/)
+    })
+    it("part 1 rejects a truncated hex escape", () => {
+        assert.throws(() => part1("\"\\x4\""), /Invalid line/)
+    })
+    it("part 1 rejects a hex escape with non-hex digits", () => {
+        assert.throws(() => part1("\"\\xzz\""), /Invalid line/)
+    })
+    it("part 1 rejects an escaped closing quote", () => {
+        assert.throws(() => part1("\"abc\\\""), /Invalid line/)
+    })
+})
+
 // Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
 const expected: {part1?: number; part2?: number} = readExpected(2015, 8)
 
