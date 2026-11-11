@@ -5,7 +5,6 @@ import {inputPath, readExpected, readInput} from "../../input.ts"
 import {part1, part2} from "./day07.ts"
 import {BinaryGate, Circuit, Wire, type Operation} from "./circuit_operators.ts"
 
-
 describe("2015 day 07: examples", () => {
     const example = [
         "123 -> x",
