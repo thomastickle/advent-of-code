@@ -5,6 +5,20 @@ import {inputPath, readExpected, readInput} from "../../input.ts"
 import {part1, part2} from "./day08.ts"
 
 describe("2015 day 08: examples", () => {
+    // The page gives each line's characters of code and characters in memory. The answer for one line is the first
+    // minus the second, so these per-line results are derived by subtraction. The last case runs all four as lines.
+    it("part 1: the empty string literal (2 of code, 0 in memory) -> 2", pending(() => {
+        assert.equal(part1("\"\""), 2)
+    }))
+    it("part 1: abc (5 of code, 3 in memory) -> 2", pending(() => {
+        assert.equal(part1("\"abc\""), 2)
+    }))
+    it("part 1: aaa with an escaped quote (10 of code, 7 in memory) -> 3", pending(() => {
+        assert.equal(part1("\"aaa\\\"aaa\""), 3)
+    }))
+    it("part 1: a hex escape, x27 (6 of code, 1 in memory) -> 5", pending(() => {
+        assert.equal(part1("\"\\x27\""), 5)
+    }))
     // Code characters minus in-memory characters over all four example lines: (2 + 5 + 10 + 6) - (0 + 3 + 7 + 1).
     it("part 1: the example (4 lines) -> 12", pending(() => {
         const input = [

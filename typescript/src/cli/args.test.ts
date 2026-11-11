@@ -12,8 +12,11 @@ describe("parseSelection", () => {
         assert.deepEqual([sel.year, sel.day, sel.part], [2015, 1, 2])
     })
 
-    it("reads positionals, and flags win over them", () => {
+    it("reads positionals", () => {
         assert.deepEqual(parseSelection(["2015", "03", "1"]).day, 3)
+    })
+
+    it("lets a flag win over a positional", () => {
         assert.equal(parseSelection(["2015", "--year=2016"]).year, 2016)
     })
 
@@ -22,11 +25,19 @@ describe("parseSelection", () => {
         assert.deepEqual([sel.year, sel.day, sel.part], ["all", "all", "all"])
     })
 
-    it("rejects bad values", () => {
+    it("rejects a part above 2", () => {
         assert.throws(() => parseSelection(["--part=3"]), UsageError)
+    })
+    it("rejects a day above 25", () => {
         assert.throws(() => parseSelection(["--day=26"]), UsageError)
+    })
+    it("rejects a year that is not a number", () => {
         assert.throws(() => parseSelection(["--year=abc"]), UsageError)
+    })
+    it("rejects an unknown flag", () => {
         assert.throws(() => parseSelection(["--bogus"]), UsageError)
+    })
+    it("rejects an extra positional argument", () => {
         assert.throws(() => parseSelection(["2015", "1", "1", "extra"]), UsageError)
     })
 })

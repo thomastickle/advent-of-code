@@ -95,15 +95,23 @@ describe("2015 day 07: numeric operands", () => {
         assert.equal(part1("NOT 0 -> a"), 65535)
     })
 
-    it("evaluates numeric operands in shifts", () => {
+    it("evaluates numeric operands in LSHIFT", () => {
         assert.equal(part1("2 LSHIFT 3 -> a"), 16)
+    })
+    it("evaluates numeric operands in RSHIFT", () => {
         assert.equal(part1("8 RSHIFT 2 -> a"), 2)
     })
 
-    it("resolves wire and numeric operands after the full circuit is built", () => {
+    it("resolves a wire on the left of AND defined after it", () => {
         assert.equal(part1("x AND 3 -> a\n2 -> x"), 2)
+    })
+    it("resolves a wire on the right of AND defined after it", () => {
         assert.equal(part1("2 AND x -> a\n3 -> x"), 2)
+    })
+    it("resolves a wire on the left of OR defined after it", () => {
         assert.equal(part1("x OR 4 -> a\n2 -> x"), 6)
+    })
+    it("resolves a wire on the right of OR defined after it", () => {
         assert.equal(part1("4 OR x -> a\n2 -> x"), 6)
     })
 
@@ -158,8 +166,10 @@ describe("2015 day 07: circuit construction", () => {
 })
 
 describe("2015 day 07: any input can be a number or a wire", () => {
-    it("takes a shift count from a wire", () => {
+    it("takes an LSHIFT count from a wire", () => {
         assert.equal(part1("2 -> n\n1 LSHIFT n -> a"), 4)
+    })
+    it("takes an RSHIFT count from a wire", () => {
         assert.equal(part1("2 -> n\n8 RSHIFT n -> a"), 2)
     })
     it("takes a number as the left input of a shift", () => {
@@ -177,8 +187,10 @@ describe("2015 day 07: signal range", () => {
     it("rejects a number above 65535 assigned to a wire", () => {
         assert.throws(() => part1("65536 -> a"), /Signal 65536 is out of range \(0 to 65535\): 65536 -> a/)
     })
-    it("rejects a number above 65535 as an input to a gate", () => {
+    it("rejects a number above 65535 as the right input of AND", () => {
         assert.throws(() => part1("x AND 70000 -> a\n1 -> x"), /Signal 70000 is out of range/)
+    })
+    it("rejects a number above 65535 as the left input of OR", () => {
         assert.throws(() => part1("70000 OR x -> a\n1 -> x"), /Signal 70000 is out of range/)
     })
     it("rejects a number above 65535 as the input to NOT", () => {
@@ -193,12 +205,16 @@ describe("2015 day 07: large shift counts", () => {
     it("shifts left by 15 into the top bit", () => {
         assert.equal(part1("1 LSHIFT 15 -> a"), 32768)
     })
-    it("empties the signal when shifting left by 16 or more", () => {
+    it("empties the signal when shifting left by 16", () => {
         assert.equal(part1("1 LSHIFT 16 -> a"), 0)
+    })
+    it("empties the signal when shifting left by 32, which JavaScript itself reads as a shift by 0", () => {
         assert.equal(part1("1 LSHIFT 32 -> a"), 0)
     })
-    it("empties the signal when shifting right by 16 or more", () => {
+    it("empties the signal when shifting right by 16", () => {
         assert.equal(part1("65535 RSHIFT 16 -> a"), 0)
+    })
+    it("empties the signal when shifting right by 32, which JavaScript itself reads as a shift by 0", () => {
         assert.equal(part1("65535 RSHIFT 32 -> a"), 0)
     })
 })

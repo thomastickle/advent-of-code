@@ -77,8 +77,10 @@ describe("2015 day 06: parser", () => {
     it("rejects the wrong case", () => {
         assert.throws(() => parseCommand("TURN ON 0,0 through 1,1"), /Invalid line/)
     })
-    it("rejects a range that runs backwards", () => {
+    it("rejects an x range that runs backwards", () => {
         assert.throws(() => parseCommand("toggle 5,0 through 4,9"), /Invalid line/)
+    })
+    it("rejects a y range that runs backwards", () => {
         assert.throws(() => parseCommand("toggle 0,9 through 9,5"), /Invalid line/)
     })
     it("rejects coordinates outside the 1000-wide grid", () => {

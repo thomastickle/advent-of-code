@@ -57,10 +57,13 @@ function randomInput(random: () => number, span: number): string {
 }
 
 describe("2015 day 06 (compressed): agrees with the grid version", () => {
-    it("matches on a full-grid turn on followed by one toggle in the far corner", () => {
-        const input = "turn on 0,0 through 999,999\ntoggle 999,999 through 999,999"
-        assert.equal(part1(input), gridPart1(input))
-        assert.equal(part2(input), gridPart2(input))
+    // A full-grid turn on followed by one toggle in the far corner.
+    const cornerToggle = "turn on 0,0 through 999,999\ntoggle 999,999 through 999,999"
+    it("part 1 matches on a full-grid turn on followed by one toggle in the far corner", () => {
+        assert.equal(part1(cornerToggle), gridPart1(cornerToggle))
+    })
+    it("part 2 matches on a full-grid turn on followed by one toggle in the far corner", () => {
+        assert.equal(part2(cornerToggle), gridPart2(cornerToggle))
     })
     it("matches on 300 random inputs, including heavily overlapping ones", () => {
         const random = seededRandom(2015)
