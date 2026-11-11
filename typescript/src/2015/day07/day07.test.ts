@@ -3,7 +3,7 @@ import {describe, it} from "node:test"
 import {pending} from "../../testing.ts"
 import {inputPath, readExpected, readInput} from "../../input.ts"
 import {part1, part2} from "./day07.ts"
-import {And, Circuit, type Operation} from "./circuit_operators.ts"
+import {BinaryGate, Circuit, Wire, type Operation} from "./circuit_operators.ts"
 
 
 describe("2015 day 07: examples", () => {
@@ -84,14 +84,130 @@ describe("2015 day 07: numeric operands", () => {
         assert.equal(part1("1 LSHIFT 16 -> a"), 0)
     })
 
+    it("keeps NOT results within the 16-bit signal width", () => {
+        assert.equal(part1("NOT 65535 -> a"), 0)
+    })
+
     it("reports missing wires when evaluating other gates", () => {
         assert.throws(() => part1("missing OR 1 -> a"), /Wire missing not found/)
+    })
+})
+
+describe("2015 day 07: missing wire errors name the instruction", () => {
+    it("AND", () => {
+        assert.throws(() => part1("missing AND 1 -> a"), /Wire missing not found\. missing AND 1 -> a$/)
+    })
+    it("OR", () => {
+        assert.throws(() => part1("1 OR missing -> a"), /Wire missing not found\. 1 OR missing -> a$/)
+    })
+    it("LSHIFT", () => {
+        assert.throws(() => part1("missing LSHIFT 2 -> a"), /Wire missing not found\. missing LSHIFT 2 -> a$/)
+    })
+    it("RSHIFT", () => {
+        assert.throws(() => part1("missing RSHIFT 2 -> a"), /Wire missing not found\. missing RSHIFT 2 -> a$/)
+    })
+    it("NOT", () => {
+        assert.throws(() => part1("NOT missing -> a"), /Wire missing not found\. NOT missing -> a$/)
+    })
+    it("a plain wire", () => {
+        assert.throws(() => part1("missing -> a"), /Wire missing not found\. missing -> a$/)
     })
 })
 
 describe("2015 day 07: circuit construction", () => {
     it("builds a circuit from instructions", () => {
         assert.equal(Circuit.fromInput("1 AND 3 -> a").evaluate("a"), 1)
+    })
+
+    it("rejects an unknown gate", () => {
+        assert.throws(() => Circuit.fromInput("1 -> x\nx XOR 2 -> y"), /Invalid line: x XOR 2 -> y/)
+    })
+    it("rejects an instruction with a missing operand", () => {
+        assert.throws(() => Circuit.fromInput("x AND -> a"), /Invalid line: x AND -> a/)
+    })
+    it("rejects a blank line", () => {
+        assert.throws(() => Circuit.fromInput("1 -> x\n\n2 -> y"), /Invalid line: $/)
+    })
+})
+
+describe("2015 day 07: any input can be a number or a wire", () => {
+    it("takes a shift count from a wire", () => {
+        assert.equal(part1("2 -> n\n1 LSHIFT n -> a"), 4)
+        assert.equal(part1("2 -> n\n8 RSHIFT n -> a"), 2)
+    })
+    it("takes a number as the left input of a shift", () => {
+        assert.equal(part1("3 -> n\n1 LSHIFT n -> a"), 8)
+    })
+    it("passes a number straight through NOT", () => {
+        assert.equal(part1("NOT 65535 -> a"), 0)
+    })
+})
+
+describe("2015 day 07: signal range", () => {
+    it("accepts the largest signal, 65535", () => {
+        assert.equal(part1("65535 -> a"), 65535)
+    })
+    it("rejects a number above 65535 assigned to a wire", () => {
+        assert.throws(() => part1("65536 -> a"), /Signal 65536 is out of range \(0 to 65535\): 65536 -> a/)
+    })
+    it("rejects a number above 65535 as an input to a gate", () => {
+        assert.throws(() => part1("x AND 70000 -> a\n1 -> x"), /Signal 70000 is out of range/)
+        assert.throws(() => part1("70000 OR x -> a\n1 -> x"), /Signal 70000 is out of range/)
+    })
+    it("rejects a number above 65535 as the input to NOT", () => {
+        assert.throws(() => part1("NOT 70000 -> a"), /Signal 70000 is out of range/)
+    })
+    it("rejects an out-of-range number even if no one reads that wire", () => {
+        assert.throws(() => Circuit.fromInput("1 -> a\n70000 -> unused"), /Signal 70000 is out of range/)
+    })
+})
+
+describe("2015 day 07: large shift counts", () => {
+    it("shifts left by 15 into the top bit", () => {
+        assert.equal(part1("1 LSHIFT 15 -> a"), 32768)
+    })
+    it("empties the signal when shifting left by 16 or more", () => {
+        assert.equal(part1("1 LSHIFT 16 -> a"), 0)
+        assert.equal(part1("1 LSHIFT 32 -> a"), 0)
+    })
+    it("empties the signal when shifting right by 16 or more", () => {
+        assert.equal(part1("65535 RSHIFT 16 -> a"), 0)
+        assert.equal(part1("65535 RSHIFT 32 -> a"), 0)
+    })
+})
+
+describe("2015 day 07: cycles", () => {
+    it("rejects a wire that feeds itself", () => {
+        assert.throws(() => part1("a -> a"), /Circuit has a cycle: a -> a$/)
+    })
+    it("rejects two wires that feed each other", () => {
+        assert.throws(() => part1("a -> b\nb -> a"), /Circuit has a cycle: b -> a -> b$/)
+    })
+    it("rejects a cycle behind a gate", () => {
+        assert.throws(() => part1("x AND a -> b\nb -> a\n1 -> x"), /Circuit has a cycle: b -> a -> b$/)
+    })
+    it("rejects a cycle through a NOT and a shift", () => {
+        assert.throws(() => part1("NOT b -> a\na LSHIFT 1 -> b"), /Circuit has a cycle: a -> b -> a$/)
+    })
+    it("reports the cycle even when asked for a wire outside it", () => {
+        assert.throws(() => part1("1 -> ok\na -> b\nb -> a", "ok"), /Circuit has a cycle/)
+    })
+    it("does not mistake a wire shared by two paths for a cycle", () => {
+        assert.equal(part1("1 -> x\nx -> y\nx -> z\ny AND z -> a"), 1)
+    })
+    it("accepts the cycle being broken by replacing a wire's operation", () => {
+        const circuit = Circuit.fromInput("a -> b\nb -> a")
+        assert.throws(() => circuit.evaluate("a"), /Circuit has a cycle/)
+
+        circuit.set("b", {evaluate: () => 5})
+        assert.equal(circuit.evaluate("a"), 5)
+    })
+    it("rejects a cycle that is introduced by replacing a wire's operation", () => {
+        const circuit = Circuit.fromInput("1 -> b\nb -> a")
+        assert.equal(circuit.evaluate("a"), 1)
+
+        circuit.set("b", new Wire("a -> b", ["a -> b", "a", "b"]))
+        assert.throws(() => circuit.evaluate("a"), /Circuit has a cycle: b -> a -> b$/)
     })
 })
 
@@ -108,7 +224,7 @@ describe("2015 day 07: evaluation cache", () => {
         const instruction = "zero AND zero -> a"
 
         mapping.set("zero", zero)
-        mapping.set("a", new And(instruction, [instruction, "zero", "zero", "a"]))
+        mapping.set("a", new BinaryGate(instruction, [instruction, "zero", "AND", "zero", "a"]))
 
         assert.equal(mapping.evaluate("a"), 0)
         assert.equal(mapping.evaluate("a"), 0)
@@ -144,7 +260,7 @@ describe("2015 day 07: evaluation cache", () => {
 
     it("uses the evaluating circuit for a shared operation instance", () => {
         const instruction = "x AND 3 -> a"
-        const operation = new And(instruction, [instruction, "x", "3", "a"])
+        const operation = new BinaryGate(instruction, [instruction, "x", "AND", "3", "a"])
         let firstInputEvaluations = 0
         let secondInputEvaluations = 0
         let replacementEvaluations = 0
