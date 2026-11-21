@@ -4,28 +4,32 @@ import {inputPath, readInput} from "../../input.ts"
 export function lookAndSay(input: string, rounds = 40) {
     let roundInput = [...input]
     for (let i = 0; i < rounds; i++) {
-        const stack: string[] = []
+        let runCount  = 0
+        let lastChar = ''
         const roundOutput: string[] = []
         for (const char of roundInput) {
-            if (stack.length === 0 || stack[stack.length - 1] === char) {
-                stack.push(char)
+            if (lastChar === char) {
+                runCount += 1
                 continue
             }
 
-            roundOutput.push('' + stack.length)
-            roundOutput.push(stack[stack.length - 1]!)
-            stack.length = 0
-            stack.push(char)
+            if (runCount > 0) {
+                roundOutput.push('' + runCount)
+                roundOutput.push(lastChar)
+            }
+
+            runCount = 1
+            lastChar = char
         }
 
-        if (stack.length > 0) {
-            roundOutput.push('' + stack.length)
-            roundOutput.push(stack[stack.length - 1]!)
+        if (lastChar !== '') {
+            roundOutput.push('' + runCount)
+            roundOutput.push(lastChar)
         }
         roundInput = roundOutput
     }
 
-    return roundInput.join('').length
+    return roundInput.length
 }
 
 export function part1(input: string): number {
