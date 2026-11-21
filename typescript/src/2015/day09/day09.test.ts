@@ -1,29 +1,28 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
-import {pending} from "../../testing.ts"
 import {inputPath, readExpected, readInput} from "../../input.ts"
 import {part1, part2} from "./day09.ts"
 
 describe("2015 day 09: examples", () => {
-    it("part 1: the example (3 lines) -> 605", pending(() => {
+    it("part 1: the example (3 lines) -> 605", () => {
         const input = [
             "London to Dublin = 464",
             "London to Belfast = 518",
             "Dublin to Belfast = 141",
         ].join("\n")
         assert.equal(part1(input), 605)
-    }))
+    })
 
     // Longest route, derived from the six route totals the page lists.
     // Check it against the page once part 2 is unlocked.
-    it("part 2: the example (3 lines) -> 982", pending(() => {
+    it("part 2: the example (3 lines) -> 982", () => {
         const input = [
             "London to Dublin = 464",
             "London to Belfast = 518",
             "Dublin to Belfast = 141",
         ].join("\n")
         assert.equal(part2(input), 982)
-    }))
+    })
 })
 
 // Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
@@ -38,10 +37,10 @@ const skip = (answer: number | undefined) =>
             : false
 
 describe("2015 day 09: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, pending(() => {
+    it("part 1", {skip: skip(expected.part1)}, () => {
         assert.equal(part1(input!), expected.part1)
-    }))
-    it("part 2", {skip: skip(expected.part2)}, pending(() => {
+    })
+    it("part 2", {skip: skip(expected.part2)}, () => {
         assert.equal(part2(input!), expected.part2)
-    }))
+    })
 })

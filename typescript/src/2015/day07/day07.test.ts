@@ -1,6 +1,5 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
-import {pending} from "../../testing.ts"
 import {inputPath, readExpected, readInput} from "../../input.ts"
 import {part1, part2} from "./day07.ts"
 import {BinaryGate, Circuit, Wire, type Operation} from "./circuit_operators.ts"
@@ -20,66 +19,66 @@ describe("2015 day 07: examples", () => {
     ].join("\n")
 
     // The example has no wire a, so each case reads a different wire.
-    it("part 1: wire x -> 123", pending(() => {
+    it("part 1: wire x -> 123", () => {
         assert.equal(part1(example, "x"), 123)
-    }))
-    it("part 1: wire y -> 456", pending(() => {
+    })
+    it("part 1: wire y -> 456", () => {
         assert.equal(part1(example, "y"), 456)
-    }))
-    it("part 1: wire d -> 72", pending(() => {
+    })
+    it("part 1: wire d -> 72", () => {
         assert.equal(part1(example, "d"), 72)
-    }))
-    it("part 1: wire e -> 507", pending(() => {
+    })
+    it("part 1: wire e -> 507", () => {
         assert.equal(part1(example, "e"), 507)
-    }))
-    it("part 1: wire f -> 492", pending(() => {
+    })
+    it("part 1: wire f -> 492", () => {
         assert.equal(part1(example, "f"), 492)
-    }))
-    it("part 1: wire g -> 114", pending(() => {
+    })
+    it("part 1: wire g -> 114", () => {
         assert.equal(part1(example, "g"), 114)
-    }))
-    it("part 1: wire h -> 65412", pending(() => {
+    })
+    it("part 1: wire h -> 65412", () => {
         assert.equal(part1(example, "h"), 65412)
-    }))
-    it("part 1: wire i -> 65079", pending(() => {
+    })
+    it("part 1: wire i -> 65079", () => {
         assert.equal(part1(example, "i"), 65079)
-    }))
-    it("part 1: wire a -> 123", pending(() => {
+    })
+    it("part 1: wire a -> 123", () => {
         assert.equal(part1(example, "a"), 123)
-    }))
-    it("part 1: wire j -> 0", pending(() => {
+    })
+    it("part 1: wire j -> 0", () => {
         assert.equal(part1(example, "j"), 0)
-    }))
+    })
 
     // The page gives no example for part 2, so these are derived by hand from its rule: take the signal on wire a,
     // override wire b with it, reset every other wire (a included), and read a again. Each circuit has wires a and b.
-    it("part 2: NOT undoes itself once b holds a's inverted signal (derived)", pending(() => {
+    it("part 2: NOT undoes itself once b holds a's inverted signal (derived)", () => {
         // a is first 65528, so b becomes 65528 and NOT of that is 7.
         assert.equal(part2("7 -> b\nNOT b -> a"), 7)
-    }))
-    it("part 2: a is read once more, not fed back again (derived)", pending(() => {
+    })
+    it("part 2: a is read once more, not fed back again (derived)", () => {
         // a is first 6, so b becomes 6 and a becomes 12. A second pass would give 24.
         assert.equal(part2("3 -> b\nb LSHIFT 1 -> a"), 12)
-    }))
-    it("part 2: wires between b and a are recomputed, not reused (derived)", pending(() => {
+    })
+    it("part 2: wires between b and a are recomputed, not reused (derived)", () => {
         // First x is 4 and a is 5. Then b becomes 5, so x becomes 10 and a becomes 11. A stale x would give 5.
         assert.equal(part2("2 -> b\nb LSHIFT 1 -> x\nx OR 1 -> a"), 11)
-    }))
-    it("part 2: the override replaces b's own gate (derived)", pending(() => {
+    })
+    it("part 2: the override replaces b's own gate (derived)", () => {
         // a is first 12, so b becomes 12 whatever x says, and a becomes 24. Keeping b's gate would give 12.
         assert.equal(part2("3 -> x\nx LSHIFT 1 -> b\nb LSHIFT 1 -> a"), 24)
-    }))
-    it("part 2: a keeps its value when it doesn't depend on b (derived)", pending(() => {
+    })
+    it("part 2: a keeps its value when it doesn't depend on b (derived)", () => {
         assert.equal(part2("10 -> a\n1 -> b"), 10)
-    }))
-    it("part 2: an override of 0 still counts as an override (derived)", pending(() => {
+    })
+    it("part 2: an override of 0 still counts as an override (derived)", () => {
         // a is first 0, so b becomes 0 and NOT of that is 65535. Ignoring a zero would leave b at 65535 and give 0.
         assert.equal(part2("65535 -> b\nNOT b -> a"), 65535)
-    }))
-    it("part 2: the override keeps its full 16 bits (derived)", pending(() => {
+    })
+    it("part 2: the override keeps its full 16 bits (derived)", () => {
         // a is first 32768, so b becomes 32768 and shifting it left by 15 leaves no bits within 16, giving 0.
         assert.equal(part2("1 -> b\nb LSHIFT 15 -> a"), 0)
-    }))
+    })
 })
 
 describe("2015 day 07: numeric operands", () => {
@@ -356,10 +355,10 @@ const skip = (answer: number | undefined) =>
             : false
 
 describe("2015 day 07: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, pending(() => {
+    it("part 1", {skip: skip(expected.part1)}, () => {
         assert.equal(part1(input!), expected.part1)
-    }))
-    it("part 2", {skip: skip(expected.part2)}, pending(() => {
+    })
+    it("part 2", {skip: skip(expected.part2)}, () => {
         assert.equal(part2(input!), expected.part2)
-    }))
+    })
 })

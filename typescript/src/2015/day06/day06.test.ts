@@ -1,31 +1,30 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
-import {pending} from "../../testing.ts"
 import {inputPath, readExpected, readInput} from "../../input.ts"
 import {parseCommand, part1, part2} from "./day06.ts"
 
 describe("2015 day 06: examples", () => {
     // The page gives no numeric results. These counts are derived from its descriptions (the grid starts all off).
-    it("part 1: turning on every light", pending(() => {
+    it("part 1: turning on every light", () => {
         assert.equal(part1("turn on 0,0 through 999,999"), 1000000)
-    }))
-    it("part 1: toggling the first row of 1000 lights", pending(() => {
+    })
+    it("part 1: toggling the first row of 1000 lights", () => {
         assert.equal(part1("toggle 0,0 through 999,0"), 1000)
-    }))
-    it("part 1: turning off the middle four lights on an off grid", pending(() => {
+    })
+    it("part 1: turning off the middle four lights on an off grid", () => {
         assert.equal(part1("turn off 499,499 through 500,500"), 0)
-    }))
-    it("part 1: turning on everything then turning off the middle four", pending(() => {
+    })
+    it("part 1: turning on everything then turning off the middle four", () => {
         assert.equal(part1("turn on 0,0 through 999,999\nturn off 499,499 through 500,500"), 999996)
-    }))
+    })
 
     // Part 2 reinterprets the commands as brightness: turn on +1, turn off -1 (minimum 0), toggle +2.
-    it("part 2: turning on one light raises the brightness by 1", pending(() => {
+    it("part 2: turning on one light raises the brightness by 1", () => {
         assert.equal(part2("turn on 0,0 through 0,0"), 1)
-    }))
-    it("part 2: toggling every light raises the brightness by 2000000", pending(() => {
+    })
+    it("part 2: toggling every light raises the brightness by 2000000", () => {
         assert.equal(part2("toggle 0,0 through 999,999"), 2000000)
-    }))
+    })
 })
 
 describe("2015 day 06: parser", () => {
@@ -100,10 +99,10 @@ const skip = (answer: number | undefined) =>
           : false
 
 describe("2015 day 06: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, pending(() => {
+    it("part 1", {skip: skip(expected.part1)}, () => {
         assert.equal(part1(input!), expected.part1)
-    }))
-    it("part 2", {skip: skip(expected.part2)}, pending(() => {
+    })
+    it("part 2", {skip: skip(expected.part2)}, () => {
         assert.equal(part2(input!), expected.part2)
-    }))
+    })
 })

@@ -1,17 +1,16 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
-import {pending} from "../../testing.ts"
 import {inputPath, readExpected, readInput} from "../../input.ts"
 import {part1, part2} from "./day04.ts"
 
 describe("2015 day 04: examples", () => {
     // The input is the secret key itself.
-    it("part 1: \"abcdef\" -> 609043", pending(() => {
+    it("part 1: \"abcdef\" -> 609043", () => {
         assert.equal(part1("abcdef"), 609043)
-    }))
-    it("part 1: \"pqrstuv\" -> 1048970", pending(() => {
+    })
+    it("part 1: \"pqrstuv\" -> 1048970", () => {
         assert.equal(part1("pqrstuv"), 1048970)
-    }))
+    })
 
     // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them below as it("part 2: ...") calls.
 })
@@ -28,10 +27,10 @@ const skip = (answer: number | undefined) =>
             : false
 
 describe("2015 day 04: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, pending(() => {
+    it("part 1", {skip: skip(expected.part1)}, () => {
         assert.equal(part1(input!), expected.part1)
-    }))
-    it("part 2", {skip: skip(expected.part2)}, pending(() => {
+    })
+    it("part 2", {skip: skip(expected.part2)}, () => {
         assert.equal(part2(input!), expected.part2)
-    }))
+    })
 })

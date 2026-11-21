@@ -1,6 +1,5 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
-import {pending} from "../../testing.ts"
 import {inputPath, readExpected, readInput} from "../../input.ts"
 import {lookAndSay, part1, part2} from "./day10.ts"
 
@@ -63,10 +62,10 @@ const skip = (answer: number | undefined) =>
           : false
 
 describe("2015 day 10: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, pending(() => {
+    it("part 1", {skip: skip(expected.part1)}, () => {
         assert.equal(part1(input!), expected.part1)
-    }))
-    it("part 2", {skip: skip(expected.part2)}, pending(() => {
+    })
+    it("part 2", {skip: skip(expected.part2)}, () => {
         assert.equal(part2(input!), expected.part2)
-    }))
+    })
 })
