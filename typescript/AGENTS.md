@@ -48,7 +48,8 @@ The repo-wide rules in `../AGENTS.md` apply as well: the user writes the solutio
 
 Every function gets JSDoc in this shape: a summary line, a `@param` for each parameter that says what it holds and
 spells out the input format with an example (`"<length>x<width>x<height>", e.g. "2x3x4"`), a `@returns` with the units,
-and `@throws` where it applies. Say why a non-obvious choice was made, such as a faster API.
+and `@throws` where it applies. Say why a non-obvious choice was made, such as a faster API, in a short clause rather
+than a paragraph. The function's name should already say what it does (see "Writing code" in `../AGENTS.md`).
 
 ## Performance
 

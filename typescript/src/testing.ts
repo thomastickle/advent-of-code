@@ -63,19 +63,31 @@ export function fullInputTests(year: number, day: number, solve: Solve, variant?
     describe(`${name}: full input`, () => {
         for (const part of [1, 2] as const) {
             const want = expected[`part${part}`]
-            const skip =
-                day === 25 && part === 2
-                    ? "day 25 has no part 2 puzzle"
-                    : input === undefined
-                      ? `no input at ${inputPath(year, day)}`
-                      : want === undefined
-                        ? "expected answer not recorded yet"
-                        : false
-
+            const skip = skipReason(year, day, part, input !== undefined, want !== undefined)
             it(`part ${part}`, {skip}, pending(() => {
                 answers ??= solve(input!)
                 assert.equal(answer(answers, part), want)
             }))
         }
     })
+}
+
+/**
+ * Why a full-input test can't run yet, if it can't.
+ *
+ * @param year Puzzle year, e.g. 2015.
+ * @param day Puzzle day, 1-25, e.g. 3.
+ * @param part Which part, 1 or 2.
+ * @param hasInput Whether the puzzle input has been saved.
+ * @param hasAnswer Whether an expected answer has been recorded for this part.
+ * @returns The reason to skip, e.g. "expected answer not recorded yet", or false to run the test.
+ */
+function skipReason(year: number, day: number, part: 1 | 2, hasInput: boolean, hasAnswer: boolean): string | false {
+    if (day === 25 && part === 2) {
+        return "day 25 has no part 2 puzzle"
+    }
+    if (!hasInput) {
+        return `no input at ${inputPath(year, day)}`
+    }
+    return hasAnswer ? false : "expected answer not recorded yet"
 }

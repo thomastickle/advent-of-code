@@ -94,7 +94,7 @@ describe("2015 day 11: Testing skipBadChars", () => {
 })
 
 describe("2015 day 11: Testing nextPassword", () => {
-    // Derived: skipping the i lands on a password that is already valid, so it must be returned, not stepped past.
+    // Derived: the skip lands on a password that is already valid.
     it("returns the password the skip lands on when it is already valid: 'abcddiaa' -> 'abcddjaa'", () => {
         assert.equal(nextPassword("abcddiaa"), "abcddjaa")
     })

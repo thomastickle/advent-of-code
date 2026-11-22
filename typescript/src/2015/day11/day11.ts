@@ -18,21 +18,25 @@ function isBadChar(char: number): boolean {
 }
 
 /**
- * Moves a password on to the next one in place, like counting in base 26: the last letter goes up by one, and a "z"
- * rolls over to "a" and carries into the letter before it. Changing the array in place avoids building a new one for
- * every one of the many candidates the search goes through.
+ * The letter after this one, skipping i, o and l. None of them is z, so skipping one never needs a carry.
+ * @param char A character code below "z", e.g. 104 for "h".
+ * @returns The next letter's code that a password may contain, e.g. 106 for "j".
+ */
+function nextAllowedChar(char: number): number {
+    const next = char + 1
+    return isBadChar(next) ? next + 1 : next
+}
+
+/**
+ * Moves a password on to the next one in place, like counting in base 26, skipping i, o and l. In place so the
+ * search doesn't build a new array for every candidate.
  * @param password The password as character codes, e.g. "abcdefgz" encoded; becomes "abcdefha".
  */
 export function incrementPassword(password: Uint8Array): void {
-    // Deliberate: "zzzzzzzz" wraps around to "aaaaaaaa" (the carry runs off the front), and the search carries on.
+    // "zzzzzzzz" wraps to "aaaaaaaa" on purpose.
     for (let index = password.length - 1; index >= 0; index--) {
         if (password[index] !== Z_CHAR) {
-            password[index] = password[index]! + 1
-            // Every password with i, o or l here is invalid, so step straight past it (h -> j, k -> m, n -> p).
-            // None of them is z, so this never carries, and everything to the right is already "a".
-            if (isBadChar(password[index]!)) {
-                password[index] = password[index]! + 1
-            }
+            password[index] = nextAllowedChar(password[index]!)
             return
         }
         password[index] = A_CHAR
@@ -71,7 +75,6 @@ export function hasTwoDifferentPairs(password: Uint8Array): boolean {
             } else if (firstPair !== password[index]) {
                 return true
             }
-            // Step past the pair so the next one can't share its second letter.
             index++
         }
     }
@@ -118,7 +121,6 @@ export function skipBadChars(password: Uint8Array): boolean {
     return true
 }
 
-/** Every password is exactly eight lowercase letters. */
 const PASSWORD_PATTERN = /^[a-z]{8}$/
 
 /**

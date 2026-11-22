@@ -4,7 +4,7 @@ import {fullInputTests} from "../../testing.ts"
 import {solve, walk} from "./day01.ts"
 
 describe("2015 day 01: examples", () => {
-    // Most part 1 examples never reach the basement, so solve() would throw on them; they check the walk instead.
+    // Most of these never reach the basement, so solve() would throw.
     it("part 1: (()) -> 0", () => {
         assert.equal(walk("(())").floor, 0)
     })

@@ -43,6 +43,11 @@ describe("Day 09 Parse Input", () => {
         assert.throws(() => parseInput(""), /Error parsing line: /)
     })
 
+    it("throws when a pair of cities has no distance between them", () => {
+        const missingLondonBelfast = "London to Dublin = 464\nDublin to Belfast = 141"
+        assert.throws(() => parseInput(missingLondonBelfast), /Missing distance between London and Belfast/)
+    })
+
     it("throws for blank lines within the input", () => {
         assert.throws(() => parseInput("London to Dublin = 464\n\nDublin to Belfast = 141"), /Error parsing line: /)
     })

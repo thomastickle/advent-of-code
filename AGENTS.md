@@ -10,6 +10,15 @@ Language-specific rules live in that folder's own `AGENTS.md`; this file holds w
 - Reviewing, refactoring, documenting or speeding up code the user has written is fine when asked.
 - Do not commit the user's in-progress solution files.
 
+## Writing code
+
+- Explain code with small functions and descriptive names, not comments. When a block needs a comment to say what it
+  does or why, extract it into a function whose name says so: `nextAllowedChar(char)`, `withRoomFor(buffer, size)`,
+  `hasTwoDifferentPairs(password)`. A reader should be able to follow a function top to bottom from its calls alone.
+- Keep functions short; split one that does several jobs (validate, set up, loop, collect) into one function per job.
+- Inline comments are rare: only for what no name can carry, such as a deliberate quirk, and one line each. Never
+  restate what the next line does.
+
 ## Tests
 
 - Each day's tests check the puzzle's own examples first, then the full input.

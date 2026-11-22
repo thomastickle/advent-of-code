@@ -42,7 +42,7 @@ describe("2015 day 10: lookAndSayLengths examples", () => {
 })
 
 describe("2015 day 10: lookAndSayLengths checkpoints", () => {
-    // Derived from the page's first five steps from "1": lengths 1, 2, 2, 4, 6, 6 after rounds 0-5.
+    // Derived from the page's first five steps from "1".
     it("measures \"1\" at several checkpoints in one run", () => {
         assert.deepEqual(lookAndSayLengths("1", [0, 3, 5]), [1, 4, 6])
     })
@@ -54,6 +54,16 @@ describe("2015 day 10: lookAndSayLengths checkpoints", () => {
     })
     it("rejects a fractional number of rounds", () => {
         assert.throws(() => lookAndSayLengths("1", [1.5]), /Invalid number of rounds: 1.5/)
+    })
+    it("rejects an empty input", () => {
+        assert.throws(() => lookAndSayLengths("", [1]), /Empty input/)
+    })
+    it("rejects a character that isn't a digit", () => {
+        assert.throws(() => lookAndSayLengths("12a", [1]), /Invalid digit "a" at position 2/)
+    })
+    // Derived: ten 1s are said as "101".
+    it("writes a run of ten or more as a multi-digit count: \"1111111111\" -> \"101\"", () => {
+        assert.deepEqual(lookAndSayLengths("1111111111", [1, 2]), [3, 6])
     })
 })
 
