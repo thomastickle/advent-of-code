@@ -1,3 +1,7 @@
+/*
+ * 2015 day 10: Elves Look, Elves Say. https://adventofcode.com/2015/day/10
+ */
+
 import {printAnswers, type Answers} from "../../answers.ts"
 
 const ZERO = "0".charCodeAt(0)

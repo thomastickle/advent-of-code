@@ -1,6 +1,8 @@
-import {printAnswers, unsolved, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 23: Opening the Turing Lock. https://adventofcode.com/2015/day/23
+ */
 
-/** 2015 day 23: Opening the Turing Lock. https://adventofcode.com/2015/day/23 */
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 export interface Registers {
     a: number

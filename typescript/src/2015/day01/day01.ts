@@ -1,3 +1,7 @@
+/*
+ * 2015 day 1: Not Quite Lisp. https://adventofcode.com/2015/day/1
+ */
+
 import {printAnswers, type Answers} from "../../answers.ts"
 
 /**

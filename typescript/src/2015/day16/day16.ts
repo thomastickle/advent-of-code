@@ -1,6 +1,8 @@
-import {printAnswers, unsolved, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 16: Aunt Sue. https://adventofcode.com/2015/day/16
+ */
 
-/** 2015 day 16: Aunt Sue. https://adventofcode.com/2015/day/16 */
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /**
  * Solves both parts. Return {@link unsolved} for a part that isn't done yet.

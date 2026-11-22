@@ -1,3 +1,7 @@
+/*
+ * 2015 day 2: I Was Told There Would Be No Math. https://adventofcode.com/2015/day/2
+ */
+
 import {printAnswers, type Answers} from "../../answers.ts"
 
 /** A present, as the three dimensions of a rectangular box, all in feet. */

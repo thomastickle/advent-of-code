@@ -1,6 +1,8 @@
-import {printAnswers, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 11: Corporate Policy. https://adventofcode.com/2015/day/11
+ */
 
-/** 2015 day 11: Corporate Policy. https://adventofcode.com/2015/day/11 */
+import {printAnswers, type Answers} from "../../answers.ts"
 
 const A_CHAR = "a".charCodeAt(0)
 const Z_CHAR = "z".charCodeAt(0)

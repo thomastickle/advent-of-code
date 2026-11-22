@@ -51,6 +51,14 @@ spells out the input format with an example (`"<length>x<width>x<height>", e.g. 
 and `@throws` where it applies. Say why a non-obvious choice was made, such as a faster API, in a short clause rather
 than a paragraph. The function's name should already say what it does (see "Writing code" in `../AGENTS.md`).
 
+Each day's file starts with a plain block comment (not JSDoc) naming the puzzle, before the imports:
+
+```ts
+/*
+ * 2015 day 9: All in a Single Night. https://adventofcode.com/2015/day/9
+ */
+```
+
 ## Performance
 
 Measure before optimizing, and throw the benchmark script away afterwards (use the scratchpad, not the repo). Choose a

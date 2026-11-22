@@ -1,6 +1,8 @@
-import {printAnswers, unsolved, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 17: No Such Thing as Too Much. https://adventofcode.com/2015/day/17
+ */
 
-/** 2015 day 17: No Such Thing as Too Much. https://adventofcode.com/2015/day/17 */
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /**
  * Solves both parts. Return {@link unsolved} for a part that isn't done yet.

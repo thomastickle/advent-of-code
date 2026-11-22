@@ -1,3 +1,7 @@
+/*
+ * 2015 day 8: Matchsticks. https://adventofcode.com/2015/day/8
+ */
+
 import {printAnswers, type Answers} from "../../answers.ts"
 
 /** Two hex digits, as in the `27` of `\x27`. */

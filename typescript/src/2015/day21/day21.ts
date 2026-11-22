@@ -1,6 +1,8 @@
-import {printAnswers, unsolved, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 21: RPG Simulator 20XX. https://adventofcode.com/2015/day/21
+ */
 
-/** 2015 day 21: RPG Simulator 20XX. https://adventofcode.com/2015/day/21 */
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 export interface Combatant {
     hitPoints: number

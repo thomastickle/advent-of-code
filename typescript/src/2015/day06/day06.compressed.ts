@@ -1,7 +1,4 @@
-import type {Answers} from "../../answers.ts"
-import {parseCommand} from "./day06.ts"
-
-/**
+/*
  * 2015 day 6, solved a second way so the two can be compared: coordinate compression.
  *
  * Every command's rectangle starts and ends on a cut point (x1 and x2 + 1 on one axis, y1 and y2 + 1 on the other).
@@ -10,6 +7,9 @@ import {parseCommand} from "./day06.ts"
  * and weights each cell by the area of its block when adding up. The grid version in day06.ts is the reference; the
  * tests check this one against it.
  */
+
+import type {Answers} from "../../answers.ts"
+import {parseCommand} from "./day06.ts"
 
 /** The grid is GRID_SIZE lights wide and tall. */
 const GRID_SIZE = 1000

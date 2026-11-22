@@ -1,8 +1,10 @@
+/*
+ * 2015 day 9: All in a Single Night. https://adventofcode.com/2015/day/9
+ */
+
 import {printAnswers, type Answers} from "../../answers.ts"
 import {parseInput} from "./parse.ts"
 import type {CityName, Route} from "./data_types.ts"
-
-/** 2015 day 9: All in a Single Night. https://adventofcode.com/2015/day/9 */
 
 /** Distances between cities numbered 0 to count - 1, in the input's distance units. */
 interface DistanceTable {

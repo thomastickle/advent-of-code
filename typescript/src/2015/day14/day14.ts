@@ -1,6 +1,8 @@
-import {printAnswers, unsolved, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 14: Reindeer Olympics. https://adventofcode.com/2015/day/14
+ */
 
-/** 2015 day 14: Reindeer Olympics. https://adventofcode.com/2015/day/14 */
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /**
  * Solves both parts. Return {@link unsolved} for a part that isn't done yet.

@@ -1,6 +1,8 @@
-import {printAnswers, unsolved, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 25: Let It Snow. https://adventofcode.com/2015/day/25
+ */
 
-/** 2015 day 25: Let It Snow. https://adventofcode.com/2015/day/25 */
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /** Which code in the sequence (1-based) lands at this row and column? Codes fill the grid along diagonals. */
 export function sequenceNumber(row: number, column: number): number {

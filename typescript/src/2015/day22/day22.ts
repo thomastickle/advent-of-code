@@ -1,6 +1,8 @@
-import {printAnswers, unsolved, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 22: Wizard Simulator 20XX. https://adventofcode.com/2015/day/22
+ */
 
-/** 2015 day 22: Wizard Simulator 20XX. https://adventofcode.com/2015/day/22 */
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 export type Spell = "Magic Missile" | "Drain" | "Shield" | "Poison" | "Recharge"
 

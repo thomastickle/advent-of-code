@@ -1,6 +1,8 @@
-import {printAnswers, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 5: Doesn't He Have Intern-Elves For This? https://adventofcode.com/2015/day/5
+ */
 
-/** 2015 day 5: Doesn't He Have Intern-Elves For This? https://adventofcode.com/2015/day/5 */
+import {printAnswers, type Answers} from "../../answers.ts"
 
 /** The strings that make a line naughty under the old rules: "ab", "cd", "pq" and "xy". */
 const forbiddenPairs = /ab|cd|pq|xy/

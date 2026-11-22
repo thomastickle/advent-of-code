@@ -1,6 +1,8 @@
-import {printAnswers, unsolved, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 18: Like a GIF For Your Yard. https://adventofcode.com/2015/day/18
+ */
 
-/** 2015 day 18: Like a GIF For Your Yard. https://adventofcode.com/2015/day/18 */
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /**
  * Solves both parts. Return {@link unsolved} for a part that isn't done yet.

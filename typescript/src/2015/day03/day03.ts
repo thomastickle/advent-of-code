@@ -1,6 +1,8 @@
-import {printAnswers, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 3: Perfectly Spherical Houses in a Vacuum. https://adventofcode.com/2015/day/3
+ */
 
-/** 2015 day 3: Perfectly Spherical Houses in a Vacuum. https://adventofcode.com/2015/day/3 */
+import {printAnswers, type Answers} from "../../answers.ts"
 
 /** A house on the infinite grid of houses; x grows to the east, y grows to the north. */
 interface Position {

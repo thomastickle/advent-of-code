@@ -1,4 +1,7 @@
-/** 2015 day 7: Some Assembly Required. https://adventofcode.com/2015/day/7 */
+/*
+ * 2015 day 7: Some Assembly Required. https://adventofcode.com/2015/day/7
+ */
+
 import {printAnswers, type Answers} from "../../answers.ts"
 import {Circuit} from "./circuit_operators.ts"
 

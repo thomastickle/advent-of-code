@@ -1,6 +1,8 @@
-import {printAnswers, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 6: Probably a Fire Hazard. https://adventofcode.com/2015/day/6
+ */
 
-/** 2015 day 6: Probably a Fire Hazard. https://adventofcode.com/2015/day/6 */
+import {printAnswers, type Answers} from "../../answers.ts"
 
 /** The grid is GRID_SIZE lights wide and tall. Coordinates run from 0 to 999, so they have at most three digits. */
 const GRID_SIZE = 1000

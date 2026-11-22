@@ -1,6 +1,8 @@
-import {printAnswers, unsolved, type Answers} from "../../answers.ts"
+/*
+ * 2015 day 12: JSAbacusFramework.io. https://adventofcode.com/2015/day/12
+ */
 
-/** 2015 day 12: JSAbacusFramework.io. https://adventofcode.com/2015/day/12 */
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /**
  * Solves both parts. Return {@link unsolved} for a part that isn't done yet.
