@@ -9,7 +9,9 @@ export interface Selection {
     help: boolean
 }
 
-/** A problem with how the command was invoked (as opposed to a bug). */
+/**
+ * A problem with how the command was invoked (as opposed to a bug).
+ */
 export class UsageError extends Error {}
 
 export const USAGE = `Usage:

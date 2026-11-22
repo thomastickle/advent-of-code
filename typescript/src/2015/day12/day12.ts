@@ -4,10 +4,14 @@
 
 import {type Answers, printAnswers} from "../../answers.ts"
 
-/** An object as JSON.parse returns it: string keys, any JSON value. */
+/**
+ * An object as JSON.parse returns it: string keys, any JSON value.
+ */
 type JsonObject = {[key: string]: unknown}
 
-/** Totals of the numbers in a JSON value, counted both ways at once. */
+/**
+ * Totals of the numbers in a JSON value, counted both ways at once.
+ */
 interface Sums {
     all: number
     withoutRed: number

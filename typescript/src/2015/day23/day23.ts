@@ -9,7 +9,9 @@ export interface Registers {
     b: number
 }
 
-/** Runs the program with both registers starting at 0 and returns them when it finishes. */
+/**
+ * Runs the program with both registers starting at 0 and returns them when it finishes.
+ */
 export function run(input: string): Registers {
     throw new Error("not implemented")
 }

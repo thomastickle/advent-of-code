@@ -4,13 +4,17 @@
 
 import {printAnswers, type Answers} from "../../answers.ts"
 
-/** A house on the infinite grid of houses; x grows to the east, y grows to the north. */
+/**
+ * A house on the infinite grid of houses; x grows to the east, y grows to the north.
+ */
 interface Position {
     x: number
     y: number
 }
 
-/** How each instruction character moves a walker: [change in x, change in y]. */
+/**
+ * How each instruction character moves a walker: [change in x, change in y].
+ */
 const moves: Record<string, readonly [number, number]> = {
     "^": [0, 1],
     v: [0, -1],

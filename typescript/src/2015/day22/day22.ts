@@ -16,7 +16,9 @@ export interface Boss {
     damage: number
 }
 
-/** Does casting these spells in order kill the boss before the player dies or runs out of mana? */
+/**
+ * Does casting these spells in order kill the boss before the player dies or runs out of mana?
+ */
 export function playerWins(player: Player, boss: Boss, spells: Spell[]): boolean {
     throw new Error("not implemented")
 }

@@ -6,10 +6,14 @@ import {inputPath, readInput} from "./input.ts"
  */
 export const unsolved = Symbol("unsolved")
 
-/** What a day's `solve` returns: `[part 1, part 2]`, either of which may still be {@link unsolved}. */
+/**
+ * What a day's `solve` returns: `[part 1, part 2]`, either of which may still be {@link unsolved}.
+ */
 export type Answers<Part1, Part2 = Part1> = readonly [Part1 | typeof unsolved, Part2 | typeof unsolved]
 
-/** A day's entry point: works out both answers from the puzzle input in one call. */
+/**
+ * A day's entry point: works out both answers from the puzzle input in one call.
+ */
 export type Solve = (input: string) => Answers<unknown>
 
 /**

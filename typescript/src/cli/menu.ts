@@ -12,7 +12,9 @@ interface Key {
     ctrl?: boolean | undefined
 }
 
-/** Arrow-key (or j/k) menu. Enter picks, q/Esc/Ctrl-C turns the sleigh around. */
+/**
+ * Arrow-key (or j/k) menu. Enter picks, q/Esc/Ctrl-C turns the sleigh around.
+ */
 export async function select<T>(title: string, choices: Choice<T>[]): Promise<T> {
     const { stdin, stdout } = process
     if (!stdin.isTTY) {

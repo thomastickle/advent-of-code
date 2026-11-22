@@ -1,4 +1,6 @@
-/** A signal is an unsigned integer this many bits wide. */
+/**
+ * A signal is an unsigned integer this many bits wide.
+ */
 const SIGNAL_BITS = 16
 
 /**
@@ -8,7 +10,9 @@ const SIGNAL_BITS = 16
  */
 const SIGNAL_MASK = (1 << SIGNAL_BITS) - 1
 
-/** What a two-input gate computes from its two signals. */
+/**
+ * What a two-input gate computes from its two signals.
+ */
 type BinaryOperator = (left: number, right: number) => number
 
 /**
@@ -23,7 +27,9 @@ const BINARY_OPERATORS: Record<string, BinaryOperator> = {
     RSHIFT: (left, right) => right >= SIGNAL_BITS ? 0 : left >> right,
 }
 
-/** Something that drives a wire: a number or another wire, or a gate. */
+/**
+ * Something that drives a wire: a number or another wire, or a gate.
+ */
 export interface Operation {
     /**
      * The names of the wires this operation reads, e.g. ["x", "y"] for "x AND y -> d". The circuit uses them to look
@@ -39,7 +45,9 @@ export interface Operation {
     evaluate(circuit: Circuit): number
 }
 
-/** A number as written in an instruction, as opposed to a wire name. */
+/**
+ * A number as written in an instruction, as opposed to a wire name.
+ */
 const NUMBER_PATTERN = /^\d+$/
 
 /**
@@ -205,7 +213,9 @@ export class Circuit {
     }
 }
 
-/** Sets a wire to a number or to a copy of another wire's signal, e.g. "123 -> x" or "lx -> a". */
+/**
+ * Sets a wire to a number or to a copy of another wire's signal, e.g. "123 -> x" or "lx -> a".
+ */
 export class Wire implements Operation {
     static readonly WIRE_PATTERN = /^(\w+) -> (\w+)$/
     private readonly input: Operand
@@ -234,9 +244,13 @@ export class Wire implements Operation {
     }
 }
 
-/** A gate with two inputs: AND, OR, LSHIFT or RSHIFT, e.g. "x AND y -> d" or "x LSHIFT 2 -> f". */
+/**
+ * A gate with two inputs: AND, OR, LSHIFT or RSHIFT, e.g. "x AND y -> d" or "x LSHIFT 2 -> f".
+ */
 export class BinaryGate implements Operation {
-    /** Built from the table of operators, so adding an operator there makes it parse here. */
+    /**
+     * Built from the table of operators, so adding an operator there makes it parse here.
+     */
     static readonly BINARY_PATTERN = new RegExp(
         `^(\\w+) (${Object.keys(BINARY_OPERATORS).join("|")}) (\\w+) -> (\\w+)$`,
     )
@@ -271,7 +285,9 @@ export class BinaryGate implements Operation {
     }
 }
 
-/** Bitwise complement of an input within 16 bits, e.g. "NOT x -> h". */
+/**
+ * Bitwise complement of an input within 16 bits, e.g. "NOT x -> h".
+ */
 export class Not implements Operation {
     static readonly NOT_PATTERN = /^NOT (\w+) -> (\w+)$/
     private readonly input: Operand

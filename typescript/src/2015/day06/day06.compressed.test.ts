@@ -26,7 +26,9 @@ describe("2015 day 06 (compressed): examples", () => {
     })
 })
 
-/** A small seeded random generator (mulberry32), so a failure can be reproduced. */
+/**
+ * A small seeded random generator (mulberry32), so a failure can be reproduced.
+ */
 function seededRandom(seed: number): () => number {
     let state = seed
     return () => {

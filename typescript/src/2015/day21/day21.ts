@@ -10,7 +10,9 @@ export interface Combatant {
     armor: number
 }
 
-/** Does the player beat the boss? The player attacks first. */
+/**
+ * Does the player beat the boss? The player attacks first.
+ */
 export function playerWins(player: Combatant, boss: Combatant): boolean {
     throw new Error("not implemented")
 }

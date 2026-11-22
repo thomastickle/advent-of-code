@@ -9,7 +9,9 @@ export interface DayEntry {
 
 const srcDir = resolve(import.meta.dirname, "..")
 
-/** Finds every src/<year>/dayNN/dayNN.ts so new days show up without registering them. */
+/**
+ * Finds every src/<year>/dayNN/dayNN.ts so new days show up without registering them.
+ */
 export function discover(root = srcDir): DayEntry[] {
     const entries: DayEntry[] = []
     for (const yearDir of readdirSync(root, { withFileTypes: true })) {

@@ -4,7 +4,9 @@
 
 import {printAnswers, type Answers} from "../../answers.ts"
 
-/** A present, as the three dimensions of a rectangular box, all in feet. */
+/**
+ * A present, as the three dimensions of a rectangular box, all in feet.
+ */
 interface Box {
     length: number
     width: number

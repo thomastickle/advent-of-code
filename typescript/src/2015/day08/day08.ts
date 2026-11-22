@@ -4,7 +4,9 @@
 
 import {printAnswers, type Answers} from "../../answers.ts"
 
-/** Two hex digits, as in the `27` of `\x27`. */
+/**
+ * Two hex digits, as in the `27` of `\x27`.
+ */
 const HEX_PAIR = /^[0-9a-fA-F]{2}$/
 
 /**

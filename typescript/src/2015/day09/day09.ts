@@ -6,19 +6,25 @@ import {printAnswers, type Answers} from "../../answers.ts"
 import {parseInput} from "./parse.ts"
 import type {CityName, Route} from "./data_types.ts"
 
-/** Distances between cities numbered 0 to count - 1, in the input's distance units. */
+/**
+ * Distances between cities numbered 0 to count - 1, in the input's distance units.
+ */
 interface DistanceTable {
     count: number
     distances: Int32Array
 }
 
-/** The shortest and longest of a set of route distances, in the input's distance units. */
+/**
+ * The shortest and longest of a set of route distances, in the input's distance units.
+ */
 interface DistanceRange {
     shortest: number
     longest: number
 }
 
-/** A set of visited cities as a bitmask: bit n is set once city n is visited, so `number` holds up to 31 cities. */
+/**
+ * A set of visited cities as a bitmask: bit n is set once city n is visited, so `number` holds up to 31 cities.
+ */
 type Visited = number
 
 const MAX_CITIES = 31

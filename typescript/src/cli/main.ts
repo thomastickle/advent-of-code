@@ -17,7 +17,9 @@ type Outcome =
     | { kind: "no-input"; path: string }
     | { kind: "coal"; message: string }
 
-/** What running one day produced: an outcome per chosen part, and how long `solve` took if it ran. */
+/**
+ * What running one day produced: an outcome per chosen part, and how long `solve` took if it ran.
+ */
 interface DayResult {
     outcomes: Outcome[]
     ms?: number
@@ -100,9 +102,13 @@ async function runDay(
     return outcomes.some((o) => o.kind === "star") ? { outcomes, ms } : { outcomes }
 }
 
-/** Width of an answer column. Longer answers still print in full; they just push the rest of their row along. */
+/**
+ * Width of an answer column. Longer answers still print in full; they just push the rest of their row along.
+ */
 const answerWidth = 14
-/** Width of the time column: a number right-aligned on its decimal point, then the unit, e.g. " 163.60 ms". */
+/**
+ * Width of the time column: a number right-aligned on its decimal point, then the unit, e.g. " 163.60 ms".
+ */
 const timeWidth = 10
 
 /**
@@ -138,30 +144,40 @@ function describe(outcome: Outcome): string {
     }
 }
 
-/** The [⭐ 🪨] marks and the day label: star = solved, coal = naughty list, tree = day 25's free star. */
+/**
+ * The [⭐ 🪨] marks and the day label: star = solved, coal = naughty list, tree = day 25's free star.
+ */
 function rowStart(marks: string[], label: string): string {
     return `  ${dim("[")}${marks.join(" ")}${dim("]")} ${label}  `
 }
 
-/** Spaces as wide as what {@link rowStart} prints, for lining the header up with the rows. Each mark is 2 wide. */
+/**
+ * Spaces as wide as what {@link rowStart} prints, for lining the header up with the rows. Each mark is 2 wide.
+ */
 function rowStartPadding(partCount: number): string {
     const marksWidth = partCount * 2 + (partCount - 1)
     return " ".repeat("  [] Day 01  ".length + marksWidth)
 }
 
-/** Column headings for a year's table, lined up with the rows that {@link dayLine} prints. */
+/**
+ * Column headings for a year's table, lined up with the rows that {@link dayLine} prints.
+ */
 function headerLine(parts: Part[]): string {
     const columns = parts.map((part) => cell(`Part ${part}`, answerWidth)).join(" ")
     return dim(rowStartPadding(parts.length) + columns + " " + "Time".padStart(timeWidth - 3))
 }
 
-/** The shorter of a path relative to where the runner was started and the absolute path. */
+/**
+ * The shorter of a path relative to where the runner was started and the absolute path.
+ */
 function shortestPath(path: string): string {
     const near = relative(process.cwd(), path)
     return near.length < path.length ? near : path
 }
 
-/** Each distinct error message among the outcomes, so one thrown by `solve` shows once rather than per part. */
+/**
+ * Each distinct error message among the outcomes, so one thrown by `solve` shows once rather than per part.
+ */
 function coalNotes(outcomes: Outcome[]): string {
     const messages = [...new Set(outcomes.flatMap((o) => (o.kind === "coal" ? [o.message] : [])))]
     return messages.length === 0 ? "" : `  ${red(messages.join("; "))}`

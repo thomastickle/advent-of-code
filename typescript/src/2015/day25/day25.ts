@@ -4,12 +4,16 @@
 
 import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
-/** Which code in the sequence (1-based) lands at this row and column? Codes fill the grid along diagonals. */
+/**
+ * Which code in the sequence (1-based) lands at this row and column? Codes fill the grid along diagonals.
+ */
 export function sequenceNumber(row: number, column: number): number {
     throw new Error("not implemented")
 }
 
-/** The code at this row and column: start at 20151125, then multiply by 252533 and take the remainder mod 33554393. */
+/**
+ * The code at this row and column: start at 20151125, then multiply by 252533 and take the remainder mod 33554393.
+ */
 export function codeAt(row: number, column: number): number {
     throw new Error("not implemented")
 }

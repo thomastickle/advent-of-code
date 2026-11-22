@@ -4,10 +4,14 @@
 
 import {printAnswers, type Answers} from "../../answers.ts"
 
-/** The grid is GRID_SIZE lights wide and tall. Coordinates run from 0 to 999, so they have at most three digits. */
+/**
+ * The grid is GRID_SIZE lights wide and tall. Coordinates run from 0 to 999, so they have at most three digits.
+ */
 const GRID_SIZE = 1000
 
-/** One instruction, e.g. "turn on 0,0 through 999,999". The pieces are joined by a single whitespace character. */
+/**
+ * One instruction, e.g. "turn on 0,0 through 999,999". The pieces are joined by a single whitespace character.
+ */
 const commandPattern = new RegExp(
     [
         "^(?<action>turn off|turn on|toggle)",

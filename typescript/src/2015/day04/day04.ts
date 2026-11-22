@@ -8,14 +8,18 @@ import {hash} from "node:crypto"
 const ZERO = "0".charCodeAt(0)
 const NINE = "9".charCodeAt(0)
 
-/** Room for the digits of any safe integer (at most 16) after the secret key. */
+/**
+ * Room for the digits of any safe integer (at most 16) after the secret key.
+ */
 const MAX_DIGITS = 16
 
-/** The secret key followed by a number's decimal digits, as bytes that are counted up in place. */
+/**
+ * The secret key followed by a number's decimal digits, as bytes that are counted up in place. `inUse` is the key and
+ * digits in use: a view of `bytes`, so it sees every increment without being rebuilt.
+ */
 interface KeyedNumber {
     bytes: Uint8Array
     keyLength: number
-    /** The key and digits in use; a view of `bytes`, so it sees every increment without being rebuilt. */
     inUse: Uint8Array
 }
 

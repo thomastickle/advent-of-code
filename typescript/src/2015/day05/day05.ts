@@ -4,7 +4,9 @@
 
 import {printAnswers, type Answers} from "../../answers.ts"
 
-/** The strings that make a line naughty under the old rules: "ab", "cd", "pq" and "xy". */
+/**
+ * The strings that make a line naughty under the old rules: "ab", "cd", "pq" and "xy".
+ */
 const forbiddenPairs = /ab|cd|pq|xy/
 
 /**

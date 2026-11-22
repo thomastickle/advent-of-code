@@ -11,14 +11,20 @@
 import type {Answers} from "../../answers.ts"
 import {parseCommand} from "./day06.ts"
 
-/** The grid is GRID_SIZE lights wide and tall. */
+/**
+ * The grid is GRID_SIZE lights wide and tall.
+ */
 const GRID_SIZE = 1000
 
-/** The cut points along one axis, and a way to look up which block a coordinate starts. */
+/**
+ * The cut points along one axis, and a way to look up which block a coordinate starts.
+ *
+ * `points` holds the sorted distinct cut points, from 0 to GRID_SIZE; block i runs from points[i] to just before
+ * points[i + 1]. `blockStartingAt` maps a cut point to the index of the block that starts there; its other entries are
+ * unused.
+ */
 interface Axis {
-    /** Sorted distinct cut points, from 0 to GRID_SIZE. Block i runs from points[i] to just before points[i + 1]. */
     points: number[]
-    /** For a coordinate that is a cut point, the index of the block that starts there. Other entries are unused. */
     blockStartingAt: Int32Array
 }
 
