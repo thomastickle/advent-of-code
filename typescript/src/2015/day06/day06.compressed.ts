@@ -121,29 +121,11 @@ function applyBrightness(cells: Int32Array, action: string, first: number, last:
 }
 
 /**
- * Part 1 with coordinate compression: how many lights are lit after the instructions
- * @param input The puzzle input, one instruction per line, e.g. "turn on 0,0 through 999,999"
- * @returns The number of lit lights
- */
-export function part1(input: string): number {
-    return run(input, 1)
-}
-
-/**
- * Part 2 with coordinate compression: the total brightness after the instructions
- * @param input The puzzle input, one instruction per line, e.g. "toggle 0,0 through 999,999"
- * @returns The sum of every light's brightness
- */
-export function part2(input: string): number {
-    return run(input, 2)
-}
-
-/**
- * Solves both parts with coordinate compression. Each part is worked out on its own for now.
+ * Solves both parts with coordinate compression. They share only the parsing, so each part runs on its own.
  *
  * @param input The puzzle input, one instruction per line, e.g. "toggle 0,0 through 999,999".
  * @returns [lights left on, total brightness].
  */
 export function solve(input: string): Answers<number> {
-    return [part1(input), part2(input)]
+    return [run(input, 1), run(input, 2)]
 }

@@ -62,32 +62,13 @@ function ribbon({length, width, height}: Box): number {
 }
 
 /**
- * Part 1: total wrapping paper for all the presents
- * @param input One box per line, each in the format "<length>x<width>x<height>", e.g. "2x3x4"
- * @returns Total square feet of wrapping paper
- */
-export function part1(input: string): number {
-    return processInput(input, wrappingPaper)
-}
-
-/**
- * Part 2: total ribbon for all the presents
- * @param input One box per line, each in the format "<length>x<width>x<height>", e.g. "2x3x4"
- * @returns Total feet of ribbon
- */
-export function part2(input: string): number {
-    return processInput(input, ribbon)
-}
-
-/**
- * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
- * part 1.
+ * Solves both parts. They share only the parsing, which is cheap, so each part runs on its own.
  *
  * @param input One box per line, each in the format "<length>x<width>x<height>", e.g. "2x3x4".
  * @returns [square feet of wrapping paper, feet of ribbon].
  */
 export function solve(input: string): Answers<number> {
-    return [part1(input), part2(input)]
+    return [processInput(input, wrappingPaper), processInput(input, ribbon)]
 }
 
 if (import.meta.main) {

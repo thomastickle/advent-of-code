@@ -8,8 +8,6 @@ import {
     hasTwoDifferentPairs,
     incrementChar,
     incrementPassword,
-    part1,
-    part2,
     solve,
 } from "./day11.ts"
 
@@ -180,17 +178,17 @@ describe("2015 day 11: password validation", () => {
 
 describe("2015 day 11: examples", () => {
     it("part 1: \"abcdefgh\" -> abcdffaa", () => {
-        assert.equal(part1("abcdefgh"), "abcdffaa")
+        assert.equal(solve("abcdefgh")[0], "abcdffaa")
     })
     it("part 1: \"ghijklmn\" -> ghjaabcc", () => {
-        assert.equal(part1("ghijklmn"), "ghjaabcc")
+        assert.equal(solve("ghijklmn")[0], "ghjaabcc")
     })
 
     it("part 2: derived from \"abcdefgh\" -> abcdffbb", () => {
-        assert.equal(part2("abcdefgh"), "abcdffbb")
+        assert.equal(solve("abcdefgh")[1], "abcdffbb")
     })
     it("part 2: derived from \"abcdffaa\" -> abcdffcc", () => {
-        assert.equal(part2("abcdffaa"), "abcdffcc")
+        assert.equal(solve("abcdffaa")[1], "abcdffcc")
     })
 })
 

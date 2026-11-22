@@ -13,44 +13,35 @@ function floorChange(instruction: string): number {
 }
 
 /**
- * Part 1: the floor Santa ends up on
- * @param input The instructions, a string of "(" and ")" characters, e.g. "(()(()("
- * @returns The final floor, where 0 is the ground floor and negative floors are below it
- */
-export function part1(input: string): number {
-    let floor = 0
-    for (const instruction of input) {
-        floor += floorChange(instruction)
-    }
-    return floor
-}
-
-/**
- * Part 2: the first instruction that takes Santa into the basement
+ * Follows every instruction once, noting both the final floor and the first step into the basement.
  * @param input The instructions, a string of "(" and ")" characters, e.g. "()())"
- * @returns The 1-based position of the instruction that first reaches floor -1
- * @throws Error if Santa never enters the basement
+ * @returns The final floor (0 is the ground floor, negative floors are below it), and the 1-based position of the
+ * instruction that first reaches floor -1, or undefined if Santa never gets there
  */
-export function part2(input: string): number {
+export function walk(input: string): {floor: number, basementAt: number | undefined} {
     let floor = 0
+    let basementAt: number | undefined
     for (let index = 0; index < input.length; index++) {
         floor += floorChange(input[index]!)
-        if (floor === -1) {
-            return index + 1
+        if (floor === -1 && basementAt === undefined) {
+            basementAt = index + 1
         }
     }
-    throw new Error("Santa never enters the basement")
+    return {floor, basementAt}
 }
 
 /**
- * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
- * part 1.
- *
+ * Solves both parts from a single walk through the instructions.
  * @param input The instructions, a string of "(" and ")" characters, e.g. "(()(()(".
  * @returns [final floor, 1-based position of the first instruction that reaches the basement].
+ * @throws Error if Santa never enters the basement
  */
 export function solve(input: string): Answers<number> {
-    return [part1(input), part2(input)]
+    const {floor, basementAt} = walk(input)
+    if (basementAt === undefined) {
+        throw new Error("Santa never enters the basement")
+    }
+    return [floor, basementAt]
 }
 
 if (import.meta.main) {

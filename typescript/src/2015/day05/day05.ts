@@ -119,32 +119,13 @@ function countNice(input: string, isNice: (line: string) => boolean): number {
 }
 
 /**
- * Part 1: how many strings are nice under the old rules
- * @param input The puzzle input, one string per line
- * @returns The number of nice strings
- */
-export function part1(input: string): number {
-    return countNice(input, isNiceOldRules)
-}
-
-/**
- * Part 2: how many strings are nice under the new rules
- * @param input The puzzle input, one string per line
- * @returns The number of nice strings
- */
-export function part2(input: string): number {
-    return countNice(input, isNiceNewRules)
-}
-
-/**
- * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
- * part 1.
+ * Solves both parts. They share only the parsing, which is cheap, so each part runs on its own.
  *
  * @param input The puzzle input, one string per line, e.g. "ugknbfddgicrmopn".
  * @returns [nice strings under the old rules, nice strings under the new rules].
  */
 export function solve(input: string): Answers<number> {
-    return [part1(input), part2(input)]
+    return [countNice(input, isNiceOldRules), countNice(input, isNiceNewRules)]
 }
 
 if (import.meta.main) {

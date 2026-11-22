@@ -1,8 +1,16 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
 import {fullInputTests} from "../../testing.ts"
-import {part1, part2, solve} from "./day07.ts"
+import {solve} from "./day07.ts"
 import {BinaryGate, Circuit, Wire, type Operation} from "./circuit_operators.ts"
+
+/**
+ * Reads one wire of a circuit. Most examples have no wire a or b, so they can't go through solve().
+ * @param input Circuit instructions, one per line, e.g. "123 -> x\nx AND 1 -> a".
+ * @param wire Wire to read, e.g. "x".
+ * @returns The wire's signal, 0-65535.
+ */
+const signal = (input: string, wire = "a") => Circuit.fromInput(input).evaluate(wire)
 
 describe("2015 day 07: examples", () => {
     const example = [
@@ -20,131 +28,131 @@ describe("2015 day 07: examples", () => {
 
     // The example has no wire a, so each case reads a different wire.
     it("part 1: wire x -> 123", () => {
-        assert.equal(part1(example, "x"), 123)
+        assert.equal(signal(example, "x"), 123)
     })
     it("part 1: wire y -> 456", () => {
-        assert.equal(part1(example, "y"), 456)
+        assert.equal(signal(example, "y"), 456)
     })
     it("part 1: wire d -> 72", () => {
-        assert.equal(part1(example, "d"), 72)
+        assert.equal(signal(example, "d"), 72)
     })
     it("part 1: wire e -> 507", () => {
-        assert.equal(part1(example, "e"), 507)
+        assert.equal(signal(example, "e"), 507)
     })
     it("part 1: wire f -> 492", () => {
-        assert.equal(part1(example, "f"), 492)
+        assert.equal(signal(example, "f"), 492)
     })
     it("part 1: wire g -> 114", () => {
-        assert.equal(part1(example, "g"), 114)
+        assert.equal(signal(example, "g"), 114)
     })
     it("part 1: wire h -> 65412", () => {
-        assert.equal(part1(example, "h"), 65412)
+        assert.equal(signal(example, "h"), 65412)
     })
     it("part 1: wire i -> 65079", () => {
-        assert.equal(part1(example, "i"), 65079)
+        assert.equal(signal(example, "i"), 65079)
     })
     it("part 1: wire a -> 123", () => {
-        assert.equal(part1(example, "a"), 123)
+        assert.equal(signal(example, "a"), 123)
     })
     it("part 1: wire j -> 0", () => {
-        assert.equal(part1(example, "j"), 0)
+        assert.equal(signal(example, "j"), 0)
     })
 
     // The page gives no example for part 2, so these are derived by hand from its rule: take the signal on wire a,
     // override wire b with it, reset every other wire (a included), and read a again. Each circuit has wires a and b.
     it("part 2: NOT undoes itself once b holds a's inverted signal (derived)", () => {
         // a is first 65528, so b becomes 65528 and NOT of that is 7.
-        assert.equal(part2("7 -> b\nNOT b -> a"), 7)
+        assert.equal(solve("7 -> b\nNOT b -> a")[1], 7)
     })
     it("part 2: a is read once more, not fed back again (derived)", () => {
         // a is first 6, so b becomes 6 and a becomes 12. A second pass would give 24.
-        assert.equal(part2("3 -> b\nb LSHIFT 1 -> a"), 12)
+        assert.equal(solve("3 -> b\nb LSHIFT 1 -> a")[1], 12)
     })
     it("part 2: wires between b and a are recomputed, not reused (derived)", () => {
         // First x is 4 and a is 5. Then b becomes 5, so x becomes 10 and a becomes 11. A stale x would give 5.
-        assert.equal(part2("2 -> b\nb LSHIFT 1 -> x\nx OR 1 -> a"), 11)
+        assert.equal(solve("2 -> b\nb LSHIFT 1 -> x\nx OR 1 -> a")[1], 11)
     })
     it("part 2: the override replaces b's own gate (derived)", () => {
         // a is first 12, so b becomes 12 whatever x says, and a becomes 24. Keeping b's gate would give 12.
-        assert.equal(part2("3 -> x\nx LSHIFT 1 -> b\nb LSHIFT 1 -> a"), 24)
+        assert.equal(solve("3 -> x\nx LSHIFT 1 -> b\nb LSHIFT 1 -> a")[1], 24)
     })
     it("part 2: a keeps its value when it doesn't depend on b (derived)", () => {
-        assert.equal(part2("10 -> a\n1 -> b"), 10)
+        assert.equal(solve("10 -> a\n1 -> b")[1], 10)
     })
     it("part 2: an override of 0 still counts as an override (derived)", () => {
         // a is first 0, so b becomes 0 and NOT of that is 65535. Ignoring a zero would leave b at 65535 and give 0.
-        assert.equal(part2("65535 -> b\nNOT b -> a"), 65535)
+        assert.equal(solve("65535 -> b\nNOT b -> a")[1], 65535)
     })
     it("part 2: the override keeps its full 16 bits (derived)", () => {
         // a is first 32768, so b becomes 32768 and shifting it left by 15 leaves no bits within 16, giving 0.
-        assert.equal(part2("1 -> b\nb LSHIFT 15 -> a"), 0)
+        assert.equal(solve("1 -> b\nb LSHIFT 15 -> a")[1], 0)
     })
 })
 
 describe("2015 day 07: numeric operands", () => {
     it("evaluates numeric operands in AND", () => {
-        assert.equal(part1("1 AND 3 -> a"), 1)
+        assert.equal(signal("1 AND 3 -> a"), 1)
     })
 
     it("evaluates numeric operands in OR", () => {
-        assert.equal(part1("1 OR 2 -> a"), 3)
+        assert.equal(signal("1 OR 2 -> a"), 3)
     })
 
     it("evaluates numeric operands in NOT", () => {
-        assert.equal(part1("NOT 0 -> a"), 65535)
+        assert.equal(signal("NOT 0 -> a"), 65535)
     })
 
     it("evaluates numeric operands in LSHIFT", () => {
-        assert.equal(part1("2 LSHIFT 3 -> a"), 16)
+        assert.equal(signal("2 LSHIFT 3 -> a"), 16)
     })
     it("evaluates numeric operands in RSHIFT", () => {
-        assert.equal(part1("8 RSHIFT 2 -> a"), 2)
+        assert.equal(signal("8 RSHIFT 2 -> a"), 2)
     })
 
     it("resolves a wire on the left of AND defined after it", () => {
-        assert.equal(part1("x AND 3 -> a\n2 -> x"), 2)
+        assert.equal(signal("x AND 3 -> a\n2 -> x"), 2)
     })
     it("resolves a wire on the right of AND defined after it", () => {
-        assert.equal(part1("2 AND x -> a\n3 -> x"), 2)
+        assert.equal(signal("2 AND x -> a\n3 -> x"), 2)
     })
     it("resolves a wire on the left of OR defined after it", () => {
-        assert.equal(part1("x OR 4 -> a\n2 -> x"), 6)
+        assert.equal(signal("x OR 4 -> a\n2 -> x"), 6)
     })
     it("resolves a wire on the right of OR defined after it", () => {
-        assert.equal(part1("4 OR x -> a\n2 -> x"), 6)
+        assert.equal(signal("4 OR x -> a\n2 -> x"), 6)
     })
 
     it("keeps left-shift results within the 16-bit signal width", () => {
-        assert.equal(part1("1 LSHIFT 16 -> a"), 0)
+        assert.equal(signal("1 LSHIFT 16 -> a"), 0)
     })
 
     it("keeps NOT results within the 16-bit signal width", () => {
-        assert.equal(part1("NOT 65535 -> a"), 0)
+        assert.equal(signal("NOT 65535 -> a"), 0)
     })
 
     it("reports missing wires when evaluating other gates", () => {
-        assert.throws(() => part1("missing OR 1 -> a"), /Wire missing not found/)
+        assert.throws(() => signal("missing OR 1 -> a"), /Wire missing not found/)
     })
 })
 
 describe("2015 day 07: missing wire errors name the instruction", () => {
     it("AND", () => {
-        assert.throws(() => part1("missing AND 1 -> a"), /Wire missing not found\. missing AND 1 -> a$/)
+        assert.throws(() => signal("missing AND 1 -> a"), /Wire missing not found\. missing AND 1 -> a$/)
     })
     it("OR", () => {
-        assert.throws(() => part1("1 OR missing -> a"), /Wire missing not found\. 1 OR missing -> a$/)
+        assert.throws(() => signal("1 OR missing -> a"), /Wire missing not found\. 1 OR missing -> a$/)
     })
     it("LSHIFT", () => {
-        assert.throws(() => part1("missing LSHIFT 2 -> a"), /Wire missing not found\. missing LSHIFT 2 -> a$/)
+        assert.throws(() => signal("missing LSHIFT 2 -> a"), /Wire missing not found\. missing LSHIFT 2 -> a$/)
     })
     it("RSHIFT", () => {
-        assert.throws(() => part1("missing RSHIFT 2 -> a"), /Wire missing not found\. missing RSHIFT 2 -> a$/)
+        assert.throws(() => signal("missing RSHIFT 2 -> a"), /Wire missing not found\. missing RSHIFT 2 -> a$/)
     })
     it("NOT", () => {
-        assert.throws(() => part1("NOT missing -> a"), /Wire missing not found\. NOT missing -> a$/)
+        assert.throws(() => signal("NOT missing -> a"), /Wire missing not found\. NOT missing -> a$/)
     })
     it("a plain wire", () => {
-        assert.throws(() => part1("missing -> a"), /Wire missing not found\. missing -> a$/)
+        assert.throws(() => signal("missing -> a"), /Wire missing not found\. missing -> a$/)
     })
 })
 
@@ -166,34 +174,34 @@ describe("2015 day 07: circuit construction", () => {
 
 describe("2015 day 07: any input can be a number or a wire", () => {
     it("takes an LSHIFT count from a wire", () => {
-        assert.equal(part1("2 -> n\n1 LSHIFT n -> a"), 4)
+        assert.equal(signal("2 -> n\n1 LSHIFT n -> a"), 4)
     })
     it("takes an RSHIFT count from a wire", () => {
-        assert.equal(part1("2 -> n\n8 RSHIFT n -> a"), 2)
+        assert.equal(signal("2 -> n\n8 RSHIFT n -> a"), 2)
     })
     it("takes a number as the left input of a shift", () => {
-        assert.equal(part1("3 -> n\n1 LSHIFT n -> a"), 8)
+        assert.equal(signal("3 -> n\n1 LSHIFT n -> a"), 8)
     })
     it("passes a number straight through NOT", () => {
-        assert.equal(part1("NOT 65535 -> a"), 0)
+        assert.equal(signal("NOT 65535 -> a"), 0)
     })
 })
 
 describe("2015 day 07: signal range", () => {
     it("accepts the largest signal, 65535", () => {
-        assert.equal(part1("65535 -> a"), 65535)
+        assert.equal(signal("65535 -> a"), 65535)
     })
     it("rejects a number above 65535 assigned to a wire", () => {
-        assert.throws(() => part1("65536 -> a"), /Signal 65536 is out of range \(0 to 65535\): 65536 -> a/)
+        assert.throws(() => signal("65536 -> a"), /Signal 65536 is out of range \(0 to 65535\): 65536 -> a/)
     })
     it("rejects a number above 65535 as the right input of AND", () => {
-        assert.throws(() => part1("x AND 70000 -> a\n1 -> x"), /Signal 70000 is out of range/)
+        assert.throws(() => signal("x AND 70000 -> a\n1 -> x"), /Signal 70000 is out of range/)
     })
     it("rejects a number above 65535 as the left input of OR", () => {
-        assert.throws(() => part1("70000 OR x -> a\n1 -> x"), /Signal 70000 is out of range/)
+        assert.throws(() => signal("70000 OR x -> a\n1 -> x"), /Signal 70000 is out of range/)
     })
     it("rejects a number above 65535 as the input to NOT", () => {
-        assert.throws(() => part1("NOT 70000 -> a"), /Signal 70000 is out of range/)
+        assert.throws(() => signal("NOT 70000 -> a"), /Signal 70000 is out of range/)
     })
     it("rejects an out-of-range number even if no one reads that wire", () => {
         assert.throws(() => Circuit.fromInput("1 -> a\n70000 -> unused"), /Signal 70000 is out of range/)
@@ -202,40 +210,40 @@ describe("2015 day 07: signal range", () => {
 
 describe("2015 day 07: large shift counts", () => {
     it("shifts left by 15 into the top bit", () => {
-        assert.equal(part1("1 LSHIFT 15 -> a"), 32768)
+        assert.equal(signal("1 LSHIFT 15 -> a"), 32768)
     })
     it("empties the signal when shifting left by 16", () => {
-        assert.equal(part1("1 LSHIFT 16 -> a"), 0)
+        assert.equal(signal("1 LSHIFT 16 -> a"), 0)
     })
     it("empties the signal when shifting left by 32, which JavaScript itself reads as a shift by 0", () => {
-        assert.equal(part1("1 LSHIFT 32 -> a"), 0)
+        assert.equal(signal("1 LSHIFT 32 -> a"), 0)
     })
     it("empties the signal when shifting right by 16", () => {
-        assert.equal(part1("65535 RSHIFT 16 -> a"), 0)
+        assert.equal(signal("65535 RSHIFT 16 -> a"), 0)
     })
     it("empties the signal when shifting right by 32, which JavaScript itself reads as a shift by 0", () => {
-        assert.equal(part1("65535 RSHIFT 32 -> a"), 0)
+        assert.equal(signal("65535 RSHIFT 32 -> a"), 0)
     })
 })
 
 describe("2015 day 07: cycles", () => {
     it("rejects a wire that feeds itself", () => {
-        assert.throws(() => part1("a -> a"), /Circuit has a cycle: a -> a$/)
+        assert.throws(() => signal("a -> a"), /Circuit has a cycle: a -> a$/)
     })
     it("rejects two wires that feed each other", () => {
-        assert.throws(() => part1("a -> b\nb -> a"), /Circuit has a cycle: b -> a -> b$/)
+        assert.throws(() => signal("a -> b\nb -> a"), /Circuit has a cycle: b -> a -> b$/)
     })
     it("rejects a cycle behind a gate", () => {
-        assert.throws(() => part1("x AND a -> b\nb -> a\n1 -> x"), /Circuit has a cycle: b -> a -> b$/)
+        assert.throws(() => signal("x AND a -> b\nb -> a\n1 -> x"), /Circuit has a cycle: b -> a -> b$/)
     })
     it("rejects a cycle through a NOT and a shift", () => {
-        assert.throws(() => part1("NOT b -> a\na LSHIFT 1 -> b"), /Circuit has a cycle: a -> b -> a$/)
+        assert.throws(() => signal("NOT b -> a\na LSHIFT 1 -> b"), /Circuit has a cycle: a -> b -> a$/)
     })
     it("reports the cycle even when asked for a wire outside it", () => {
-        assert.throws(() => part1("1 -> ok\na -> b\nb -> a", "ok"), /Circuit has a cycle/)
+        assert.throws(() => signal("1 -> ok\na -> b\nb -> a", "ok"), /Circuit has a cycle/)
     })
     it("does not mistake a wire shared by two paths for a cycle", () => {
-        assert.equal(part1("1 -> x\nx -> y\nx -> z\ny AND z -> a"), 1)
+        assert.equal(signal("1 -> x\nx -> y\nx -> z\ny AND z -> a"), 1)
     })
     it("accepts the cycle being broken by replacing a wire's operation", () => {
         const circuit = Circuit.fromInput("a -> b\nb -> a")

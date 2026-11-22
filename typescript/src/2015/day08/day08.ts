@@ -64,33 +64,16 @@ function sumOverLines(input: string, perLine: (line: string) => number): number 
 }
 
 /**
- * Part 1: characters of code minus characters in memory, over every literal.
- * @param input The puzzle input, one string literal per line, e.g. `"abc"`
- * @returns The total difference
- * @throws If a line is not a valid string literal
- */
-export function part1(input: string): number {
-    return sumOverLines(input, line => line.length - memoryLength(line))
-}
-
-/**
- * Part 2: characters of the re-encoded literals minus characters of the original code, over every literal.
- * @param input The puzzle input, one string literal per line, e.g. `"abc"`
- * @returns The total difference
- */
-export function part2(input: string): number {
-    return sumOverLines(input, line => encodedLength(line) - line.length)
-}
-
-/**
- * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
- * part 1.
+ * Solves both parts. They share only the parsing, which is cheap, so each part runs on its own.
  *
  * @param input The puzzle input, one string literal per line, e.g. `"abc"`.
  * @returns [code characters minus memory characters, encoded characters minus code characters].
  */
 export function solve(input: string): Answers<number> {
-    return [part1(input), part2(input)]
+    return [
+        sumOverLines(input, line => line.length - memoryLength(line)),
+        sumOverLines(input, line => encodedLength(line) - line.length),
+    ]
 }
 
 if (import.meta.main) {

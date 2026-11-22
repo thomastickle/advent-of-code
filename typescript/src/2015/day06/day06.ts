@@ -136,33 +136,13 @@ function runCommands(input: string, apply: (lights: Int32Array, command: LightCo
 }
 
 /**
- * Part 1: how many lights are lit after the instructions, where turn on, turn off and toggle mean what they say
- * @param input The puzzle input, one instruction per line, e.g. "turn on 0,0 through 999,999"
- * @returns The number of lit lights
- */
-export function part1(input: string): number {
-    return runCommands(input, applyOnOff)
-}
-
-/**
- * Part 2: the total brightness after the instructions, where turn on adds 1, turn off subtracts 1 (to a minimum of 0)
- * and toggle adds 2
- * @param input The puzzle input, one instruction per line, e.g. "toggle 0,0 through 999,999"
- * @returns The sum of every light's brightness
- */
-export function part2(input: string): number {
-    return runCommands(input, applyBrightness)
-}
-
-/**
- * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
- * part 1.
+ * Solves both parts. They share only the parsing, which is cheap, so each part runs on its own.
  *
  * @param input The puzzle input, one instruction per line, e.g. "toggle 0,0 through 999,999".
  * @returns [lights left on, total brightness].
  */
 export function solve(input: string): Answers<number> {
-    return [part1(input), part2(input)]
+    return [runCommands(input, applyOnOff), runCommands(input, applyBrightness)]
 }
 
 if (import.meta.main) {

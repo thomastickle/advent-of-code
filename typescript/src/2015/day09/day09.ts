@@ -4,79 +4,61 @@ import type {CityName, Route} from "./data_types.ts"
 
 /** 2015 day 9: All in a Single Night. https://adventofcode.com/2015/day/9 */
 
+/** The shortest and longest of a set of route distances, in the input's distance units. */
+interface DistanceRange {
+    shortest: number
+    longest: number
+}
+
 /**
- * Finds the selected route distance across all starting cities in a fully connected graph.
+ * Finds the shortest and longest routes across all starting cities in a fully connected graph, in a single walk
+ * over every route (both answers come from the same set of routes, so there is no need to walk them twice).
  * @param cities Outgoing routes keyed by city name, e.g. "London" maps to routes to Dublin and Belfast.
- * @param comparisonFunction Math.min for the shortest route or Math.max for the longest; called without arguments
- * to obtain Infinity or -Infinity as the initial comparison value.
- * @returns Selected total distance in the input's distance units, visiting every city once without returning.
+ * @returns Shortest and longest total distance in the input's distance units, visiting every city once without
+ * returning.
  */
-function findDistanceByFunction(cities: Map<CityName, Route[]>, comparisonFunction: (...values: number[]) => number) {
+function findDistanceRange(cities: Map<CityName, Route[]>): DistanceRange {
     /**
      * Explores unvisited destinations, copying the visited set to keep recursive branches independent.
      * @param routes Outgoing routes from the current city, e.g. [{from: "London", to: "Dublin", distance: 464}].
      * @param visited Cities already on this branch, including the current city, e.g. new Set(["London"]).
-     * @returns Selected remaining distance in the input's units, or zero when no unvisited destinations remain.
+     * @returns Shortest and longest remaining distance in the input's units, or zeros when no unvisited
+     * destinations remain.
      */
-    function findRemainingDistance(routes: Route[], visited: Set<CityName>) {
-        let distance = comparisonFunction()
-
+    function findRemainingRange(routes: Route[], visited: Set<CityName>): DistanceRange {
         const remainingRoutes = routes.filter(route => !visited.has(route.to))
         if (remainingRoutes.length === 0) {
-            return 0
+            return {shortest: 0, longest: 0}
         }
 
+        const range = {shortest: Infinity, longest: -Infinity}
         for (const route of remainingRoutes) {
-            const nextRoutes = cities.get(route.to)
-            distance = comparisonFunction(
-                distance,
-                route.distance + findRemainingDistance(nextRoutes!, new Set(visited).add(route.to)),
-            )
+            const rest = findRemainingRange(cities.get(route.to)!, new Set(visited).add(route.to))
+            range.shortest = Math.min(range.shortest, route.distance + rest.shortest)
+            range.longest = Math.max(range.longest, route.distance + rest.longest)
         }
-        return distance
+        return range
     }
 
-    let distance = comparisonFunction()
-
-    for (const [cityName, route] of cities) {
-        distance = comparisonFunction(distance, findRemainingDistance(route, new Set<string>().add(cityName)))
+    const range = {shortest: Infinity, longest: -Infinity}
+    for (const [cityName, routes] of cities) {
+        const fromHere = findRemainingRange(routes, new Set<CityName>().add(cityName))
+        range.shortest = Math.min(range.shortest, fromHere.shortest)
+        range.longest = Math.max(range.longest, fromHere.longest)
     }
-
-    return distance
-}
-
-
-/**
- * Finds the shortest route visiting every city exactly once.
- * @param input LF- or CRLF-separated routes in the form "London to Dublin = 464".
- * @returns Shortest total distance in the input's distance units, without returning to the starting city.
- * @throws {Error} If a route line cannot be parsed.
- */
-export function part1(input: string): number {
-    const cities = parseInput(input)
-    return findDistanceByFunction(cities, Math.min)
+    return range
 }
 
 /**
- * Finds the longest route visiting every city exactly once.
- * @param input LF- or CRLF-separated routes in the form "London to Dublin = 464".
- * @returns Longest total distance in the input's distance units, without returning to the starting city.
- * @throws {Error} If a route line cannot be parsed.
- */
-export function part2(input: string): number {
-    const cities = parseInput(input)
-    return findDistanceByFunction(cities, Math.max)
-}
-
-/**
- * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
- * part 1.
+ * Solves both parts from one parse and one walk over every route.
  *
  * @param input One route per line in the form "<city> to <city> = <distance>", e.g. "London to Dublin = 464".
  * @returns [shortest route, longest route], in the input's distance units.
+ * @throws {Error} If a route line cannot be parsed.
  */
 export function solve(input: string): Answers<number> {
-    return [part1(input), part2(input)]
+    const {shortest, longest} = findDistanceRange(parseInput(input))
+    return [shortest, longest]
 }
 
 if (import.meta.main) {

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
 import {fullInputTests} from "../../testing.ts"
-import {part1, part2, solve} from "./day09.ts"
+import {solve} from "./day09.ts"
 
 describe("2015 day 09: examples", () => {
     it("part 1: the example (3 lines) -> 605", () => {
@@ -10,7 +10,7 @@ describe("2015 day 09: examples", () => {
             "London to Belfast = 518",
             "Dublin to Belfast = 141",
         ].join("\n")
-        assert.equal(part1(input), 605)
+        assert.equal(solve(input)[0], 605)
     })
 
     // Longest route, derived from the six route totals the page lists.
@@ -21,7 +21,7 @@ describe("2015 day 09: examples", () => {
             "London to Belfast = 518",
             "Dublin to Belfast = 141",
         ].join("\n")
-        assert.equal(part2(input), 982)
+        assert.equal(solve(input)[1], 982)
     })
 })
 

@@ -78,23 +78,15 @@ export function nextPassword(input: string) {
     return String.fromCodePoint(...password)
 }
 
-export function part1(input: string): string {
-    return nextPassword(input)
-}
-
-export function part2(input: string): string {
-    return nextPassword(nextPassword(input))
-}
-
 /**
- * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
- * part 1.
+ * Solves both parts, starting part 2's search from part 1's password instead of finding it a second time.
  *
  * @param input The current password, eight lowercase letters, e.g. "abcdefgh".
  * @returns [next valid password, the valid password after that].
  */
 export function solve(input: string): Answers<string> {
-    return [part1(input), part2(input)]
+    const next = nextPassword(input)
+    return [next, nextPassword(next)]
 }
 
 if (import.meta.main) {

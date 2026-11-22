@@ -1,19 +1,33 @@
 import {printAnswers, type Answers} from "../../answers.ts"
 
 /**
- * Plays the look-and-say game and measures the result.
+ * Plays the look-and-say game once, for as many rounds as the largest checkpoint, and measures the sequence at each
+ * checkpoint on the way. This lets part 1 (40 rounds) be read off the run that part 2 (50 rounds) needs anyway.
  *
  * @param input Starting sequence of digits, e.g. "1113222113".
- * @param rounds Number of times to apply the rule, e.g. 40.
- * @returns Number of digits in the sequence after the last round.
- * @throws If the input contains anything other than the digits 0-9.
+ * @param checkpoints Round counts to measure after, e.g. [40, 50]. 0 measures the starting sequence.
+ * @returns Number of digits after each checkpoint, in the same order, e.g. [252594, 3579328].
+ * @throws If the input contains anything other than the digits 0-9, or a checkpoint is not a whole number of
+ * rounds (0 or more).
  */
-export function lookAndSay(input: string, rounds = 40): number {
+export function lookAndSayLengths(input: string, checkpoints: number[]): number[] {
+    const badCheckpoint = checkpoints.find(checkpoint => !Number.isInteger(checkpoint) || checkpoint < 0)
+    if (badCheckpoint !== undefined) {
+        throw new Error(`Invalid number of rounds: ${badCheckpoint}`)
+    }
+
     let current = parseDigits(input)
     let length = current.length
     let next: Uint8Array = new Uint8Array(length * 2)
 
-    for (let round = 0; round < rounds; round++) {
+    const lengths = new Map<number, number>()
+    const rounds = Math.max(0, ...checkpoints)
+    for (let round = 0; ; round++) {
+        lengths.set(round, length)
+        if (round === rounds) {
+            break
+        }
+
         // Each run writes at most two digits per input digit, so this is always enough room.
         if (next.length < length * 2) {
             next = new Uint8Array(length * 2)
@@ -26,7 +40,7 @@ export function lookAndSay(input: string, rounds = 40): number {
         next = swap
     }
 
-    return length
+    return checkpoints.map(checkpoint => lengths.get(checkpoint)!)
 }
 
 /**
@@ -102,23 +116,16 @@ function writeRun(buffer: Uint8Array, offset: number, count: number, digit: numb
     return offset
 }
 
-export function part1(input: string): number {
-    return lookAndSay(input, 40)
-}
-
-export function part2(input: string): number {
-    return lookAndSay(input, 50)
-}
-
 /**
- * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
- * part 1.
+ * Solves both parts from a single 50-round game, measuring the sequence after round 40 on the way.
  *
  * @param input Starting sequence of digits, e.g. "1113222113".
  * @returns [digits after 40 rounds, digits after 50 rounds].
+ * @throws If the input contains anything other than the digits 0-9.
  */
 export function solve(input: string): Answers<number> {
-    return [part1(input), part2(input)]
+    const [after40, after50] = lookAndSayLengths(input, [40, 50])
+    return [after40!, after50!]
 }
 
 if (import.meta.main) {

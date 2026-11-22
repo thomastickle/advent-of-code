@@ -66,32 +66,14 @@ function countHouses(input: string, walkers: number): number {
 }
 
 /**
- * Part 1: houses that Santa alone delivers to
- * @param input The instructions, a string of "^", "v", "<" and ">" characters, e.g. "^>v<"
- * @returns The number of houses that get at least one present
- */
-export function part1(input: string): number {
-    return countHouses(input, 1)
-}
-
-/**
- * Part 2: houses that Santa and Robo-Santa deliver to, taking turns
- * @param input The instructions, a string of "^", "v", "<" and ">" characters, e.g. "^>v<"
- * @returns The number of houses that get at least one present
- */
-export function part2(input: string): number {
-    return countHouses(input, 2)
-}
-
-/**
- * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
- * part 1.
+ * Solves both parts. Santa's walk alone and the walk shared with Robo-Santa visit different houses, so each part
+ * runs on its own.
  *
  * @param input The instructions, a string of "^", "v", "<" and ">" characters, e.g. "^>v<".
  * @returns [houses Santa visits alone, houses Santa and Robo-Santa visit together].
  */
 export function solve(input: string): Answers<number> {
-    return [part1(input), part2(input)]
+    return [countHouses(input, 1), countHouses(input, 2)]
 }
 
 if (import.meta.main) {

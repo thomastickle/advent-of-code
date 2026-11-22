@@ -1,28 +1,28 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
 import {fullInputTests} from "../../testing.ts"
-import {part1, part2, solve} from "./day06.compressed.ts"
-import {part1 as gridPart1, part2 as gridPart2} from "./day06.ts"
+import {solve} from "./day06.compressed.ts"
+import {solve as gridSolve} from "./day06.ts"
 
 describe("2015 day 06 (compressed): examples", () => {
     // The page gives no numeric results for part 1. These counts are derived from its descriptions.
     it("part 1: turning on every light", () => {
-        assert.equal(part1("turn on 0,0 through 999,999"), 1000000)
+        assert.equal(solve("turn on 0,0 through 999,999")[0], 1000000)
     })
     it("part 1: toggling the first row of 1000 lights", () => {
-        assert.equal(part1("toggle 0,0 through 999,0"), 1000)
+        assert.equal(solve("toggle 0,0 through 999,0")[0], 1000)
     })
     it("part 1: turning off the middle four lights on an off grid", () => {
-        assert.equal(part1("turn off 499,499 through 500,500"), 0)
+        assert.equal(solve("turn off 499,499 through 500,500")[0], 0)
     })
     it("part 1: turning on everything then turning off the middle four", () => {
-        assert.equal(part1("turn on 0,0 through 999,999\nturn off 499,499 through 500,500"), 999996)
+        assert.equal(solve("turn on 0,0 through 999,999\nturn off 499,499 through 500,500")[0], 999996)
     })
     it("part 2: turning on one light raises the brightness by 1", () => {
-        assert.equal(part2("turn on 0,0 through 0,0"), 1)
+        assert.equal(solve("turn on 0,0 through 0,0")[1], 1)
     })
     it("part 2: toggling every light raises the brightness by 2000000", () => {
-        assert.equal(part2("toggle 0,0 through 999,999"), 2000000)
+        assert.equal(solve("toggle 0,0 through 999,999")[1], 2000000)
     })
 })
 
@@ -60,18 +60,17 @@ describe("2015 day 06 (compressed): agrees with the grid version", () => {
     // A full-grid turn on followed by one toggle in the far corner.
     const cornerToggle = "turn on 0,0 through 999,999\ntoggle 999,999 through 999,999"
     it("part 1 matches on a full-grid turn on followed by one toggle in the far corner", () => {
-        assert.equal(part1(cornerToggle), gridPart1(cornerToggle))
+        assert.equal(solve(cornerToggle)[0], gridSolve(cornerToggle)[0])
     })
     it("part 2 matches on a full-grid turn on followed by one toggle in the far corner", () => {
-        assert.equal(part2(cornerToggle), gridPart2(cornerToggle))
+        assert.equal(solve(cornerToggle)[1], gridSolve(cornerToggle)[1])
     })
     it("matches on 300 random inputs, including heavily overlapping ones", () => {
         const random = seededRandom(2015)
         for (const span of [1000, 10, 3]) {
             for (let round = 0; round < 100; round++) {
                 const input = randomInput(random, span)
-                assert.equal(part1(input), gridPart1(input), `part 1, span ${span}:\n${input}`)
-                assert.equal(part2(input), gridPart2(input), `part 2, span ${span}:\n${input}`)
+                assert.deepEqual(solve(input), gridSolve(input), `span ${span}:\n${input}`)
             }
         }
     })
