@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, type Answers} from "../../answers.ts"
 import {hash} from "node:crypto"
 
 /** 2015 day 4: The Ideal Stocking Stuffer. https://adventofcode.com/2015/day/4 */
@@ -41,12 +41,17 @@ export function part2(input: string): number {
     return findLowestNumber(input, 6)
 }
 
+/**
+ * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
+ * part 1.
+ *
+ * @param input The secret key from the puzzle, e.g. "abcdef".
+ * @returns [lowest number whose hash starts with five zeros, lowest number whose hash starts with six zeros].
+ */
+export function solve(input: string): Answers<number> {
+    return [part1(input), part2(input)]
+}
+
 if (import.meta.main) {
-    const input = readInput(2015, 4)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 4)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 4, solve)
 }

@@ -1,21 +1,17 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /** 2015 day 13: Knights of the Dinner Table. https://adventofcode.com/2015/day/13 */
 
-export function part1(input: string): number {
-    throw new Error("not implemented")
-}
-
-export function part2(input: string): number {
-    throw new Error("not implemented")
+/**
+ * Solves both parts. Return {@link unsolved} for a part that isn't done yet.
+ *
+ * @param input One happiness rule per line, e.g. "Alice would gain 54 happiness units by sitting next to Bob."
+ * @returns [part 1 answer, part 2 answer].
+ */
+export function solve(input: string): Answers<number> {
+    return [unsolved, unsolved]
 }
 
 if (import.meta.main) {
-    const input = readInput(2015, 13)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 13)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 13, solve)
 }

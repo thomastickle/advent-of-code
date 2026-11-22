@@ -1,21 +1,18 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /** 2015 day 17: No Such Thing as Too Much. https://adventofcode.com/2015/day/17 */
 
-export function part1(input: string, liters = 150): number {
-    throw new Error("not implemented")
-}
-
-export function part2(input: string): number {
-    throw new Error("not implemented")
+/**
+ * Solves both parts. Return {@link unsolved} for a part that isn't done yet.
+ *
+ * @param input One container size in liters per line, e.g. "20".
+ * @param liters Eggnog to store in liters, e.g. 150 (the example stores 25).
+ * @returns [part 1 answer, part 2 answer].
+ */
+export function solve(input: string, liters = 150): Answers<number> {
+    return [unsolved, unsolved]
 }
 
 if (import.meta.main) {
-    const input = readInput(2015, 17)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 17)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 17, solve)
 }

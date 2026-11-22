@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, type Answers} from "../../answers.ts"
 
 /** A present, as the three dimensions of a rectangular box, all in feet. */
 interface Box {
@@ -79,12 +79,17 @@ export function part2(input: string): number {
     return processInput(input, ribbon)
 }
 
+/**
+ * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
+ * part 1.
+ *
+ * @param input One box per line, each in the format "<length>x<width>x<height>", e.g. "2x3x4".
+ * @returns [square feet of wrapping paper, feet of ribbon].
+ */
+export function solve(input: string): Answers<number> {
+    return [part1(input), part2(input)]
+}
+
 if (import.meta.main) {
-    const input = readInput(2015, 2)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 2)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 2, solve)
 }

@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /** 2015 day 25: Let It Snow. https://adventofcode.com/2015/day/25 */
 
@@ -12,15 +12,16 @@ export function codeAt(row: number, column: number): number {
     throw new Error("not implemented")
 }
 
-export function part1(input: string): number {
-    throw new Error("not implemented")
+/**
+ * Solves the puzzle. Day 25 has no part 2 puzzle (its star is free), so part 2 stays {@link unsolved}.
+ *
+ * @param input The puzzle sentence giving the row and column, e.g. "... Enter the code at row 2981, column 3075."
+ * @returns [part 1 answer, part 2 answer].
+ */
+export function solve(input: string): Answers<number> {
+    return [unsolved, unsolved]
 }
 
 if (import.meta.main) {
-    const input = readInput(2015, 25)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 25)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
+    printAnswers(2015, 25, solve)
 }

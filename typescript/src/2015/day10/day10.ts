@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, type Answers} from "../../answers.ts"
 
 /**
  * Plays the look-and-say game and measures the result.
@@ -110,12 +110,17 @@ export function part2(input: string): number {
     return lookAndSay(input, 50)
 }
 
+/**
+ * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
+ * part 1.
+ *
+ * @param input Starting sequence of digits, e.g. "1113222113".
+ * @returns [digits after 40 rounds, digits after 50 rounds].
+ */
+export function solve(input: string): Answers<number> {
+    return [part1(input), part2(input)]
+}
+
 if (import.meta.main) {
-    const input = readInput(2015, 10)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 10)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 10, solve)
 }

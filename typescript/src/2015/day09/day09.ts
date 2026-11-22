@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, type Answers} from "../../answers.ts"
 import {parseInput} from "./parse.ts"
 import type {CityName, Route} from "./data_types.ts"
 
@@ -68,12 +68,17 @@ export function part2(input: string): number {
     return findDistanceByFunction(cities, Math.max)
 }
 
+/**
+ * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
+ * part 1.
+ *
+ * @param input One route per line in the form "<city> to <city> = <distance>", e.g. "London to Dublin = 464".
+ * @returns [shortest route, longest route], in the input's distance units.
+ */
+export function solve(input: string): Answers<number> {
+    return [part1(input), part2(input)]
+}
+
 if (import.meta.main) {
-    const input = readInput(2015, 9)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 9)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 9, solve)
 }

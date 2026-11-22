@@ -1,8 +1,7 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
-import {pending} from "../../testing.ts"
-import {inputPath, readExpected, readInput} from "../../input.ts"
-import {part1, part2} from "./day15.ts"
+import {answer, fullInputTests, pending} from "../../testing.ts"
+import {solve} from "./day15.ts"
 
 describe("2015 day 15: examples", () => {
     it("part 1: the example (2 lines) -> 62842880", pending(() => {
@@ -10,28 +9,10 @@ describe("2015 day 15: examples", () => {
             "Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8",
             "Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3",
         ].join("\n")
-        assert.equal(part1(input), 62842880)
+        assert.equal(answer(solve(input), 1), 62842880)
     }))
 
     // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them below as it("part 2: ...") calls.
 })
 
-// Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
-const expected: {part1?: number; part2?: number} = readExpected(2015, 15)
-
-const input = readInput(2015, 15)
-const skip = (answer: number | undefined) =>
-    input === undefined
-        ? `no input at ${inputPath(2015, 15)}`
-        : answer === undefined
-          ? "expected answer not recorded yet"
-          : false
-
-describe("2015 day 15: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, pending(() => {
-        assert.equal(part1(input!), expected.part1)
-    }))
-    it("part 2", {skip: skip(expected.part2)}, pending(() => {
-        assert.equal(part2(input!), expected.part2)
-    }))
-})
+fullInputTests(2015, 15, solve)

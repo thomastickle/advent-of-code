@@ -1,21 +1,18 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /** 2015 day 14: Reindeer Olympics. https://adventofcode.com/2015/day/14 */
 
-export function part1(input: string, seconds = 2503): number {
-    throw new Error("not implemented")
-}
-
-export function part2(input: string): number {
-    throw new Error("not implemented")
+/**
+ * Solves both parts. Return {@link unsolved} for a part that isn't done yet.
+ *
+ * @param input One reindeer per line, e.g. "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds."
+ * @param seconds Length of the race in seconds, e.g. 2503 (the example race lasts 1000).
+ * @returns [part 1 answer, part 2 answer].
+ */
+export function solve(input: string, seconds = 2503): Answers<number> {
+    return [unsolved, unsolved]
 }
 
 if (import.meta.main) {
-    const input = readInput(2015, 14)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 14)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 14, solve)
 }

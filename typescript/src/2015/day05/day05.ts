@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, type Answers} from "../../answers.ts"
 
 /** 2015 day 5: Doesn't He Have Intern-Elves For This? https://adventofcode.com/2015/day/5 */
 
@@ -136,12 +136,17 @@ export function part2(input: string): number {
     return countNice(input, isNiceNewRules)
 }
 
+/**
+ * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
+ * part 1.
+ *
+ * @param input The puzzle input, one string per line, e.g. "ugknbfddgicrmopn".
+ * @returns [nice strings under the old rules, nice strings under the new rules].
+ */
+export function solve(input: string): Answers<number> {
+    return [part1(input), part2(input)]
+}
+
 if (import.meta.main) {
-    const input = readInput(2015, 5)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 5)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 5, solve)
 }

@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, type Answers} from "../../answers.ts"
 
 /** Two hex digits, as in the `27` of `\x27`. */
 const HEX_PAIR = /^[0-9a-fA-F]{2}$/
@@ -82,12 +82,17 @@ export function part2(input: string): number {
     return sumOverLines(input, line => encodedLength(line) - line.length)
 }
 
+/**
+ * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
+ * part 1.
+ *
+ * @param input The puzzle input, one string literal per line, e.g. `"abc"`.
+ * @returns [code characters minus memory characters, encoded characters minus code characters].
+ */
+export function solve(input: string): Answers<number> {
+    return [part1(input), part2(input)]
+}
+
 if (import.meta.main) {
-    const input = readInput(2015, 8)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 8)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 8, solve)
 }

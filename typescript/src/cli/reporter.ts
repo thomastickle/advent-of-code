@@ -119,7 +119,9 @@ export default async function* reporter(source: AsyncIterable<TestEvent>) {
             detail: status === "failed" ? describeFailure(data["details"]?.error) : [],
         }
 
-        const day = /src\/(\d{4})\/day(\d{2})\//.exec(file)
+        // Full-input tests are declared by fullInputTests() in src/testing.ts, so node:test reports that file; their
+        // suite name ("2015 day 06: full input") still says which day they belong to.
+        const day = /src\/(\d{4})\/day(\d{2})\//.exec(file) ?? /^(\d{4}) day (\d{2})\b/.exec(contexts[0] ?? "")
         if (day) {
             const part = partPattern.exec(leaf) ?? contexts.map((c) => partPattern.exec(c)).find(Boolean)
             place(root, [day[1]!, `Day ${day[2]}`, part ? `Part ${part[1]}` : "Other tests"], result)

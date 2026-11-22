@@ -12,11 +12,23 @@ The repo-wide rules in `../AGENTS.md` apply as well: the user writes the solutio
 
 ## Layout
 
-- `src/<year>/dayNN/dayNN.ts` exports `part1(input)` and `part2(input)` and has a small runner block at the bottom.
-- `src/<year>/dayNN/dayNN.test.ts` has the examples first, then the full-input tests.
+- `src/<year>/dayNN/dayNN.ts` exports `solve(input)`, which returns both answers as `[part1, part2]`
+  (`Answers<T>` from `src/answers.ts`), so part 2 can build on part 1's work instead of starting over. Its runner block
+  at the bottom is `printAnswers(year, day, solve)`. A day may also export helpers (or `part1`/`part2`) for the
+  examples to test.
+- A part that isn't done yet returns `unsolved` in its slot, e.g. `[floor, unsolved]`. New days start as
+  `return [unsolved, unsolved]`; helper stubs still throw "not implemented". This replaces the repo-wide "throws not
+  implemented" rule for the parts themselves. Day 25 has no part 2 puzzle, so its part 2 stays `unsolved`.
+- `src/<year>/dayNN/dayNN.test.ts` has the examples first, then `fullInputTests(year, day, solve)`.
 - `src/input.ts` reads `inputs/<year>/dayNN.txt` (`readInput`) and the user's answers (`readExpected`).
-- `src/testing.ts` has `pending()`: wrap a test body in it so a part that still throws "not implemented" is reported as
-  skipped instead of failing.
+- `src/testing.ts` has the test helpers:
+  - `pending()`: wrap a test body in it so an unsolved part, or a helper that still throws "not implemented", is
+    reported as skipped instead of failing.
+  - `answer(solve(example), 1)`: picks one part out of `solve`'s result inside `pending()`.
+  - `fullInputTests()`: declares both full-input tests. It runs `solve` once and both tests share the result.
+- `solve` always computes both parts, even for an example that only applies to one. If the other part can't handle
+  that example (it throws or runs too long), have the example test a helper instead, or give `solve` an option with a
+  default (as days 14, 17 and 18 do).
 - `src/cli/` is the runner, menu, theme and reporter.
 
 ## Style

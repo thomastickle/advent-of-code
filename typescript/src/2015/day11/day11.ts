@@ -1,7 +1,7 @@
 /**
  * 2015 day 11: Corporate Policy. https://adventofcode.com/2015/day/11
  */
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, type Answers} from "../../answers.ts"
 
 
 const A_CHAR = 'a'.codePointAt(0)!
@@ -86,12 +86,17 @@ export function part2(input: string): string {
     return nextPassword(nextPassword(input))
 }
 
+/**
+ * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
+ * part 1.
+ *
+ * @param input The current password, eight lowercase letters, e.g. "abcdefgh".
+ * @returns [next valid password, the valid password after that].
+ */
+export function solve(input: string): Answers<string> {
+    return [part1(input), part2(input)]
+}
+
 if (import.meta.main) {
-    const input = readInput(2015, 11)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 11)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 11, solve)
 }

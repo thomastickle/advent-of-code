@@ -1,8 +1,7 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
-import {pending} from "../../testing.ts"
-import {inputPath, readExpected, readInput} from "../../input.ts"
-import {part1, part2} from "./day19.ts"
+import {answer, fullInputTests, pending} from "../../testing.ts"
+import {solve} from "./day19.ts"
 
 describe("2015 day 19: examples", () => {
     // Input is the replacement rules, a blank line, then the molecule.
@@ -14,7 +13,7 @@ describe("2015 day 19: examples", () => {
             "",
             "HOH",
         ].join("\n")
-        assert.equal(part1(input), 4)
+        assert.equal(answer(solve(input), 1), 4)
     }))
     it("part 1: the example (5 lines) -> 7", pending(() => {
         const input = [
@@ -24,28 +23,10 @@ describe("2015 day 19: examples", () => {
             "",
             "HOHOHO",
         ].join("\n")
-        assert.equal(part1(input), 7)
+        assert.equal(answer(solve(input), 1), 7)
     }))
 
     // Part 2 examples only appear on the puzzle page once part 1 is solved. Add them below as it("part 2: ...") calls.
 })
 
-// Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
-const expected: {part1?: number; part2?: number} = readExpected(2015, 19)
-
-const input = readInput(2015, 19)
-const skip = (answer: number | undefined) =>
-    input === undefined
-        ? `no input at ${inputPath(2015, 19)}`
-        : answer === undefined
-          ? "expected answer not recorded yet"
-          : false
-
-describe("2015 day 19: full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, pending(() => {
-        assert.equal(part1(input!), expected.part1)
-    }))
-    it("part 2", {skip: skip(expected.part2)}, pending(() => {
-        assert.equal(part2(input!), expected.part2)
-    }))
-})
+fullInputTests(2015, 19, solve)

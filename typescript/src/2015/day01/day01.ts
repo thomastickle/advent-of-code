@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, type Answers} from "../../answers.ts"
 
 /**
  * How a single instruction character moves Santa
@@ -42,12 +42,17 @@ export function part2(input: string): number {
     throw new Error("Santa never enters the basement")
 }
 
+/**
+ * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
+ * part 1.
+ *
+ * @param input The instructions, a string of "(" and ")" characters, e.g. "(()(()(".
+ * @returns [final floor, 1-based position of the first instruction that reaches the basement].
+ */
+export function solve(input: string): Answers<number> {
+    return [part1(input), part2(input)]
+}
+
 if (import.meta.main) {
-    const input = readInput(2015, 1)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 1)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 1, solve)
 }

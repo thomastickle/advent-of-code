@@ -1,4 +1,6 @@
+import { relative } from "node:path"
 import { pathToFileURL } from "node:url"
+import { unsolved, type Answers, type Solve } from "../answers.ts"
 import { inputPath, readInput } from "../input.ts"
 import { parseSelection, UsageError, USAGE, type Level } from "./args.ts"
 import { discover, type DayEntry } from "./discover.ts"
@@ -6,14 +8,20 @@ import { select, type Choice } from "./menu.ts"
 import { banner, bold, cyan, dim, formatDuration, green, red, yellow } from "./theme.ts"
 
 type Part = 1 | 2
-type Solver = (input: string) => unknown
-type DayModule = { part1?: Solver; part2?: Solver }
+type DayModule = { solve?: Solve }
 
 type Outcome =
-    | { kind: "star"; answer: string; ms: number }
-    | { kind: "wrapped" } // not implemented yet
+    | { kind: "star"; answer: string }
+    | { kind: "wrapped" } // unsolved, or a helper still throws "not implemented"
+    | { kind: "free" } // day 25 has no part 2 puzzle
     | { kind: "no-input"; path: string }
     | { kind: "coal"; message: string }
+
+/** What running one day produced: an outcome per chosen part, and how long `solve` took if it ran. */
+interface DayResult {
+    outcomes: Outcome[]
+    ms?: number
+}
 
 const pad = (n: number) => String(n).padStart(2, "0")
 const allOr = <T>(value: Level<T>, all: T[]): T[] => (value === "all" ? all : [value])
@@ -59,48 +67,111 @@ async function choose(entries: DayEntry[], sel: ReturnType<typeof parseSelection
     return picked.flatMap((entry) => allOr(part, [1, 2] as Part[]).map((p) => ({ entry, part: p })))
 }
 
-async function runPart(
+/**
+ * Runs a day's `solve` once and picks out the chosen parts, so a day that works out part 1 on the way to part 2 is
+ * timed (and run) only once. Both parts are computed even if only one was chosen.
+ */
+async function runDay(
     mod: DayModule | Error,
     input: string | undefined,
     entry: DayEntry,
-    part: Part,
-): Promise<Outcome> {
-    if (mod instanceof Error) return { kind: "coal", message: mod.message }
-    const solver = mod[`part${part}`]
-    if (solver === undefined) return { kind: "wrapped" }
-    if (input === undefined) return { kind: "no-input", path: inputPath(entry.year, entry.day) }
+    parts: Part[],
+): Promise<DayResult> {
+    const every = (outcome: Outcome): DayResult => ({ outcomes: parts.map(() => outcome) })
+    if (mod instanceof Error) return every({ kind: "coal", message: mod.message })
+    if (mod.solve === undefined) return every({ kind: "coal", message: "the day does not export solve()" })
+    if (input === undefined) return every({ kind: "no-input", path: inputPath(entry.year, entry.day) })
+
     const start = performance.now()
+    let answers: Answers<unknown>
     try {
-        const answer = await solver(input)
-        return { kind: "star", answer: String(answer), ms: performance.now() - start }
+        answers = await mod.solve(input)
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error)
-        return /not implemented/i.test(message) ? { kind: "wrapped" } : { kind: "coal", message }
+        return every(/not implemented/i.test(message) ? { kind: "wrapped" } : { kind: "coal", message })
     }
+    const ms = performance.now() - start
+
+    const outcomes = parts.map((part): Outcome => {
+        if (entry.day === 25 && part === 2) return { kind: "free" }
+        const answer = answers[part - 1]
+        return answer === unsolved ? { kind: "wrapped" } : { kind: "star", answer: String(answer) }
+    })
+    return outcomes.some((o) => o.kind === "star") ? { outcomes, ms } : { outcomes }
 }
+
+/** Width of an answer column. Longer answers still print in full; they just push the rest of their row along. */
+const answerWidth = 14
+/** Width of the time column: a number right-aligned on its decimal point, then the unit, e.g. " 163.60 ms". */
+const timeWidth = 10
+
+/**
+ * Formats a day's run time for the time column, so decimal points and units line up from row to row.
+ *
+ * @param ms Run time in milliseconds, e.g. 163.6 or 5490.
+ * @returns Exactly {@link timeWidth} characters, e.g. " 163.60 ms" or "   5.49 s ".
+ */
+function timeCell(ms: number): string {
+    const [value, unit] = ms >= 1000 ? [ms / 1000, "s"] : [ms, "ms"]
+    return `${value.toFixed(2).padStart(7)} ${unit.padEnd(2)}`
+}
+
+/**
+ * Pads text to a column width before coloring it, since escape codes would throw the count off.
+ * The emoji used here (🎁 🎄 🪨) are two UTF-16 units and two terminal columns wide, so `length` measures them right.
+ */
+const cell = (text: string, width: number, paint: (s: string) => string = (s) => s) =>
+    paint(text) + " ".repeat(Math.max(0, width - text.length))
 
 function describe(outcome: Outcome): string {
     switch (outcome.kind) {
         case "star":
-            return `${bold(outcome.answer)} ${dim(`(${formatDuration(outcome.ms)})`)}`
+            return cell(outcome.answer, answerWidth, bold)
         case "wrapped":
-            return `🎁 ${yellow("still wrapped")}`
+            return `🎁 ${cell("wrapped", answerWidth - 3, yellow)}`
+        case "free":
+            return `🎄 ${cell("free star", answerWidth - 3, dim)}`
         case "no-input":
-            return `📜 ${yellow("no input")}`
+            return `📜 ${cell("no input", answerWidth - 3, yellow)}`
         case "coal":
-            return `${red("coal:")} ${outcome.message}`
+            return `🪨 ${cell("coal", answerWidth - 3, red)}`
     }
 }
 
-/** One line per day: [⭐ 🪨] marks for each part (star = solved, coal = naughty list), then the details. */
-function dayLine(entry: DayEntry, parts: Part[], outcomes: Outcome[]): string {
-    const marks = outcomes.map((o) => (o.kind === "star" ? "⭐" : "🪨")).join(" ")
+/** The [⭐ 🪨] marks and the day label: star = solved, coal = naughty list, tree = day 25's free star. */
+function rowStart(marks: string[], label: string): string {
+    return `  ${dim("[")}${marks.join(" ")}${dim("]")} ${label}  `
+}
+
+/** Column headings for a year's table, lined up with the rows that {@link dayLine} prints. */
+function headerLine(parts: Part[]): string {
+    const columns = parts.map((part) => cell(`Part ${part}`, answerWidth)).join(" ")
+    // A row starts with "  [⭐ ⭐] Day 01  ": each mark is two columns wide, with a space between marks.
+    const indent = " ".repeat(2 + 1 + parts.length * 3 - 1 + 1 + 1 + "Day 01".length + 2)
+    return dim(indent + columns + " " + "Time".padStart(timeWidth - 3))
+}
+
+/**
+ * One row per day: the marks, an answer column per chosen part, then how long `solve` took for the whole day.
+ * A missing input or an error doesn't fit a column, so it goes after them.
+ */
+function dayLine(entry: DayEntry, { outcomes, ms }: DayResult): string {
+    const marks = outcomes.map((o) => (o.kind === "star" ? "⭐" : o.kind === "free" ? "🎄" : "🪨"))
+    const start = rowStart(marks, bold(`Day ${pad(entry.day)}`))
+
     const first = outcomes[0]
-    const details =
-        first?.kind === "no-input" && outcomes.every((o) => o.kind === "no-input")
-            ? `📜 ${yellow("no input yet")} ${dim(`(expected ${first.path})`)}`
-            : outcomes.map((o, i) => `Part ${parts[i]}: ${describe(o)}`).join(dim("  ·  "))
-    return `  ${dim("[")}${marks}${dim("]")} ${bold(`Day ${pad(entry.day)}`)} ${dim("·")} ${details}`
+    if (first?.kind === "no-input" && outcomes.every((o) => o.kind === "no-input")) {
+        const near = relative(process.cwd(), first.path)
+        const path = near.length < first.path.length ? near : first.path
+        return `${start}📜 ${yellow("no input yet")} ${dim(`(expected ${path})`)}`
+    }
+
+    const columns = outcomes.map(describe).join(" ")
+    const time = ms === undefined ? " ".repeat(timeWidth) : dim(timeCell(ms))
+    // When solve itself throws, both parts carry the same message, so print it once.
+    const messages = [...new Set(outcomes.flatMap((o) => (o.kind === "coal" ? [o.message] : [])))]
+    const notes = messages.length === 0 ? "" : `  ${red(messages.join("; "))}`
+    return `${start}${columns} ${time}${notes}`.trimEnd()
 }
 
 async function main() {
@@ -115,7 +186,7 @@ async function main() {
     if (entries.length === 0) throw new UsageError("The workshop is empty: no src/<year>/dayNN/dayNN.ts files found.")
     const targets = await choose(entries, sel)
 
-    const counts = { star: 0, wrapped: 0, "no-input": 0, coal: 0 }
+    const counts = { star: 0, wrapped: 0, free: 0, "no-input": 0, coal: 0 }
     const start = performance.now()
     let lastYear = 0
 
@@ -131,16 +202,16 @@ async function main() {
         if (entry.year !== lastYear) {
             lastYear = entry.year
             console.log(`\n${cyan(`── 🎄 ${entry.year} ${"─".repeat(30)}`)}`)
+            console.log(headerLine(parts))
         }
         const mod: DayModule | Error = await import(pathToFileURL(entry.file).href).then(
             (m: DayModule) => m,
             (e: unknown) => (e instanceof Error ? e : new Error(String(e))),
         )
         const input = readInput(entry.year, entry.day)
-        const outcomes: Outcome[] = []
-        for (const part of parts) outcomes.push(await runPart(mod, input, entry, part))
-        for (const outcome of outcomes) counts[outcome.kind]++
-        console.log(dayLine(entry, parts, outcomes))
+        const result = await runDay(mod, input, entry, parts)
+        for (const outcome of result.outcomes) counts[outcome.kind]++
+        console.log(dayLine(entry, result))
     }
 
     const bits = [`⭐ ${counts.star} ${counts.star === 1 ? "star" : "stars"}`]

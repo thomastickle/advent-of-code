@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, type Answers} from "../../answers.ts"
 
 /** 2015 day 3: Perfectly Spherical Houses in a Vacuum. https://adventofcode.com/2015/day/3 */
 
@@ -83,12 +83,17 @@ export function part2(input: string): number {
     return countHouses(input, 2)
 }
 
+/**
+ * Solves both parts. Each part is worked out on its own for now; share the work here if part 2 can build on
+ * part 1.
+ *
+ * @param input The instructions, a string of "^", "v", "<" and ">" characters, e.g. "^>v<".
+ * @returns [houses Santa visits alone, houses Santa and Robo-Santa visit together].
+ */
+export function solve(input: string): Answers<number> {
+    return [part1(input), part2(input)]
+}
+
 if (import.meta.main) {
-    const input = readInput(2015, 3)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 3)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 3, solve)
 }

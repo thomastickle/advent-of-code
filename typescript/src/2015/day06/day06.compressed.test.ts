@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import {describe, it} from "node:test"
-import {inputPath, readExpected, readInput} from "../../input.ts"
-import {part1, part2} from "./day06.compressed.ts"
+import {fullInputTests} from "../../testing.ts"
+import {part1, part2, solve} from "./day06.compressed.ts"
 import {part1 as gridPart1, part2 as gridPart2} from "./day06.ts"
 
 describe("2015 day 06 (compressed): examples", () => {
@@ -77,22 +77,4 @@ describe("2015 day 06 (compressed): agrees with the grid version", () => {
     })
 })
 
-// Your answers live in inputs/<year>/dayNN.expected.json (git-ignored), e.g. {"part1": 1, "part2": 2}.
-const expected: {part1?: number; part2?: number} = readExpected(2015, 6)
-
-const input = readInput(2015, 6)
-const skip = (answer: number | undefined) =>
-    input === undefined
-        ? `no input at ${inputPath(2015, 6)}`
-        : answer === undefined
-          ? "expected answer not recorded yet"
-          : false
-
-describe("2015 day 06 (compressed): full input", () => {
-    it("part 1", {skip: skip(expected.part1)}, () => {
-        assert.equal(part1(input!), expected.part1)
-    })
-    it("part 2", {skip: skip(expected.part2)}, () => {
-        assert.equal(part2(input!), expected.part2)
-    })
-})
+fullInputTests(2015, 6, solve, "compressed")

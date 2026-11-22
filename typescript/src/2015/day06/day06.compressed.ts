@@ -1,3 +1,4 @@
+import type {Answers} from "../../answers.ts"
 import {parseCommand} from "./day06.ts"
 
 /**
@@ -135,4 +136,14 @@ export function part1(input: string): number {
  */
 export function part2(input: string): number {
     return run(input, 2)
+}
+
+/**
+ * Solves both parts with coordinate compression. Each part is worked out on its own for now.
+ *
+ * @param input The puzzle input, one instruction per line, e.g. "toggle 0,0 through 999,999".
+ * @returns [lights left on, total brightness].
+ */
+export function solve(input: string): Answers<number> {
+    return [part1(input), part2(input)]
 }

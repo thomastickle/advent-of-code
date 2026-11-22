@@ -1,4 +1,4 @@
-import {inputPath, readInput} from "../../input.ts"
+import {printAnswers, unsolved, type Answers} from "../../answers.ts"
 
 /** 2015 day 23: Opening the Turing Lock. https://adventofcode.com/2015/day/23 */
 
@@ -12,20 +12,16 @@ export function run(input: string): Registers {
     throw new Error("not implemented")
 }
 
-export function part1(input: string): number {
-    throw new Error("not implemented")
-}
-
-export function part2(input: string): number {
-    throw new Error("not implemented")
+/**
+ * Solves both parts. Return {@link unsolved} for a part that isn't done yet.
+ *
+ * @param input The program, one instruction per line, e.g. "jio a, +2".
+ * @returns [part 1 answer, part 2 answer].
+ */
+export function solve(input: string): Answers<number> {
+    return [unsolved, unsolved]
 }
 
 if (import.meta.main) {
-    const input = readInput(2015, 23)
-    if (input === undefined) {
-        console.error(`No input found at ${inputPath(2015, 23)}`)
-        process.exit(1)
-    }
-    console.log("part 1:", part1(input))
-    console.log("part 2:", part2(input))
+    printAnswers(2015, 23, solve)
 }
