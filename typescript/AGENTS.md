@@ -51,6 +51,17 @@ spells out the input format with an example (`"<length>x<width>x<height>", e.g. 
 and `@throws` where it applies. Say why a non-obvious choice was made, such as a faster API, in a short clause rather
 than a paragraph. The function's name should already say what it does (see "Writing code" in `../AGENTS.md`).
 
+Write every JSDoc block in the multi-line Javadoc/KDoc form, even when it holds one sentence; never the one-line
+`/** ... */` form:
+
+```ts
+/**
+ * A reindeer's standing in the race, updated each second.
+ */
+```
+
+Interfaces get one summary comment above them; their fields don't get their own comments.
+
 Each day's file starts with a plain block comment (not JSDoc) naming the puzzle, before the imports:
 
 ```ts
